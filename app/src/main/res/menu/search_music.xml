@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+    <item
+        android:title="Folder"
+        android:id="@+id/folder"
+        android:icon="@drawable/folder"
+        android:orderInCategory="2"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="Search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="always"
+        />
+
+
+
+    <item android:title="How to Use?"
+        android:id="@+id/use"/>
+
+    <item android:title="About"
+        android:id="@+id/about"/>
+
+    <item
+        android:id="@+id/rate_us"
+        android:title="Rate Us"
+        />
+
+
+</menu>

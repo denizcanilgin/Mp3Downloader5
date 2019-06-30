@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">Mp3 Downloader</string>
+
+
+
+    <string name="admob_banner_ad_unit_id">ca-app-pub-2610648432092774/4242191980</string>
+
+    <string name="admob_showIntersitial_ad_unit_id">ca-app-pub-2610648432092774/9529219826</string>
+
+
+    <!--Facebook music app    -->
+
+    <string name="facebook_banner">311257849559302_311259216225832</string>
+
+    <string name="facebook_Intersitial">311257849559302_311265736225180</string>
+
+    <string name="facebook_app_id">311257849559302</string>
+
+
+    <string name="bat">DOWNLOADED MUSICS</string>
+    <string name="bear">ACOUSTIC-VOCAL</string>
+    <string name="bee">JAZZ-BLUES</string>
+    <string name="butterfly">METAL</string>
+    <string name="cat">HOME</string>
+    <string name="deer">ROCK</string>
+    <string name="dolphin">CLASSICAL</string>
+    <string name="elephant">RELAX</string>
+    <string name="horse">DRUMM-BASS</string>
+
+
+    <string name="text_inside_circle_button_text_normal">Text Inside Circle Button(Normal)</string>
+    <string name="text_inside_circle_button_text_highlighted">Text Inside Circle Button(Highlighted)</string>
+    <string name="text_inside_circle_button_text_unable">Text Inside Circle Button(Unable)</string>
+
+    <string name="text_outside_circle_button_text_normal">Text Outside Circle Button(Normal)</string>
+    <string name="text_outside_circle_button_text_highlighted">Text Outside Circle Button(Highlighted)</string>
+    <string name="text_outside_circle_button_text_unable">Text Outside Circle Button(Unable)</string>
+
+    <string name="text_ham_button_text_normal">Ham Button Text(Normal)</string>
+    <string name="text_ham_button_text_highlighted">Ham Button Text(Highlighted)</string>
+    <string name="text_ham_button_text_unable">Ham Button Text(Unable)</string>
+    <string name="text_ham_button_sub_text_normal">Ham Button Sub Text(Normal)</string>
+    <string name="text_ham_button_sub_text_highlighted">Ham Button Sub Text(Highlighted)</string>
+    <string name="text_ham_button_sub_text_unable">Ham Button Sub Text(Unable)</string>
+</resources>

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "117834575926",
+    "firebase_url": "https://mp3-app-86dcc.firebaseio.com",
+    "project_id": "mp3-app-86dcc",
+    "storage_bucket": "mp3-app-86dcc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:117834575926:android:a5f6f20c8120e31a",
+        "android_client_info": {
+          "package_name": "com.freemusicdownloader.mp3downloader"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "117834575926-7e8ihpg7qqpk1te3ig9a4nom3fgp5fuf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVwwsjg-OU4V6aSOIaRuMv8cRXv-MVq5A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "117834575926-7e8ihpg7qqpk1te3ig9a4nom3fgp5fuf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

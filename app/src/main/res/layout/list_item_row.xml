@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+
+    android:padding="5dp"
+    android:layout_height="85dp">
+
+
+
+    <ImageButton
+        android:layout_margin="8dp"
+        android:layout_gravity="center"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/play"
+        android:id="@+id/playstop"
+        />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_weight="3"
+        android:orientation="vertical">
+
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Deneme 1"
+        android:layout_marginTop="5dp"
+        android:textStyle="bold"
+        android:shadowColor="#7F000000"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+        android:id="@+id/authortext"
+        android:maxLines="1"
+        android:maxLength="15"
+        android:textColor="#000"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="aaaaaaassssssss"
+        android:id="@+id/songtext"
+        android:maxLines="1"
+        android:maxLength="20"
+        android:textColor="#000"
+        />
+
+
+    </LinearLayout>
+
+
+<RelativeLayout
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_marginRight="10dp"
+    android:layout_weight="2"
+    android:layout_gravity="right">
+
+
+
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/download"
+        android:id="@+id/downbtn"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/musictime"
+        android:layout_toStartOf="@+id/musictime" />
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="06:00"
+        android:maxLength="5"
+        android:textColor="#000"
+        android:layout_gravity="center"
+        android:layout_marginLeft="20dp"
+        android:id="@+id/musictime"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+
+
+</RelativeLayout>
+
+</LinearLayout>
