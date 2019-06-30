@@ -264,6 +264,7 @@ public class MusicList extends AppCompatActivity {
             final View rowView;
             rowView = inflater.inflate(R.layout.list_item_row_2, null);
 
+            //denizcan
 
             holder.txt_music_name = (TextView) rowView.findViewById(R.id.songtext);
             holder.txt_music_author = (TextView) rowView.findViewById(R.id.authortext);
