@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:gravity="center"
-    android:background="#FFF"
+    android:background="@drawable/main_header_selector"
     android:layout_height="match_parent">
 
     <ImageView
@@ -10,9 +12,15 @@
         android:layout_height="114dp"
         android:background="@drawable/icon"
         android:id="@+id/splashLogo"
+        android:visibility="gone"
         android:layout_gravity="center_horizontal" />
-    <com.sdsmdg.harjot.rotatingtext.RotatingTextWrapper
-        android:id="@+id/custom_switcher"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/avi"
+        style="@style/AVLoadingIndicatorView"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        app:indicatorColor="#fff"
+        app:indicatorName="BallClipRotatePulseIndicator" />
+
 </LinearLayout>
