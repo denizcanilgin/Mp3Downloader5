@@ -148,6 +148,8 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
         most_popular_songs most_popular_songs = new most_popular_songs();
         most_popular_songs.execute();
 
+
+
         return rootView;
     }
 
