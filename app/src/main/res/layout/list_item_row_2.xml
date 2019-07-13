@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="50dp">
+    android:layout_height="50dp"
+
+    android:padding="5dp">
 
 
 
@@ -11,7 +13,18 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@drawable/play"
+        android:visibility="gone"
         android:id="@+id/playstop2"
+        />
+
+    <ImageView
+        android:layout_margin="8dp"
+        android:layout_gravity="center"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:visibility="visible"
+        android:background="@drawable/ic_music_note_black_24dp"
+        android:id="@+id/playstop3"
         />
 
     <LinearLayout
@@ -33,7 +46,7 @@
             android:id="@+id/authortext"
             android:maxLines="1"
             android:maxLength="20"
-            android:textColor="#000"
+            android:textColor="#fff"
             />
 
         <TextView
@@ -44,7 +57,7 @@
             android:id="@+id/songtext"
             android:maxLines="1"
             android:maxLength="20"
-            android:textColor="#000"
+            android:textColor="#fff"
             />
 
 
@@ -60,11 +73,12 @@
 
 
         <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_centerInParent="true"
             android:layout_marginLeft="35dp"
-            android:src="@drawable/swipe"/>
+            android:visibility="visible"
+            android:src="@drawable/ic_access_time_black_24dp"/>
 
 
         <TextView
@@ -72,7 +86,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="06:00"
-            android:textColor="#000"
+            android:textColor="#fff"
             android:layout_gravity="center"
             android:maxLength="5"
             android:layout_marginLeft="20dp"

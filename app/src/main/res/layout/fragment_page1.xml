@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue_background">
+    android:background="#fff">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:EMVideoView="http://schemas.android.com/apk/res-auto"
@@ -12,7 +12,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fff">
+        android:background="@drawable/main_header_selector" >
 
 
 
@@ -90,8 +90,10 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/adViewContainer"
             android:layout_alignParentStart="true"
+            android:dividerHeight="0.3px"
+            android:divider="#fff"
             android:layout_alignParentLeft="true"
-            android:background="@drawable/main_header_selector" />
+            />
 
         <ImageView
             android:id="@+id/imgview"

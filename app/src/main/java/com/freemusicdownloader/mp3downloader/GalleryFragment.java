@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -15,23 +14,23 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
-import com.baoyz.swipemenulistview.SwipeMenuItem;
-import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import org.michaelbel.bottomsheet.BottomSheet;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +40,19 @@ import java.util.Date;
 /* Fragment used as page 2 */
 public class GalleryFragment extends Fragment {
 
-    public SwipeMenuListView mylist;
+    private int[] items = new int[]{
+            R.string.action_st_play,
+            R.string.action_st_delete,
+            R.string.action_st_share
+    };
+
+    private int[] icons = new int[]{
+            R.drawable.ic_play_arrow_black_24dp,
+            R.drawable.ic_delete_black_24dp,
+            R.drawable.ic_share_black_24dp
+    };
+
+    public ListView mylist;
     public MediaPlayer mp;
     private SwipeMenuCreator mMenuCreator;
 
@@ -67,15 +78,15 @@ public class GalleryFragment extends Fragment {
         ads_layout.setVisibility(View.INVISIBLE);
         avLoadingIndicatorView = rootView.findViewById(R.id.avi);
 
-        FacebookSdk.sdkInitialize( getActivity());
-        AppEventsLogger.activateApp( getActivity().getApplication());
+        FacebookSdk.sdkInitialize(getActivity());
+        AppEventsLogger.activateApp(getActivity().getApplication());
         View view = getActivity().getWindow().getDecorView().getRootView();
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         builder.detectFileUriExposure();
 
-        mylist = (SwipeMenuListView)rootView.findViewById(R.id.listemm);
+        mylist = rootView.findViewById(R.id.listemm);
         mp = new MediaPlayer();
         mydialog = new ProgressDialog(getActivity());
 
@@ -86,91 +97,21 @@ public class GalleryFragment extends Fragment {
         getAllMusics(pathControl());
 
 
-
         adapterListMusics = new customAdapterListMusics(getActivity().getApplication(), getAllMusics(pathControl()), listMusicNameCont, listMusicName, listMusicTime);
 
         mylist.setAdapter(adapterListMusics);
-        if (mylist.getAdapter().getCount() != 0)
-        {
+        if (mylist.getAdapter().getCount() != 0) {
 //            AudienceNetworkAds.facebookLoadBanner(getActivity(), view);
 //            AudienceNetworkAds.facebookInterstitialAd(getActivity(),ads_layout,avLoadingIndicatorView);
         }
-
-        SwipeMenuCreator creator = new SwipeMenuCreator() {
-            @Override
-            public void create(SwipeMenu menu) {
-
-                SwipeMenuItem openItem = new SwipeMenuItem(
-                        getActivity());
-                // set item background
-                openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
-                        0xCE)));
-                // set item width
-                openItem.setWidth(dp2px(90));
-                // set item title
-//                openItem.setTitle("Play");
-
-                openItem.setIcon(R.drawable.ic_play_circle_outline_black_24dp);
-                // set item title fontsize
-                openItem.setTitleSize(18);
-                // set item title font color
-                openItem.setTitleColor(Color.WHITE);
-                // add to menu
-                menu.addMenuItem(openItem);
-
-                // create "delete" item
-                SwipeMenuItem deleteItem = new SwipeMenuItem(
-                        getActivity());
-                // set item background
-                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
-                        0x3F, 0x25)));
-                // set item width
-                deleteItem.setWidth(dp2px(90));
-                deleteItem.setTitle("Delete");
-                // set a icon
-                deleteItem.setIcon(R.drawable.ic_delete_black_24dp);
-                // add to menu
-                menu.addMenuItem(deleteItem);
-
-            }
-        };
-        mylist.setMenuCreator(creator);
-
-        mylist.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-
-                switch (index) {
-                    case 0:
-                        Intent intent = new Intent();
-                        intent.setAction(Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.parse(listMusicurll.get(position).toString()), "audio/mp3");
-                        startActivity(intent);
-                        break;
-                    case 1:
-
-                        delete_item(position);
-                        adapterListMusics.notifyDataSetChanged();
-                        break;
-                }
-                return true;
-            }
-
-        });
-
 
 
         return rootView;
     }
 
-    private int dp2px(int dp) {
-
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
-                getResources().getDisplayMetrics());
-    }
     public class customAdapterListMusics extends BaseAdapter {
 
-        public  ArrayList<String> listmusicURL;
+        public ArrayList<String> listmusicURL;
         ArrayList<String> listmusicname;
         ArrayList<String> listmusicauthor;
         ArrayList<String> listmusictime;
@@ -194,8 +135,6 @@ public class GalleryFragment extends Fragment {
 
 
         }
-
-
 
 
         @Override
@@ -225,8 +164,6 @@ public class GalleryFragment extends Fragment {
             ImageButton btn_download;
 
 
-
-
         }
 
 
@@ -242,11 +179,70 @@ public class GalleryFragment extends Fragment {
             holder.btn_play_stop = (ImageButton) rowView.findViewById(R.id.playstop2);
 
 
-
-
             holder.txt_music_name.setText(listmusicname.get(position).toString().trim());
             holder.txt_music_author.setText(listmusicauthor.get(position).toString().trim());
             holder.txt_music_time.setText(listmusictime.get(position).toString().trim());
+
+
+            mylist.setClickable(true);
+            mylist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, final int index, long l) {
+
+                    BottomSheet.Builder builder = new BottomSheet.Builder(getActivity());
+                    builder.setTitle(listmusicauthor.get(index).toString())
+                            .setWindowDimming(134)
+                            .setBackgroundColor(getResources().getColor(R.color.colorAccent))
+                            .setTitleTextColor(Color.WHITE)
+                            .setItemTextColor(Color.WHITE)
+                            .setIconColor(Color.WHITE)
+                            .setDividers(true)
+                            .setItems(items, icons, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    switch (i) {
+
+                                        case 0:
+
+                                            Intent intent = new Intent();
+                                            intent.setAction(Intent.ACTION_VIEW);
+                                            intent.setDataAndType(Uri.parse(listMusicurll.get(index).toString()), "audio/mp3");
+                                            startActivity(intent);
+                                            break;
+                                        case 1:
+                                            delete_item(index);
+                                            adapterListMusics.notifyDataSetChanged();
+                                            break;
+                                        case 2:
+                                            Toast.makeText(getActivity(), "Share", Toast.LENGTH_SHORT).show();
+                                            break;
+
+                                    }
+
+                                }
+                            });
+                    builder.show();
+
+
+//                    switch (index) {
+//                        case 0:
+//                            Intent intent = new Intent();
+//                            intent.setAction(Intent.ACTION_VIEW);
+//                            intent.setDataAndType(Uri.parse(listMusicurll.get(index).toString()), "audio/mp3");
+//                            startActivity(intent);
+//                            break;
+//                        case 1:
+//
+//                            delete_item(index);
+//                            adapterListMusics.notifyDataSetChanged();
+//                            break;
+//                    }
+
+
+                }
+            });
+
 
             holder.btn_play_stop.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -267,14 +263,13 @@ public class GalleryFragment extends Fragment {
 
     }
 
-    public void delete_item(final int position)
-    {
+    public void delete_item(final int position) {
 
         // Toast.makeText(getApplicationContext(),"delete tıkland",Toast.LENGTH_SHORT).show();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Delete");
         builder.setMessage("Do you really want to delete this song!!!");
-        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener(){
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
 
                 //İptal butonuna basılınca yapılacaklar.Sadece kapanması isteniyorsa boş bırakılacak
@@ -287,7 +282,7 @@ public class GalleryFragment extends Fragment {
             public void onClick(DialogInterface dialog, int id) {
                 //Tamam butonuna basılınca yapılacaklar
 
-                try{
+                try {
                     File file = new File(Uri.parse(listMusicurll.get(position)).getPath());
                     file.exists();
                     file.delete();
@@ -298,11 +293,10 @@ public class GalleryFragment extends Fragment {
                     customAdapterListMusics adapterListMusics = new customAdapterListMusics(getActivity().getApplication(), getAllMusics(pathControl()), listMusicNameCont, listMusicName, listMusicTime);
                     mylist.setAdapter(adapterListMusics);
 
-                    Toast.makeText(getActivity(),"Song Deleted!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Song Deleted!", Toast.LENGTH_SHORT).show();
 
-                }
-                catch(Exception e){
-                    Toast.makeText(getActivity(),"An Error Accoured!",Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Toast.makeText(getActivity(), "An Error Accoured!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -421,7 +415,7 @@ public class GalleryFragment extends Fragment {
         if (path != null) {
             return path;
         } else {
-            path = getActivity().getApplication().getFilesDir() + File.separator+ "Mp3Download/";
+            path = getActivity().getApplication().getFilesDir() + File.separator + "Mp3Download/";
 
             return path;
 

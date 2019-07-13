@@ -28,6 +28,13 @@
     <string name="horse">DRUMM-BASS</string>
 
 
+    <string name="action_st_play">Play</string>
+    <string name="action_st_download">Download</string>
+    <string name="action_st_delete">Delete</string>
+    <string name="action_st_share">Share</string>
+    <string name="action_st_favorite">Add Favorite</string>
+
+
     <string name="text_inside_circle_button_text_normal">Text Inside Circle Button(Normal)</string>
     <string name="text_inside_circle_button_text_highlighted">Text Inside Circle Button(Highlighted)</string>
     <string name="text_inside_circle_button_text_unable">Text Inside Circle Button(Unable)</string>

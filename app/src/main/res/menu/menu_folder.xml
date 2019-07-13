@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <item android:title="How to Use?"
+        app:iconTint="#fff"
         android:id="@+id/use"/>
 
     <item android:title="About"
-        android:id="@+id/about"/>
+        android:id="@+id/about"
+        app:iconTint="#fff"/>
 
     <item
         android:id="@+id/rate_us"
         android:title="Rate Us"
+        app:iconTint="#fff"
         />
 
 

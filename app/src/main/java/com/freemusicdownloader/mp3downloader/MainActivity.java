@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcel;
 import android.support.design.widget.TabLayout;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -51,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+
+
         // Connect the ViewPager to our custom PagerAdapter. The PagerAdapter supplies the pages
         // (fragments) to the ViewPager, which the ViewPager needs to display.
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -59,8 +63,18 @@ public class MainActivity extends AppCompatActivity {
         // Connect the tabs with the ViewPager (the setupWithViewPager method does this for us in
         // both directions, i.e. when a new tab is selected, the ViewPager switches to this page,
         // and when the ViewPager switches to a new page, the corresponding tab is selected)
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+
+        new Handler().postDelayed(
+                new Runnable(){
+                    @Override
+                    public void run() {
+                        tabLayout.getTabAt(1).select();
+                    }
+                }, 1);
         tabLayout.setupWithViewPager(mViewPager);
+
+
     }
 
     @Override

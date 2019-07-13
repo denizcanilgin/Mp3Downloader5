@@ -10,11 +10,18 @@
     <ImageButton
         android:layout_margin="8dp"
         android:layout_gravity="center"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/play"
-        android:id="@+id/playstop"
-        android:visibility="invisible" />
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:visibility="gone"
+        android:background="@drawable/ic_music_note_black_24dp"
+        android:id="@+id/playstop"/>
+    <ImageView
+        android:layout_margin="8dp"
+        android:layout_gravity="center"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/ic_music_note_black_24dp"
+        android:id="@+id/playstop2"/>
 
     <LinearLayout
         android:layout_width="0dp"
@@ -29,6 +36,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Deneme 1"
+        android:textStyle="bold"
         android:layout_marginTop="5dp"
         android:id="@+id/authortext"
         android:maxLines="1"
@@ -61,12 +69,20 @@
 
 
     <ImageButton
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/download"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/ic_access_time_black_24dp"
         android:id="@+id/downbtn"
         android:layout_centerVertical="true"
-        android:visibility="visible"
+        android:visibility="gone"
+        android:layout_toLeftOf="@+id/musictime"
+        android:layout_toStartOf="@+id/musictime" />
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/ic_access_time_black_24dp"
+        android:id="@+id/downbtn2"
+        android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/musictime"
         android:layout_toStartOf="@+id/musictime" />
 

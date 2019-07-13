@@ -21,10 +21,13 @@
         <!--android:theme="@style/ThemeOverlay.AppCompat.ActionBar"-->
         <!--/>-->
 
-        <com.baoyz.swipemenulistview.SwipeMenuListView
+        <ListView
             android:id="@+id/listemm"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:dividerHeight="0.3px"
+            android:divider="#fff"
+            android:clickable="true"
             android:layout_above="@+id/adViewContainer" />
 
 

@@ -1,0 +1,21 @@
+
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_play"
+        android:icon="@drawable/ic_play_circle_outline_black_24dp"
+        android:title="Play" />
+    <item
+        android:id="@+id/action_download"
+        android:icon="@drawable/ic_file_download_black_24dp"
+        android:title="Download" />
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share_black_24dp"
+        android:title="Share" />
+    <item
+        android:id="@+id/action_favorite"
+        android:icon="@drawable/ic_favorite_black_24dp"
+        android:title="Add Favorite" />
+
+</menu>
