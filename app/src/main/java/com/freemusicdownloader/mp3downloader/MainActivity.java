@@ -29,15 +29,16 @@ public class MainActivity extends AppCompatActivity {
     private final String[] PAGE_TITLES = new String[] {
             "GENRES",
             "HOME",
-            "GALLERY"
+            "GALLERY",
+            "FAVs"
     };
 
     // The fragments that are used as the individual pages
     private final Fragment[] PAGES = new Fragment[] {
             new GenresFragment(),
             new HomeFragment(),
-            new GalleryFragment()
-
+            new GalleryFragment(),
+            new FavFragment()
 
     };
 

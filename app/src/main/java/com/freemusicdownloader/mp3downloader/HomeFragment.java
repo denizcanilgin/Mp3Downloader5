@@ -82,6 +82,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
     public ArrayList<String> musicName;
     public ArrayList<String> musicAuthor;
     public ArrayList<String> musicTime;
+
     private Tracker mTracker;
     public String sarkıismi;
     public ImageView imgView;
@@ -438,13 +439,6 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
                                                     Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
 
-//                        if (countAds % 2 == 0) {
-//
-//                            AudienceNetworkAds.facebookInterstitialAd(MainActivity.this, ads_layout, avLoadingIndicatorView);
-//
-//                        }
-
-
                                                 if (countAds == 0) {
                                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
                                                         new DownloadAsyncTask(listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3", getActivity(), 2).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3");
@@ -470,7 +464,16 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
                                             Toast.makeText(getActivity(), "Share", Toast.LENGTH_SHORT).show();
                                             break;
                                         case 3:
-                                            Toast.makeText(getActivity(), "Favori", Toast.LENGTH_SHORT).show();
+                                            //Toast.makeText(getActivity(), "Favori", Toast.LENGTH_SHORT).show();
+
+                                            FavMusic favMusic = new FavMusic(listmusicname.get(songPos),listmusicURL.get(songPos),listmusicauthor.get(songPos),listmusictime.get(songPos));
+                                            GlobalClass globalClass = new GlobalClass();
+                                            globalClass.addFavMusic(getActivity(),favMusic);
+
+                                            String selected_song = listmusicauthor.get(songPos);
+
+                                            Toast.makeText(getActivity(), selected_song +" was successfully added to favorites!", Toast.LENGTH_SHORT).show();
+
                                             break;
                                     }
 

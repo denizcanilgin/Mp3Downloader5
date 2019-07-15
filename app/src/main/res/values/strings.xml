@@ -33,6 +33,7 @@
     <string name="action_st_delete">Delete</string>
     <string name="action_st_share">Share</string>
     <string name="action_st_favorite">Add Favorite</string>
+    <string name="action_st_remove_favorite">Remove From Favorite</string>
 
 
     <string name="text_inside_circle_button_text_normal">Text Inside Circle Button(Normal)</string>
