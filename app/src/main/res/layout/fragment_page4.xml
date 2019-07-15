@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:EMVideoView="http://schemas.android.com/apk/res-auto"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/main_header_selector" >
+
+
+
+        <LinearLayout
+
+            android:id="@+id/noNetworkLayout"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/shape"
+            android:orientation="vertical"
+            android:visibility="gone"
+
+            >
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="No internet connection!"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_signal_cellular_connected_no_internet_4_bar_black_24dp" />
+
+        </LinearLayout>
+
+
+
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/adViewContainer"
+            android:layout_alignParentStart="true"
+            android:dividerHeight="0.3px"
+            android:divider="#fff"
+            android:layout_alignParentLeft="true"
+            />
+
+        <ImageView
+            android:id="@+id/imgview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/bc2"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/song_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="SONG NOT FOUND"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+
+
+        <RelativeLayout
+            android:id="@+id/adViewContainer"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/transparent">
+
+            <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/ad_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                ads:adSize="BANNER"
+                ads:adUnitId="@string/admob_banner_ad_unit_id" />
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+</FrameLayout>
