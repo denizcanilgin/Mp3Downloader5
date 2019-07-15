@@ -15,8 +15,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
@@ -36,6 +40,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+
+import static android.app.Activity.RESULT_OK;
 
 /* Fragment used as page 2 */
 public class GalleryFragment extends Fragment {
@@ -107,6 +113,13 @@ public class GalleryFragment extends Fragment {
 
 
         return rootView;
+    }
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
+
     }
 
     public class customAdapterListMusics extends BaseAdapter {
@@ -319,6 +332,43 @@ public class GalleryFragment extends Fragment {
         mp.reset();
 
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.refresh, menu);
+
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+
+        int id = item.getItemId();
+
+        switch (id)
+        {
+            case R.id.action_refresh :
+
+
+//                Intent myIntent = new Intent(Intent.ACTION_GET_CONTENT);
+//                myIntent.setType("*/*");
+//                startActivityForResult(myIntent,10);
+                Toast.makeText(getActivity(), "Gallery Refresh ...", Toast.LENGTH_SHORT).show();
+                getAllMusics(pathControl());
+                adapterListMusics = new customAdapterListMusics(getActivity().getApplication(), getAllMusics(pathControl()), listMusicNameCont, listMusicName, listMusicTime);
+                mylist.setAdapter(adapterListMusics);
+                if (mylist.getAdapter().getCount() != 0) {
+//            AudienceNetworkAds.facebookLoadBanner(getActivity(), view);
+//            AudienceNetworkAds.facebookInterstitialAd(getActivity(),ads_layout,avLoadingIndicatorView);
+                }
+
+                return true;
+        }
+
+        return false;
     }
 
     class task extends AsyncTask<String, Void, Void> {

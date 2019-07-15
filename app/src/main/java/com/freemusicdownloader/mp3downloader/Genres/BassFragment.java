@@ -1,12 +1,11 @@
-package com.freemusicdownloader.mp3downloader;
+package com.freemusicdownloader.mp3downloader.Genres;
+
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.app.SearchManager;
-import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,8 +29,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.util.Base64;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -44,6 +41,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.freemusicdownloader.mp3downloader.DownloadAsyncTask;
+import com.freemusicdownloader.mp3downloader.R;
 import com.google.android.gms.analytics.Tracker;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -57,12 +56,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /* Fragment used as page 1 */
-public class HomeFragment extends Fragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+public class BassFragment extends Fragment {
 
     private int[] items = new int[]{
             R.string.action_st_play,
@@ -112,8 +110,11 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 
     private NotificationManagerCompat notificationManager;
 
+
     @SuppressLint("NewApi")
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+
+
 
 
     @Override
@@ -124,6 +125,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+
 
         view = getActivity().getWindow().getDecorView().getRootView();
         // AudienceNetworkAds.facebookLoadBanner(getActivity(), view);
@@ -143,9 +145,11 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
         song_result.setVisibility(View.INVISIBLE);
 
 
-        most_popular_songs most_popular_songs = new most_popular_songs();
-        most_popular_songs.execute();
+        most_popular_songs_bass songsBass = new most_popular_songs_bass();
+        songsBass.execute();
 
+//
+//        new MainActivity().tollbarTitle("Rock");
 
         return rootView;
     }
@@ -181,42 +185,14 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 
     }
 
+
+
     @Override
     public void onStart() {
         super.onStart();
     }
 
 
-    @Override
-    public boolean onClose() {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-
-        //SearchMusic (query);
-        SearchMusic searchMusic = new SearchMusic();
-        searchMusic.execute(query);
-
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.search_music, menu);
-        mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        mSearchView.setQueryHint("Enter your mp3 name ...");
-
-        setupSearchView();
-
-        super.onCreateOptionsMenu(menu, inflater);
-    }
 
     class PlayMusicAction extends AsyncTask<Uri, Uri, Uri> {
 
@@ -314,7 +290,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 
         @Override
         public View getView(final int position, final View convertView, ViewGroup parent) {
-            final Holder holder = new Holder();
+            final customAdapterListMusics.Holder holder = new customAdapterListMusics.Holder();
             final View rowView;
             rowView = inflater.inflate(R.layout.list_item_row, null);
 
@@ -443,24 +419,23 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 //                            AudienceNetworkAds.facebookInterstitialAd(MainActivity.this, ads_layout, avLoadingIndicatorView);
 //
 //                        }
-
-
                                                 if (countAds == 0) {
                                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-                                                        new DownloadAsyncTask(listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3", getActivity(), 2).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3");
+                                                        new DownloadAsyncTask(listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3", getActivity(), 10).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3");
                                                 } else if (countAds == 1) {
                                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-                                                        new DownloadAsyncTask(listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3", getActivity(), 3).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3");
+                                                        new DownloadAsyncTask(listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3", getActivity(), 11).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3");
                                                 } else if (countAds == 2) {
 
                                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-                                                        new DownloadAsyncTask(listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3", getActivity(), 4).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3");
+                                                        new DownloadAsyncTask(listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3", getActivity(), 12).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3");
                                                 } else if (countAds == 3) {
                                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-                                                        new DownloadAsyncTask(listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3", getActivity(), 5).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3");
-                                                } else if (countAds == 4) {
+                                                        new DownloadAsyncTask(listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3", getActivity(), 13).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3");
+                                                    countAds = 0;
+                                                }else if (countAds == 4) {
                                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-                                                        new DownloadAsyncTask(listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3", getActivity(), 100).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3");
+                                                        new DownloadAsyncTask(listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3", getActivity(), 102).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3");
                                                     countAds = 0;
                                                 }
                                                 countAds++;
@@ -525,133 +500,6 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
     }
 
 
-    public class SearchMusic extends AsyncTask<String, String, customAdapterListMusics> {
-
-        @Override
-        protected void onPreExecute() {
-
-
-            if (!getActivity().isFinishing()) {
-
-                LoadingMethod();
-
-            }
-
-            imgView.setImageDrawable(null);
-
-
-            super.onPreExecute();
-
-        }
-
-
-        @Override
-        protected customAdapterListMusics doInBackground(String... strings) {
-
-
-            String s = strings[0];
-
-            String temp = s.trim().replace(" ", "+");
-
-            Document doc = null;
-
-
-            try {
-                doc = Jsoup.connect(decodeString("aHR0cDovL21wM3BuLm5ldC9zZWFyY2gvcy9mLw==") + temp + "/").get();
-
-                Elements body = doc.select("div#xbody");
-
-                Elements url_content = body.select("li.cplayer-sound-item");
-
-
-                Elements mp3_time_content = url_content.select("em.cplayer-data-sound-time");
-
-
-                Elements music_name_content = url_content.select("a[href]").select("b.cplayer-data-sound-title");
-
-
-                Elements music_author_content = url_content.select("a[href]").select("i.cplayer-data-sound-author");
-
-                musicURL = null;
-                musicURL = new ArrayList<String>();
-                musicName = null;
-                musicName = new ArrayList<String>();
-                musicAuthor = null;
-                musicAuthor = new ArrayList<String>();
-                musicTime = null;
-                musicTime = new ArrayList<String>();
-
-
-                for (Element link : url_content) {
-
-                    musicURL.add(link.attr("data-download-url").toString().trim());
-
-                }
-
-
-                for (Element mtime : mp3_time_content) {
-
-
-                    musicTime.add(mtime.text().toString().trim());
-
-
-                }
-
-
-                for (Element mname : music_name_content) {
-
-                    // get the value from href attribute
-                    //  System.out.println("\nlink  URL IMG : " + link.attr("src"));
-
-
-                    //   txt.append("\n"+mname.select("b.cplayer-data-sound-title").text()); // şarkı isimleri
-
-                    musicName.add(mname.text().trim());
-
-
-                    // txt.append("\n"+mname.select("i.cplayer-data-sound-author").text());  //sanatçı ismi
-
-
-                }
-
-
-                for (Element mauthor : music_author_content) {
-
-
-                    musicAuthor.add(mauthor.text().trim());
-
-
-                }
-
-                adapterListMusics = new customAdapterListMusics(getActivity().getApplication(), musicURL, musicName, musicAuthor, musicTime);
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-
-
-                getActivity().runOnUiThread(new Runnable() {
-                    public void run() {
-                        final Toast toast = Toast.makeText(getActivity(), "SONG NOT FOUND!\nPLEASE TRY AGAIN ", Toast.LENGTH_SHORT);
-
-                        toast.show();
-                    }
-                });
-
-            }
-
-            return adapterListMusics;
-        }
-
-        @Override
-        protected void onPostExecute(customAdapterListMusics s) {
-
-            mylist.setAdapter(s);
-            super.onPostExecute(s);
-            LoadingMethodDismiss();
-
-        }
-    }
 
     @Override
     public void onDestroy() {
@@ -659,7 +507,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 
     }
 
-    class most_popular_songs extends AsyncTask<String, Object, customAdapterListMusics> {
+    class most_popular_songs_bass extends AsyncTask<String, Object, customAdapterListMusics> {
 
 
         @Override
@@ -676,7 +524,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 
 
             try {
-                doc = Jsoup.connect(decodeString("aHR0cDovL21wM3BuLm5ldC9zZWFyY2gvcy9mL01vc3QrcG9wdWxhcitzb25ncy8")).get();
+                doc = Jsoup.connect(decodeString("aHR0cHM6Ly90dm94eS5uZXQvdG9wL2RydW1fYmFzcy8")).get();
 
                 Elements body = doc.select("div#xbody");
 
@@ -758,25 +606,6 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
         }
     }
 
-    private void setupSearchView() {
-
-        mSearchView.setIconifiedByDefault(true);
-
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        if (searchManager != null) {
-            List<SearchableInfo> searchables = searchManager.getSearchablesInGlobalSearch();
-            SearchableInfo info = searchManager.getSearchableInfo(getActivity().getComponentName());
-            mSearchView.setSearchableInfo(info);
-        }
-//
-        mSearchView.setOnQueryTextListener(HomeFragment.this);
-        mSearchView.setOnCloseListener(HomeFragment.this);
-
-        mSearchView.setIconifiedByDefault(true);
-        //  mSearchView.setFocusable(false);
-        // mSearchView.setIconified(false);
-        //  mSearchView.requestFocusFromTouch();
-    }
 
     private String decodeString(String encoded) {
         byte[] dataDec = Base64.decode(encoded, Base64.DEFAULT);

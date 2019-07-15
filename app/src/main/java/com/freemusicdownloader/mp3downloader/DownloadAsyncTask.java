@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaScannerConnection;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -219,7 +220,7 @@ public class DownloadAsyncTask extends AsyncTask<String,String,String> {
 //                .setPosition(konfettiView.getX() + konfettiView.getWidth() / 2, konfettiView.getY() + konfettiView.getHeight() / 3)
 //                .burst(100);
 
-        Toast.makeText(activity, "" + songName + " Downloaded", Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, "" + songName + " downloaded", Toast.LENGTH_SHORT).show();
 
         builder.setContentText("1Download finished")
                 .setSmallIcon(R.drawable.ic_file_download_black_24dp)
@@ -227,9 +228,10 @@ public class DownloadAsyncTask extends AsyncTask<String,String,String> {
                 .setOngoing(true)
                 .setOnlyAlertOnce(true)
                 .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
-        notificationManager.notify(NOTIFY_ID, builder.build());
+
         notificationManager.cancel(NOTIFY_ID);
         createNotification(currentimagepath,songName);
+
     }
 
 

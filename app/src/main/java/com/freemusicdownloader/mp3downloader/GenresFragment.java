@@ -3,12 +3,18 @@ package com.freemusicdownloader.mp3downloader;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/* Fragment used as page 3 */
+import com.freemusicdownloader.mp3downloader.Genres.AcousticFragment;
+import com.freemusicdownloader.mp3downloader.Genres.BassFragment;
+import com.freemusicdownloader.mp3downloader.Genres.ClassicalFragment;
+import com.freemusicdownloader.mp3downloader.Genres.JazzFragment;
+import com.freemusicdownloader.mp3downloader.Genres.MetalFragment;
+import com.freemusicdownloader.mp3downloader.Genres.RelaxFragment;
+import com.freemusicdownloader.mp3downloader.Genres.RockFragment;
+
 public class GenresFragment extends Fragment implements View.OnClickListener {
 
     private CardView cv_jazz;
@@ -34,13 +40,71 @@ public class GenresFragment extends Fragment implements View.OnClickListener {
 
         switch (view.getId()){
 
-            case  R.id.card_acustic: Log.i("PUSHED","" + view.getId()); break;
-            case  R.id.card_bass: Log.i("PUSHED","" + view.getId()); break;
-            case  R.id.card_classical: Log.i("PUSHED","" + view.getId()); break;
-            case  R.id.card_jazz: Log.i("PUSHED","" + view.getId()); break;
-            case  R.id.card_metal: Log.i("PUSHED","" + view.getId()); break;
-            case  R.id.card_Rock: Log.i("PUSHED","" + view.getId()); break;
-            case  R.id.card_relax: Log.i("PUSHED","" + view.getId()); break;
+            case  R.id.card_Rock:
+                RockFragment nextRock= new RockFragment();
+                getActivity().getFragmentManager().beginTransaction()
+                        .replace(R.id.genres_layout, nextRock, "findThisFragment")
+                        .addToBackStack(null)
+                        .commit();
+            break;
+
+            case  R.id.card_jazz:
+                JazzFragment nextJazz= new JazzFragment();
+                getActivity().getFragmentManager().beginTransaction()
+                        .replace(R.id.genres_layout, nextJazz, "findThisFragment")
+                        .addToBackStack(null)
+                        .commit();
+                break;
+
+            case  R.id.card_acustic:
+
+                AcousticFragment nextAcoustic = new AcousticFragment();
+                getActivity().getFragmentManager().beginTransaction()
+                        .replace(R.id.genres_layout, nextAcoustic, "findThisFragment")
+                        .addToBackStack(null)
+                        .commit();
+
+            break;
+
+            case  R.id.card_classical:
+
+                ClassicalFragment nextClassical = new ClassicalFragment();
+                getActivity().getFragmentManager().beginTransaction()
+                        .replace(R.id.genres_layout, nextClassical, "findThisFragment")
+                        .addToBackStack(null)
+                        .commit();
+                break;
+
+            case  R.id.card_relax:
+
+                RelaxFragment nextRelax = new RelaxFragment();
+                getActivity().getFragmentManager().beginTransaction()
+                        .replace(R.id.genres_layout, nextRelax, "findThisFragment")
+                        .addToBackStack(null)
+                        .commit();
+                break;
+
+            case  R.id.card_metal:
+
+                MetalFragment nextMetal = new MetalFragment();
+                getActivity().getFragmentManager().beginTransaction()
+                        .replace(R.id.genres_layout, nextMetal, "findThisFragment")
+                        .addToBackStack(null)
+                        .commit();
+                break;
+            case  R.id.card_bass:
+
+                BassFragment nextBass = new BassFragment();
+                getActivity().getFragmentManager().beginTransaction()
+                        .replace(R.id.genres_layout, nextBass, "findThisFragment")
+                        .addToBackStack(null)
+                        .commit();
+                break;
+
+
+
+
+
 
 
         }
