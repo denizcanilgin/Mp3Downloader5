@@ -218,10 +218,14 @@ public class GalleryFragment extends Fragment {
 
                                         case 0:
 
-                                            Intent intent = new Intent();
-                                            intent.setAction(Intent.ACTION_VIEW);
-                                            intent.setDataAndType(Uri.parse(listMusicurll.get(index).toString()), "audio/mp3");
-                                            startActivity(intent);
+//                                            Intent intent = new Intent();
+//                                            intent.setAction(Intent.ACTION_VIEW);
+//                                            intent.setDataAndType(Uri.parse(listMusicurll.get(index).toString()), "audio/mp3");
+//                                            startActivity(intent);
+                                            new GlobalUri().setUri(Uri.parse(listMusicurll.get(index).toString()));
+                                            new GlobalUri().setMediaPlayer(null);
+                                            Intent ıntent = new Intent(getActivity(),MusicPlayerActivity.class);
+                                            startActivity(ıntent);
                                             break;
                                         case 1:
                                             delete_item(index);
@@ -352,14 +356,14 @@ public class GalleryFragment extends Fragment {
         {
             case R.id.action_refresh :
 
-
-//                Intent myIntent = new Intent(Intent.ACTION_GET_CONTENT);
-//                myIntent.setType("*/*");
-//                startActivityForResult(myIntent,10);
-                Toast.makeText(getActivity(), "Gallery Refresh ...", Toast.LENGTH_SHORT).show();
-                getAllMusics(pathControl());
-                adapterListMusics = new customAdapterListMusics(getActivity().getApplication(), getAllMusics(pathControl()), listMusicNameCont, listMusicName, listMusicTime);
-                mylist.setAdapter(adapterListMusics);
+                Intent intent = new Intent();
+                intent.setType("audio/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Choose Track"), 1);
+//                Toast.makeText(getActivity(), "Gallery Refresh ...", Toast.LENGTH_SHORT).show();
+//                getAllMusics(pathControl());
+//                adapterListMusics = new customAdapterListMusics(getActivity().getApplication(), getAllMusics(pathControl()), listMusicNameCont, listMusicName, listMusicTime);
+//                mylist.setAdapter(adapterListMusics);
                 if (mylist.getAdapter().getCount() != 0) {
 //            AudienceNetworkAds.facebookLoadBanner(getActivity(), view);
 //            AudienceNetworkAds.facebookInterstitialAd(getActivity(),ads_layout,avLoadingIndicatorView);

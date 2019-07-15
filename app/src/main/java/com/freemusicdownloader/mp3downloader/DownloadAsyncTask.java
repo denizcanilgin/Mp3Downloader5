@@ -7,7 +7,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaScannerConnection;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -42,7 +41,7 @@ public class DownloadAsyncTask extends AsyncTask<String,String,String> {
     private NotificationManagerCompat notificationManager;
     private String songName;
 
-    public DownloadAsyncTask(String url, String filename, Activity activity, int NOTIFY_ID) {
+    public  DownloadAsyncTask(String url, String filename, Activity activity, int NOTIFY_ID) {
         this.url = url;
         this.filename = filename;
         this.activity = activity;
@@ -167,12 +166,9 @@ public class DownloadAsyncTask extends AsyncTask<String,String,String> {
 
             while ((count = input.read(data)) != -1) {
                 total += count;
-
-
                 try {
                     final long finalTotal = total;
-                    new Thread(new Runnable() {
-
+                     new Thread(new Runnable() {
                         @Override
                         public void run() {
                             builder.setContentTitle(songName)
