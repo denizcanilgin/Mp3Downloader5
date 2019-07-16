@@ -42,6 +42,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="dnzzzzzz"
+            android:fontFamily="@font/light"
+
             android:textStyle="bold"
             android:id="@+id/authortext"
             android:maxLines="1"
@@ -87,6 +89,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="06:00"
             android:textColor="#fff"
+            android:fontFamily="@font/light"
             android:layout_gravity="center"
             android:maxLength="5"
             android:layout_marginLeft="20dp"

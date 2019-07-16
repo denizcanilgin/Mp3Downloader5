@@ -106,6 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/fab_margin"
+                android:visibility="invisible"
                 android:id="@+id/imageButtonStop"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/ic_stop_circle_outline_black_48dp"

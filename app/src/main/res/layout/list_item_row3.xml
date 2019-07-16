@@ -18,8 +18,8 @@
     <ImageView
         android:layout_margin="8dp"
         android:layout_gravity="center"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:background="@drawable/ic_favorite_black_24dp"
         android:id="@+id/playstop2"/>
 
@@ -37,6 +37,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Deneme 1"
             android:textStyle="bold"
+            android:fontFamily="@font/light"
             android:layout_marginTop="5dp"
             android:id="@+id/authortext"
             android:maxLines="1"
@@ -45,6 +46,8 @@
             />
 
         <TextView
+            android:fontFamily="@font/light"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
@@ -91,6 +94,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/light"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="06:00"
             android:maxLength="5"

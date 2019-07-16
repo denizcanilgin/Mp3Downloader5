@@ -49,6 +49,8 @@
                 android:layout_gravity="center"
                 android:text="Showing Ads"
                 android:textAlignment="center"
+                android:fontFamily="@font/light"
+
                 android:textColor="#fff"
                 android:textStyle="bold" />
 

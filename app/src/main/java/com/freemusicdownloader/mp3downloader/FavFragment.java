@@ -1,5 +1,6 @@
 package com.freemusicdownloader.mp3downloader;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.DialogInterface;
@@ -8,8 +9,11 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +36,8 @@ public class FavFragment extends Fragment implements View.OnClickListener {
     Activity activity;
     GlobalClass globalClass;
     private FavMusicsAdapter adapter;
+    public int countAds = 0;
+
 
     AVLoadingIndicatorView avLoadingIndicatorView;
 
@@ -67,12 +73,12 @@ public class FavFragment extends Fragment implements View.OnClickListener {
 
 
                     BottomSheet.Builder builder = new BottomSheet.Builder(getActivity());
-                    builder.setTitle(songList.get(position).toString() + "\n- " + songList.get(position).toString())
+                    builder.setTitle(songList.get(position).getMusicName().toString() + "\n- " + songList.get(position).getMusicAuthor().toString())
                             .setWindowDimming(134)
-                            .setBackgroundColor(getResources().getColor(R.color.colorAccent))
-                            .setTitleTextColor(Color.WHITE)
-                            .setItemTextColor(Color.WHITE)
-                            .setIconColor(Color.WHITE)
+                            .setBackgroundColor(getResources().getColor(R.color.colorWhite))
+                            .setTitleTextColor(getResources().getColor(R.color.color_gray))
+                            .setItemTextColor(getResources().getColor(R.color.color_gray))
+                            .setIconColor(getResources().getColor(R.color.color_gray))
                             .setDividers(true)
                             .setItems(items, icons, new DialogInterface.OnClickListener() {
                                         @Override
@@ -86,9 +92,13 @@ public class FavFragment extends Fragment implements View.OnClickListener {
                                                     break;
                                                 case 1:
 
+                                                    download_selected_song(position);
+
                                                     break;
 
                                                 case 2:
+
+                                                    share_selected_song(songList.get(position).getMusicName(),songList.get(position).getMusicAuthor());
 
                                                     break;
 
@@ -131,73 +141,39 @@ public class FavFragment extends Fragment implements View.OnClickListener {
 
     public void play_selected_song(int position){
 
-        Toast.makeText(getActivity(), "Play", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getActivity(), "Play", Toast.LENGTH_SHORT).show();
 
         try {
-
-            if (isPackageInstalled("com.google.android.music", activity.getPackageManager())) {
-
                 PlayMusicAction playMusicAction = new PlayMusicAction();
-                playMusicAction.doInBackground(Uri.parse(songList.get(position).toString()));
-
-            } else {
-
-
-                new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
-                        .setTitleText("MP3 Downloader")
-                        .setContentText("Please install the 'Google Play Music' for quick play.\nDo you want to install it now?")
-                        .setConfirmButton("YES", new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-
-                                final String appPackageName = getActivity().getPackageName(); // getPackageName() from Context or Activity object
-                                try {
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + "com.google.android.music")));
-                                } catch (android.content.ActivityNotFoundException anfe) {
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + "com.google.android.music")));
-                                }
-
-                            }
-                        })
-                        .setCancelButton("NO", new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-
-                                sweetAlertDialog.cancel();
-                            }
-                        })
-
-                        .show();
-
-            }
+                playMusicAction.doInBackground(Uri.parse(songList.get(position).getMusicURL().toString()));
 
         } catch (Exception e) {
-            new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
-                    .setTitleText("MP3 Downloader")
-                    .setContentText("Please install the 'Google Play Music' for quick play.\nDo you want to install it now?")
-                    .setConfirmButton("YES", new SweetAlertDialog.OnSweetClickListener() {
-                        @Override
-                        public void onClick(SweetAlertDialog sweetAlertDialog) {
-
-                            final String appPackageName = getActivity().getPackageName(); // getPackageName() from Context or Activity object
-                            try {
-                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + "com.google.android.music")));
-                            } catch (android.content.ActivityNotFoundException anfe) {
-                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + "com.google.android.music")));
-                            }
-
-                        }
-                    })
-                    .setCancelButton("NO", new SweetAlertDialog.OnSweetClickListener() {
-                        @Override
-                        public void onClick(SweetAlertDialog sweetAlertDialog) {
-
-                            sweetAlertDialog.cancel();
-                        }
-                    })
-
-                    .show();
-        }
+//            new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+//                    .setTitleText("MP3 Downloader")
+//                    .setContentText("Please install the 'Google Play Music' for quick play.\nDo you want to install it now?")
+//                    .setConfirmButton("YES", new SweetAlertDialog.OnSweetClickListener() {
+//                        @Override
+//                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+//
+//                            final String appPackageName = getActivity().getPackageName(); // getPackageName() from Context or Activity object
+//                            try {
+//                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + "com.google.android.music")));
+//                            } catch (android.content.ActivityNotFoundException anfe) {
+//                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + "com.google.android.music")));
+//                            }
+//
+//                        }
+//                    })
+//                    .setCancelButton("NO", new SweetAlertDialog.OnSweetClickListener() {
+//                        @Override
+//                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+//
+//                            sweetAlertDialog.cancel();
+//                        }
+//                    })
+//
+//                    .show();
+       }
 
 
     }
@@ -249,6 +225,54 @@ public class FavFragment extends Fragment implements View.OnClickListener {
         }
 
         return found;
+    }
+
+    public void download_selected_song(int songPos){
+
+        Toast.makeText(getActivity(), "Download", Toast.LENGTH_SHORT).show();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.System.canWrite(getContext())) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE}, 2909);
+            }
+        }
+
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+
+            if (countAds == 0) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                    new DownloadAsyncTask(songList.get(songPos).getMusicURL(), songList.get(songPos).getMusicName() + ".mp3", getActivity(), 2).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, songList.get(songPos).getMusicURL(), songList.get(songPos).getMusicName() + ".mp3");
+            } else if (countAds == 1) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                    new DownloadAsyncTask(songList.get(songPos).getMusicURL(), songList.get(songPos).getMusicName() + ".mp3", getActivity(), 3).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, songList.get(songPos).getMusicURL(), songList.get(songPos).getMusicName() + ".mp3");
+            } else if (countAds == 2) {
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                    new DownloadAsyncTask(songList.get(songPos).getMusicURL(), songList.get(songPos).getMusicName() + ".mp3", getActivity(), 4).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, songList.get(songPos).getMusicURL(), songList.get(songPos).getMusicName() + ".mp3");
+            } else if (countAds == 3) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                    new DownloadAsyncTask(songList.get(songPos).getMusicURL(), songList.get(songPos).getMusicName() + ".mp3", getActivity(), 5).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, songList.get(songPos).getMusicURL(), songList.get(songPos).getMusicName() + ".mp3");
+            } else if (countAds == 4) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                    new DownloadAsyncTask(songList.get(songPos).getMusicURL(), songList.get(songPos).getMusicName() + ".mp3", getActivity(), 100).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, songList.get(songPos).getMusicURL(), songList.get(songPos).getMusicName() + ".mp3");
+                countAds = 0;
+            }
+            countAds++;
+        }
+
+    }
+
+    public void share_selected_song(String songName, String songAuthor){
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "You should listen to this amazing song! \n \n " + songName + " - " + songAuthor
+         + " \n \n https://play.google.com/store/apps/details?id=com.freemusicdownloader.mp3downloader");
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.app_name)));
+
     }
 
 }

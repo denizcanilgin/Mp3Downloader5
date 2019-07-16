@@ -46,9 +46,9 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:src="@drawable/play"
                             android:layout_width="wrap_content"
-                            android:layout_height="120dp" />,
+                            android:layout_height="120dp"
+                            android:src="@drawable/rock" />,
 
                         <View
                             android:layout_width="match_parent"
@@ -93,7 +93,7 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:src="@drawable/play"
+                            android:src="@drawable/jazz"
                             android:layout_width="wrap_content"
                             android:layout_height="120dp" />,
 
@@ -150,7 +150,7 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:src="@drawable/play"
+                            android:src="@drawable/acustic"
                             android:layout_width="wrap_content"
                             android:layout_height="120dp" />,
 
@@ -197,7 +197,7 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:src="@drawable/play"
+                            android:src="@drawable/classical"
                             android:layout_width="wrap_content"
                             android:layout_height="120dp" />,
 
@@ -254,7 +254,7 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:src="@drawable/play"
+                            android:src="@drawable/relax"
                             android:layout_width="wrap_content"
                             android:layout_height="120dp" />,
 
@@ -301,7 +301,7 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:src="@drawable/play"
+                            android:src="@drawable/metal"
                             android:layout_width="wrap_content"
                             android:layout_height="120dp" />,
 
@@ -358,7 +358,7 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:src="@drawable/play"
+                            android:src="@drawable/drumbass"
                             android:layout_width="wrap_content"
                             android:layout_height="120dp" />,
 

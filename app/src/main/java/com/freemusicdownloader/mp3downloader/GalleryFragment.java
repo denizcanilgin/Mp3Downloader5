@@ -203,12 +203,12 @@ public class GalleryFragment extends Fragment {
                 public void onItemClick(AdapterView<?> adapterView, View view, final int index, long l) {
 
                     BottomSheet.Builder builder = new BottomSheet.Builder(getActivity());
-                    builder.setTitle(listmusicauthor.get(index).toString())
+                    builder.setTitle(listMusicName.get(position).toString() + "\n- " + listMusicName.get(position).toString())
                             .setWindowDimming(134)
-                            .setBackgroundColor(getResources().getColor(R.color.colorAccent))
-                            .setTitleTextColor(Color.WHITE)
-                            .setItemTextColor(Color.WHITE)
-                            .setIconColor(Color.WHITE)
+                            .setBackgroundColor(getResources().getColor(R.color.colorWhite))
+                            .setTitleTextColor(getResources().getColor(R.color.color_gray))
+                            .setItemTextColor(getResources().getColor(R.color.color_gray))
+                            .setIconColor(getResources().getColor(R.color.color_gray))
                             .setDividers(true)
                             .setItems(items, icons, new DialogInterface.OnClickListener() {
                                 @Override
@@ -217,11 +217,6 @@ public class GalleryFragment extends Fragment {
                                     switch (i) {
 
                                         case 0:
-
-//                                            Intent intent = new Intent();
-//                                            intent.setAction(Intent.ACTION_VIEW);
-//                                            intent.setDataAndType(Uri.parse(listMusicurll.get(index).toString()), "audio/mp3");
-//                                            startActivity(intent);
                                             new GlobalUri().setUri(Uri.parse(listMusicurll.get(index).toString()));
                                             new GlobalUri().setMediaPlayer(null);
                                             Intent ıntent = new Intent(getActivity(),MusicPlayerActivity.class);
@@ -232,7 +227,7 @@ public class GalleryFragment extends Fragment {
                                             adapterListMusics.notifyDataSetChanged();
                                             break;
                                         case 2:
-                                            Toast.makeText(getActivity(), "Share", Toast.LENGTH_SHORT).show();
+                                            share_selected_song(listmusicname.get(position),listmusicauthor.get(position));
                                             break;
 
                                     }
@@ -335,6 +330,17 @@ public class GalleryFragment extends Fragment {
         mp.stop(); //error
         mp.reset();
 
+
+    }
+
+    public void share_selected_song(String songName, String songAuthor){
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "You should listen to this amazing song! \n \n " + songName + " - " + songAuthor
+                + " \n \n https://play.google.com/store/apps/details?id=com.freemusicdownloader.mp3downloader");
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.app_name)));
 
     }
 

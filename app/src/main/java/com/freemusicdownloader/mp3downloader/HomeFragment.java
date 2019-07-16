@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.media.AudioManager;
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -98,6 +99,8 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 
 
     private SearchView mSearchView;
+    private ImageView mLogoView;
+
 
     public customAdapterListMusics adapterListMusics;
 
@@ -212,6 +215,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.search_music, menu);
         mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+       // mLogoView = (ImageView) menu.findItem(R.id.action_logo).getActionView();
         mSearchView.setQueryHint("Enter your mp3 name ...");
 
         setupSearchView();
@@ -247,6 +251,17 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 
 
         }
+    }
+
+    public void share_selected_song(String songName, String songAuthor){
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "You should listen to this amazing song! \n \n " + songName + " - " + songAuthor
+                + " \n \n https://play.google.com/store/apps/details?id=com.freemusicdownloader.mp3downloader");
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.app_name)));
+
     }
 
     @Override
@@ -339,12 +354,12 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
                 public void onItemClick(AdapterView<?> adapterView, View view, final int songPos, long l) {
 
                     BottomSheet.Builder builder = new BottomSheet.Builder(getActivity());
-                    builder.setTitle(listmusicauthor.get(songPos).toString() + "\n- " + listmusicname.get(songPos).toString())
+                    builder.setTitle(listmusicauthor.get(position).toString() + "\n- " + listmusicauthor.get(position).toString())
                             .setWindowDimming(134)
-                            .setBackgroundColor(getResources().getColor(R.color.colorAccent))
-                            .setTitleTextColor(Color.WHITE)
-                            .setItemTextColor(Color.WHITE)
-                            .setIconColor(Color.WHITE)
+                            .setBackgroundColor(getResources().getColor(R.color.colorWhite))
+                            .setTitleTextColor(getResources().getColor(R.color.color_gray))
+                            .setItemTextColor(getResources().getColor(R.color.color_gray))
+                            .setIconColor(getResources().getColor(R.color.color_gray))
                             .setDividers(true)
                             .setItems(items, icons, new DialogInterface.OnClickListener() {
                                 @Override
@@ -461,7 +476,8 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
                                             }
                                             break;
                                         case 2:
-                                            Toast.makeText(getActivity(), "Share", Toast.LENGTH_SHORT).show();
+                                            share_selected_song(listmusicname.get(position),listmusicauthor.get(position));
+
                                             break;
                                         case 3:
                                             //Toast.makeText(getActivity(), "Favori", Toast.LENGTH_SHORT).show();

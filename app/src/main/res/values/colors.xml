@@ -4,10 +4,12 @@
     <color name="colorPrimaryDark">#38ef7d</color>
     <color name="colorAccent">#38ef7d</color>
     <color name="colorAccent2">#38ef7d</color>
-
+    <color name="colorWhite">#fff</color>
+    <color name="colorRed">#c40c0c</color>
     <color name="blue_background">#1976D2</color>
     <color name="teal_background">#00796B</color>
     <color name="orange_background">#F57C00</color>
     <color name="red_background">#D32F2F</color>
     <color name="purple_background">#7B1FA2</color>
+    <color name = "color_gray">#303030</color>
 </resources>

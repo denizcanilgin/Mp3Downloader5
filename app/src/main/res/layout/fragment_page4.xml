@@ -34,6 +34,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
+                android:fontFamily="@font/light"
+
                 android:gravity="center"
                 android:text="No internet connection!"
                 android:textAlignment="center"
@@ -77,6 +79,8 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:text="SONG NOT FOUND"
+            android:fontFamily="@font/light"
+
             android:textColor="#fff"
             android:textSize="20sp"
             android:textStyle="bold"

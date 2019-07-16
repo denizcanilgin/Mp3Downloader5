@@ -8,6 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/main_header_selector"
     tools:context=".MusicPlayerActivity"
     tools:showIn="@layout/activity_music_player">
 
@@ -21,6 +22,8 @@
         android:src="@drawable/ic_album_white_400_128dp"
         android:scaleType="centerInside"
         />
+
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -40,6 +43,15 @@
         android:layout_gravity="center_horizontal"
         android:textColor="@android:color/white"/>
 
+    <View
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"/>
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -58,7 +70,9 @@
         <android.support.v7.widget.AppCompatSeekBar
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:progressBackgroundTint="@color/white"
             android:id="@+id/seekBar"
+            android:thumbTint="@color/white"
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.8"/>
 
@@ -74,8 +88,7 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
@@ -89,7 +102,8 @@
             android:id="@+id/imageButtonPlayPause"
             android:layout_gravity="center_vertical"
             android:src="@drawable/ic_play_circle_outline_black_48dp"
-            android:tint="@color/colorAccent"
+            android:tint="@color/white"
+            android:layout_marginTop="15dp"
             android:background="@null"
             android:enabled="false"/>
 
@@ -98,10 +112,11 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/fab_margin"
             android:id="@+id/imageButtonStop"
+            android:visibility="invisible"
             android:layout_gravity="center_vertical"
             android:src="@drawable/ic_stop_circle_outline_black_48dp"
-            android:tint="@color/colorAccent"
+            android:tint="@color/white"
             android:background="@null"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

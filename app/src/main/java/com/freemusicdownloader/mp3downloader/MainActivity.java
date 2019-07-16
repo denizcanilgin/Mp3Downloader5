@@ -15,12 +15,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import com.androidsx.rateme.OnRatingListener;
 import com.androidsx.rateme.RateMeDialog;
 
 
 public class MainActivity extends AppCompatActivity {
+
+
+    private ImageView iv_icon;
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     public Toolbar toolbar;
@@ -50,7 +54,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
