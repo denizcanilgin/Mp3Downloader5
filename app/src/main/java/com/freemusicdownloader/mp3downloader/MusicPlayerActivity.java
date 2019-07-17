@@ -65,12 +65,14 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 isBinded = true;
                 initInfos(mediaPlaybackService.getFile());
 
-                Uri selectedtrack = new GlobalUri().getUri();
+                Uri selectedtrack = new GlobalData().getUri();
                 Log.i("receiveUri",""+selectedtrack);
                 try {
                     mediaPlaybackService.init(selectedtrack);
-                    // Initialisation des informations
                     initInfos(selectedtrack);
+                    Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
+                    serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+                    startService(serviceIntent);
                 }catch (Exception e)
                 {
                     Log.i("erorororo",""+e);

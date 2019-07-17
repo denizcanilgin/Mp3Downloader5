@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -20,7 +19,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
@@ -40,8 +38,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-
-import static android.app.Activity.RESULT_OK;
 
 /* Fragment used as page 2 */
 public class GalleryFragment extends Fragment {
@@ -203,7 +199,7 @@ public class GalleryFragment extends Fragment {
                 public void onItemClick(AdapterView<?> adapterView, View view, final int index, long l) {
 
                     BottomSheet.Builder builder = new BottomSheet.Builder(getActivity());
-                    builder.setTitle(listMusicName.get(position).toString() + "\n- " + listMusicName.get(position).toString())
+                    builder.setTitle(listMusicName.get(index).toString() + "\n- " + listMusicName.get(index).toString())
                             .setWindowDimming(134)
                             .setBackgroundColor(getResources().getColor(R.color.colorWhite))
                             .setTitleTextColor(getResources().getColor(R.color.color_gray))
@@ -217,8 +213,8 @@ public class GalleryFragment extends Fragment {
                                     switch (i) {
 
                                         case 0:
-                                            new GlobalUri().setUri(Uri.parse(listMusicurll.get(index).toString()));
-                                            new GlobalUri().setMediaPlayer(null);
+                                            new GlobalData().setUri(Uri.parse(listMusicurll.get(index).toString()));
+                                            new GlobalData().setMusicName(listmusicauthor.get(index).toString().trim());
                                             Intent ıntent = new Intent(getActivity(),MusicPlayerActivity.class);
                                             startActivity(ıntent);
                                             break;
@@ -277,14 +273,12 @@ public class GalleryFragment extends Fragment {
 
     public void delete_item(final int position) {
 
-        // Toast.makeText(getApplicationContext(),"delete tıkland",Toast.LENGTH_SHORT).show();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Delete");
         builder.setMessage("Do you really want to delete this song!!!");
         builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
 
-                //İptal butonuna basılınca yapılacaklar.Sadece kapanması isteniyorsa boş bırakılacak
 
             }
         });
@@ -292,7 +286,6 @@ public class GalleryFragment extends Fragment {
 
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                //Tamam butonuna basılınca yapılacaklar
 
                 try {
                     File file = new File(Uri.parse(listMusicurll.get(position)).getPath());

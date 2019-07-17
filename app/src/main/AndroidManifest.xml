@@ -49,9 +49,12 @@
             android:name="com.facebook.ads.AudienceNetworkActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
 
-        <activity android:name=".MusicPlayerActivity"/>
+        <activity android:name=".MusicPlayerActivity"
+            android:launchMode="singleTask"/>
 
         <service android:name=".MediaPlaybackService" />
+
+        <!--<service android:name=".NotificationService" />-->
 
         <meta-data
             android:name="com.google.android.gms.version"
