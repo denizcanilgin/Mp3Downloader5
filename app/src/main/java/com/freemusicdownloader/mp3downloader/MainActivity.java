@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                 .setBodyBackgroundColor(getResources().getColor(R.color.colorPrimaryDark))
                 .setBodyTextColor(getResources().getColor(R.color.colorAccent))
                 .enableFeedbackByEmail("polishmusicbear@gmail.com")
-                .showAppIcon(R.drawable.icon)
+                .showAppIcon(R.mipmap.icon)
                 .setShowShareButton(true)
                 .setRateButtonBackgroundColor(getResources().getColor(R.color.colorPrimary))
                 .setRateButtonPressedBackgroundColor(getResources().getColor(R.color.colorAccent))

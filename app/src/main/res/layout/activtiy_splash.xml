@@ -7,13 +7,7 @@
     android:background="@drawable/main_header_selector"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="114dp"
-        android:layout_height="114dp"
-        android:background="@drawable/icon"
-        android:id="@+id/splashLogo"
-        android:visibility="gone"
-        android:layout_gravity="center_horizontal" />
+
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/avi"
         style="@style/AVLoadingIndicatorView"
@@ -22,5 +16,13 @@
         android:layout_gravity="center"
         app:indicatorColor="#fff"
         app:indicatorName="BallClipRotatePulseIndicator" />
+
+    <ImageView
+        android:layout_width="78dp"
+        android:layout_height="78dp"
+        android:src="@drawable/smile_icon"
+        android:id="@+id/splashLogo"
+        android:visibility="visible"
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>
