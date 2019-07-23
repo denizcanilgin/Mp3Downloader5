@@ -57,7 +57,6 @@ public class MusicPlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_player);
         rootView = (ViewGroup) findViewById(android.R.id.content);
-
          connection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
@@ -77,10 +76,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 {
                     Log.i("erorororo",""+e);
                 }
-
-
             }
-
             @Override
             public void onServiceDisconnected(ComponentName name) {
                 isBinded = false;
@@ -106,13 +102,11 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
         buttonPlayPause = (ImageButton) findViewById(R.id.imageButtonPlayPause);
         buttonStop = (ImageButton) findViewById(R.id.imageButtonStop);
-
         albumArt = (ImageView) findViewById(R.id.albumArt);
         titleTextView = (TextView) findViewById(R.id.textViewTitle);
         artistTextView = (TextView) findViewById(R.id.textViewArtist);
         elapsedTimeTextView = (TextView) findViewById(R.id.textViewElapsedTime);
         durationTextView = (TextView) findViewById(R.id.textViewDuration);
-
         elapsedTimeSeekBar = (AppCompatSeekBar) findViewById(R.id.seekBar);
 
         buttonPlayPause.setOnClickListener(new View.OnClickListener() {
@@ -156,7 +150,6 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                // Change la progression du titre lorsque l'utilisateur relâche la seekbar
                 mediaPlaybackService.seekTo(seekBar.getProgress());
             }
         });

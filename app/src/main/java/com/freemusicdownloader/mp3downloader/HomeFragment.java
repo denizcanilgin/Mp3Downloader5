@@ -356,10 +356,10 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
                     BottomSheet.Builder builder = new BottomSheet.Builder(getActivity());
                     builder.setTitle(listmusicauthor.get(position).toString() + "\n- " + listmusicauthor.get(position).toString())
                             .setWindowDimming(134)
-                            .setBackgroundColor(getResources().getColor(R.color.colorWhite))
-                            .setTitleTextColor(getResources().getColor(R.color.color_gray))
-                            .setItemTextColor(getResources().getColor(R.color.color_gray))
-                            .setIconColor(getResources().getColor(R.color.color_gray))
+                            .setBackgroundColor(getResources().getColor(R.color.white))
+                            .setTitleTextColor(getResources().getColor(R.color.dark_primary))
+                            .setItemTextColor(getResources().getColor(R.color.dark_primary))
+                            .setIconColor(getResources().getColor(R.color.dark_primary))
                             .setDividers(true)
                             .setItems(items, icons, new DialogInterface.OnClickListener() {
                                 @Override

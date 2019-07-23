@@ -24,11 +24,7 @@
             android:layout_centerInParent="true"
             android:background="@drawable/shape"
             android:orientation="vertical"
-            android:visibility="gone"
-
-            >
-
-
+            android:visibility="gone">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -202,9 +202,9 @@ public class GalleryFragment extends Fragment {
                     builder.setTitle(listMusicName.get(index).toString() + "\n- " + listMusicName.get(index).toString())
                             .setWindowDimming(134)
                             .setBackgroundColor(getResources().getColor(R.color.colorWhite))
-                            .setTitleTextColor(getResources().getColor(R.color.color_gray))
-                            .setItemTextColor(getResources().getColor(R.color.color_gray))
-                            .setIconColor(getResources().getColor(R.color.color_gray))
+                            .setTitleTextColor(getResources().getColor(R.color.dark_primary))
+                            .setItemTextColor(getResources().getColor(R.color.dark_primary))
+                            .setIconColor(getResources().getColor(R.color.dark_primary))
                             .setDividers(true)
                             .setItems(items, icons, new DialogInterface.OnClickListener() {
                                 @Override
@@ -355,10 +355,18 @@ public class GalleryFragment extends Fragment {
         {
             case R.id.action_refresh :
 
-                Intent intent = new Intent();
-                intent.setType("audio/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Choose Track"), 1);
+//                Intent intent = new Intent();
+//                intent.setType("audio/*");
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                startActivityForResult(Intent.createChooser(intent, "Choose Track"), 1);
+
+                File file = new File(pathControl());
+                Uri uri = Uri.fromFile(file);
+                Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+                getActivity().sendBroadcast(intent);
+
+
+
 //                Toast.makeText(getActivity(), "Gallery Refresh ...", Toast.LENGTH_SHORT).show();
 //                getAllMusics(pathControl());
 //                adapterListMusics = new customAdapterListMusics(getActivity().getApplication(), getAllMusics(pathControl()), listMusicNameCont, listMusicName, listMusicTime);

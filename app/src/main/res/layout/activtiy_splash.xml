@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:gravity="center"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:weightSum="3"
     android:background="@drawable/main_header_selector"
     android:layout_height="match_parent">
 
 
+
+
+
+    <RelativeLayout
+        android:layout_weight="2"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/avi"
         style="@style/AVLoadingIndicatorView"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_gravity="center"
         app:indicatorColor="#fff"
         app:indicatorName="BallClipRotatePulseIndicator" />
 
-    <ImageView
-        android:layout_width="78dp"
-        android:layout_height="78dp"
-        android:src="@drawable/smile_icon"
-        android:id="@+id/splashLogo"
-        android:visibility="visible"
-        android:layout_gravity="center_horizontal" />
+    </RelativeLayout>
+
+
+
+
+
+
 
 </LinearLayout>

@@ -38,9 +38,9 @@ public class SplashActivtiy extends Activity {
         final SharedPreferences.Editor editor = sharedPref.edit();
 
 
-        ImageView SplashLogo = (ImageView)findViewById(R.id.splashLogo);
-        Animation myanim = AnimationUtils.loadAnimation(this,R.anim.splashanim);
-        SplashLogo.startAnimation(myanim);
+//        ImageView SplashLogo = (ImageView)findViewById(R.id.splashLogo);
+//        Animation myanim = AnimationUtils.loadAnimation(this,R.anim.splashanim);
+//        SplashLogo.startAnimation(myanim);
 
         new Timer().schedule(new TimerTask() {
 

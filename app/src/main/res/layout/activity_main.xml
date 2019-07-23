@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
-        android:background="#38ef7d"
+        android:background="#11998e"
         style="@style/ToolBarStyle.Event"
         android:minHeight="?attr/actionBarSize"
         app:titleTextColor="#fff" >
@@ -33,9 +33,9 @@
                 android:layout_height="24dp"
                 android:text="Mp3 Downloader - Smile"
                 android:gravity="start"
-                android:textSize="16dp"
+                android:textSize="20dp"
                 android:textColor="@color/white"
-                android:fontFamily="@font/light"
+                android:fontFamily="@font/boldc"
                 android:layout_gravity="center"
                 android:id="@+id/toolbar_title" />
 
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_marginTop="1dp"
-        android:background="#38ef7d"
+        android:background="#11998e"
         app:tabIndicatorColor="#fff"
         app:tabTextColor="#fff"
         app:tabSelectedTextColor="#fff" />
