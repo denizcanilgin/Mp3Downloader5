@@ -57,10 +57,19 @@ public class MusicPlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_player);
         rootView = (ViewGroup) findViewById(android.R.id.content);
+        buttonPlayPause = (ImageButton) findViewById(R.id.imageButtonPlayPause);
+        buttonStop = (ImageButton) findViewById(R.id.imageButtonStop);
+        albumArt = (ImageView) findViewById(R.id.albumArt);
+        titleTextView = (TextView) findViewById(R.id.textViewTitle);
+        artistTextView = (TextView) findViewById(R.id.textViewArtist);
+        elapsedTimeTextView = (TextView) findViewById(R.id.textViewElapsedTime);
+        durationTextView = (TextView) findViewById(R.id.textViewDuration);
+        elapsedTimeSeekBar = (AppCompatSeekBar) findViewById(R.id.seekBar);
          connection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 mediaPlaybackService = ((MediaPlaybackService.IDBinder)service).getService();
+                new GlobalData().setMediaPlaybackService(mediaPlaybackService);
                 isBinded = true;
                 initInfos(mediaPlaybackService.getFile());
 
@@ -68,6 +77,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 Log.i("receiveUri",""+selectedtrack);
                 try {
                     mediaPlaybackService.init(selectedtrack);
+
                     initInfos(selectedtrack);
                     Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
                     serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
@@ -87,6 +97,18 @@ public class MusicPlayerActivity extends AppCompatActivity {
         receiverElapsedTime = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                Boolean a = mediaPlaybackService.isPlaying();
+                Log.i("playingresult",""+a);
+                if  (!a)
+                {
+                    buttonPlayPause.setImageResource(R.drawable.ic_play_circle_outline_black_48dp);
+                    new GlobalData().setMediaPlaybackService(mediaPlaybackService);
+//                    mediaPlaybackService.pause();
+                }
+                //else {
+//                    buttonPlayPause.setImageResource(R.drawable.ic_pause_circle_outline_black_48dp);
+//                    mediaPlaybackService.play();
+//                }
                 elapsedTime = intent.getIntExtra(MediaPlaybackService.MPS_MESSAGE, 0);
                 updateElapsedTime(elapsedTime);
             }
@@ -100,18 +122,12 @@ public class MusicPlayerActivity extends AppCompatActivity {
             }
         };
 
-        buttonPlayPause = (ImageButton) findViewById(R.id.imageButtonPlayPause);
-        buttonStop = (ImageButton) findViewById(R.id.imageButtonStop);
-        albumArt = (ImageView) findViewById(R.id.albumArt);
-        titleTextView = (TextView) findViewById(R.id.textViewTitle);
-        artistTextView = (TextView) findViewById(R.id.textViewArtist);
-        elapsedTimeTextView = (TextView) findViewById(R.id.textViewElapsedTime);
-        durationTextView = (TextView) findViewById(R.id.textViewDuration);
-        elapsedTimeSeekBar = (AppCompatSeekBar) findViewById(R.id.seekBar);
+
 
         buttonPlayPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                new GlobalData().setMediaPlaybackService(mediaPlaybackService);
                 int resId;
                 if (mediaPlaybackService.isPlaying()) {
                     resId = R.drawable.ic_play_circle_outline_black_48dp;
@@ -123,6 +139,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 buttonPlayPause.setImageResource(resId);
             }
         });
+//        buttonPlayPause.setImageResource(R.drawable.ic_play_circle_outline_black_48dp);
         buttonPlayPause.setEnabled(true);
 
         buttonStop.setOnClickListener(new View.OnClickListener() {
@@ -169,25 +186,28 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        // Le bindService() est dans le onResume afin de lier le service à l'activité en cas de
-        // changement d'orientation ou de passage en arrière-plan
+
         getApplicationContext().bindService(new Intent(getApplicationContext(),
                 MediaPlaybackService.class), connection, BIND_AUTO_CREATE);
 
-        // Enregistrement des BroadcastReceiver à la reprise de l'activité
         LocalBroadcastManager.getInstance(this).registerReceiver(receiverElapsedTime,
                 new IntentFilter(MediaPlaybackService.MPS_RESULT)
         );
         LocalBroadcastManager.getInstance(this).registerReceiver(receiverCompleted,
                 new IntentFilter(MediaPlaybackService.MPS_COMPLETED)
+
         );
 
         super.onResume();
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
     protected void onPause() {
-        // Désenregistrement des BroadcastReceiver à la mise en pause de l'activité
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiverElapsedTime);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiverCompleted);
         super.onPause();
@@ -195,7 +215,6 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Si l'intent retourne bien un fichier
         if(resultCode==RESULT_OK)
         {
 //            // Récupération de l'URI du titre choisi

@@ -50,7 +50,9 @@
             android:configChanges="keyboardHidden|orientation|screenSize" />
 
         <activity android:name=".MusicPlayerActivity"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTop"
+            android:taskAffinity=""
+            android:excludeFromRecents="true"/>
 
         <service android:name=".MediaPlaybackService" />
 
