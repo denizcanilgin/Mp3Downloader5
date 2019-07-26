@@ -31,11 +31,11 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
     MediaPlayer mMediaPlayer = null;
     Uri file;
-    RemoteViews bigViews,views;
+    RemoteViews bigViews, views;
 
     private NotificationManager notifManager;
     NotificationCompat.Builder mBuilder;
-    String NOTIFICATION_CHANNEL_ID = "com.example.simpleapp";
+    String NOTIFICATION_CHANNEL_ID = "com.freemusicdownloader.mp3downloader";
 
     private static final int NOTIF_ID = 1234;
 
@@ -45,6 +45,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             return MediaPlaybackService.this;
         }
     }
+
     IDBinder idBinder = new IDBinder();
 
     LocalBroadcastManager broadcastManager;
@@ -56,7 +57,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     @Override
     public void onCreate() {
         broadcastManager = LocalBroadcastManager.getInstance(this);
-        views = new RemoteViews(getPackageName(), R.layout.status_bar_expanded);
+        views = new RemoteViews(getPackageName(), R.layout.status_bar);
         bigViews = new RemoteViews(getPackageName(), R.layout.status_bar_expanded);
 
         notificationManager = NotificationManagerCompat.from(this);
@@ -117,18 +118,16 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                     Thread.sleep(500);
                     MediaPlaybackService mediaPlaybackService = new GlobalData().getMediaPlaybackService();
 
-                    if  (mediaPlaybackService.isPlaying())
-                    {
-                        bigViews.setImageViewResource(R.id.status_bar_pause,R.drawable.apollo_holo_dark_pause);
-                        views.setImageViewResource(R.id.status_bar_pause,R.drawable.apollo_holo_dark_pause);
-                        notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE,mBuilder.build());
+                    if (mediaPlaybackService.isPlaying()) {
+                        bigViews.setImageViewResource(R.id.status_bar_pause, R.drawable.ic_pause_circle_filled_black_24dp);
+                        views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_pause_circle_filled_black_24dp);
+                        notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mBuilder.build());
 
-                    }else {
-                        bigViews.setImageViewResource(R.id.status_bar_pause,R.drawable.apollo_holo_dark_play);
-                        views.setImageViewResource(R.id.status_bar_pause,R.drawable.apollo_holo_dark_play);
-                        notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE,mBuilder.build());
+                    } else {
+                        bigViews.setImageViewResource(R.id.status_bar_pause, R.drawable.ic_play_circle_filled_black_24dp);
+                        views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_play_circle_filled_black_24dp);
+                        notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mBuilder.build());
                     }
-
 
 
                 } catch (InterruptedException e) {
@@ -196,28 +195,26 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         } else if (intent.getAction().equals(Constants.ACTION.PLAY_ACTION)) {
             play();
             Log.i("click_event", "Clicked Play");
-        }else if (intent.getAction().equals(Constants.ACTION.PAUSE_ACTION)) {
+        } else if (intent.getAction().equals(Constants.ACTION.PAUSE_ACTION)) {
 
             Log.i("click_event", "Clicked Pause");
             playbackService = new GlobalData().getMediaPlaybackService();
             Boolean a = playbackService.isPlaying();
-            Log.i("infoooPlay",""+a);
-            if  (playbackService.isPlaying())
-            {
-                bigViews.setImageViewResource(R.id.status_bar_pause,R.drawable.apollo_holo_dark_play);
-                views.setImageViewResource(R.id.status_bar_pause,R.drawable.apollo_holo_dark_play);
+            Log.i("infoooPlay", "" + a);
+            if (playbackService.isPlaying()) {
+                bigViews.setImageViewResource(R.id.status_bar_pause, R.drawable.ic_play_circle_filled_black_24dp);
+                views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_play_circle_filled_black_24dp);
                 pause();
-            }else {
-                bigViews.setImageViewResource(R.id.status_bar_pause,R.drawable.apollo_holo_dark_pause);
-                views.setImageViewResource(R.id.status_bar_pause,R.drawable.apollo_holo_dark_pause);
+            } else {
+                bigViews.setImageViewResource(R.id.status_bar_pause, R.drawable.ic_pause_circle_filled_black_24dp);
+                views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_pause_circle_filled_black_24dp);
                 play();
             }
 
-            notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE,mBuilder.build());
+            notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mBuilder.build());
 
 
-        }
-        else if (intent.getAction().equals(Constants.ACTION.NEXT_ACTION)) {
+        } else if (intent.getAction().equals(Constants.ACTION.NEXT_ACTION)) {
             Toast.makeText(this, "Clicked Next", Toast.LENGTH_SHORT).show();
             Log.i("click_event", "Clicked Next");
         } else if (intent.getAction().equals(
@@ -226,7 +223,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             Toast.makeText(this, "Service Stoped", Toast.LENGTH_SHORT).show();
 
             stop();
-            stopForeground( true );
+            stopForeground(true);
             notificationManager.cancel(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE);
             System.exit(0);
         }
@@ -280,7 +277,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         views.setOnClickPendingIntent(R.id.status_bar_play, pendingIntent);
         bigViews.setOnClickPendingIntent(R.id.status_bar_play, pendingIntent);
 
-        views.setOnClickPendingIntent(R.id.status_bar_pause, ppauseIntent);
+        views.setOnClickPendingIntent(R.id.status_bar_play, ppauseIntent);
         bigViews.setOnClickPendingIntent(R.id.status_bar_pause, ppauseIntent);
 
         views.setOnClickPendingIntent(R.id.status_bar_next, pnextIntent);
@@ -293,39 +290,36 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         bigViews.setOnClickPendingIntent(R.id.status_bar_collapse, pcloseIntent);
 
         String songName = new GlobalData().getMusicName();
-        Log.i("asdasd",songName);
+        Log.i("asdasd", songName);
         views.setTextViewText(R.id.status_bar_track_name, songName);
         bigViews.setTextViewText(R.id.status_bar_track_name, songName);
 
         views.setTextViewText(R.id.status_bar_artist_name, "Artist Name");
         bigViews.setTextViewText(R.id.status_bar_artist_name, "Artist Name");
 
-        String id = "default_channel_id";
-        String title = "Default Channel";
+        String id = "channel_id";
+        String title = "Channel_title";
+        Intent intent;
 
         if (notifManager == null) {
             notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            int importance = NotificationManager.IMPORTANCE_LOW ;
-            NotificationChannel mChannel = new NotificationChannel(id, title, importance);
-            mChannel.enableVibration(false);
-            mChannel.setSound(null,null);
-            if (mChannel == null) {
-                Log.i("nulllmuuuu",""+mChannel);
-                mChannel.enableVibration(false);
-                mChannel.setSound(null,null);
-                notifManager.createNotificationChannel(mChannel);
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            NotificationChannel notificationChannel = notifManager.getNotificationChannel(id);
+            if (notificationChannel == null) {
+                notificationChannel = new NotificationChannel(id, title, importance);
+                notificationChannel.setSound(null, null);
+                notifManager.createNotificationChannel(notificationChannel);
             }
-            mChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
-            mBuilder = new NotificationCompat.Builder(this,NOTIFICATION_CHANNEL_ID)
-                    .setChannelId(NOTIFICATION_CHANNEL_ID)
-                    .setSmallIcon(R.drawable.ic_music_note)
-                    .setCustomContentView(views)
-                    .setSound(null)
-                    .setCustomBigContentView(bigViews)
+            notificationChannel.setSound(null, null);
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+
+            mBuilder = new NotificationCompat.Builder(getApplicationContext(), id);
+            mBuilder.setSmallIcon(R.drawable.ic_music_note)
                     .setAutoCancel(true)
-                    .setOngoing(true)
+                    .setCustomContentView(views)
+                    .setCustomBigContentView(bigViews)
                     .setContentIntent(pendingIntent)
                     .setOnlyAlertOnce(true);
 
@@ -333,9 +327,9 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             notification.flags = Notification.FLAG_AUTO_CANCEL;
             notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, notification);
 
-        } else{
+        } else {
 
-            mBuilder = new NotificationCompat.Builder(this,NOTIFICATION_CHANNEL_ID)
+            mBuilder = new NotificationCompat.Builder(this, NOTIFICATION_SERVICE)
                     .setChannelId(NOTIFICATION_CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_music_note)
                     .setCustomContentView(views)

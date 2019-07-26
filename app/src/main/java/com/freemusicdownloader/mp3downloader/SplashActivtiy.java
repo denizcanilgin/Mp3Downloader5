@@ -4,20 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.sdsmdg.harjot.rotatingtext.RotatingTextWrapper;
-import com.sdsmdg.harjot.rotatingtext.models.Rotatable;
-
-import java.security.PublicKey;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -53,17 +44,20 @@ public class SplashActivtiy extends Activity {
 
                 Intent i = null;
 
-                if(virginity_lost == 1) {
-                    i = new Intent(SplashActivtiy.this, MainActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                if(virginity_lost == 1) {
+//                    i = new Intent(SplashActivtiy.this, MainActivity.class);
+//                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//
+//                }else
+//                {
+//
+//                    i = new Intent(SplashActivtiy.this, IntroActivity.class);
+//
+//
+//                }
 
-                }else
-                {
-
-                    i = new Intent(SplashActivtiy.this, IntroActivity.class);
-
-
-                }
+                i = new Intent(SplashActivtiy.this, MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
                 startActivity(i);
 

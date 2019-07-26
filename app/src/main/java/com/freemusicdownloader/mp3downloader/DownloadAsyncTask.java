@@ -5,8 +5,10 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -203,23 +205,9 @@ public class DownloadAsyncTask extends AsyncTask<String,String,String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
 
-//        final KonfettiView konfettiView = activity.findViewById(R.id.viewKonfetti);
-//
-//        konfettiView.build()
-//                .addColors(C.YELLOW, Color.GREEN, Color.MAGENTA, Color.BLUE)
-//                .setDirection(0.0, 359.0)
-//                .setSpeed(1f, 5f)
-//                .setFadeOutEnabled(true)
-//                .setTimeToLive(2000L)
-//                .addShapes(Shape.RECT, Shape.RECT)
-//                .addSizes(new Size(12, 5f))
-//                .setPosition(konfettiView.getX() + konfettiView.getWidth() / 2, konfettiView.getY() + konfettiView.getHeight() / 3)
-//                .burst(100);
-
         Toast.makeText(activity, "" + songName + " downloaded", Toast.LENGTH_SHORT).show();
 
-        builder.setContentText("1Download finished")
-                .setSmallIcon(R.drawable.ic_file_download_black_24dp)
+        builder.setSmallIcon(R.drawable.ic_file_download_black_24dp)
                 .setProgress(0, 0, false)
                 .setOngoing(true)
                 .setOnlyAlertOnce(true)
@@ -227,6 +215,9 @@ public class DownloadAsyncTask extends AsyncTask<String,String,String> {
 
         notificationManager.cancel(NOTIFY_ID);
         createNotification(currentimagepath,songName);
+        new GlobalData().setUri(Uri.parse(currentimagepath));
+        new GlobalData().setMusicName(songName);
+
 
     }
 
@@ -239,11 +230,17 @@ public class DownloadAsyncTask extends AsyncTask<String,String,String> {
         NotificationCompat.Builder builder;
 
 
-        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+         Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//
+//        Intent intentnatif = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(filepath));
+//
+//        intentnatif.setDataAndType(Uri.parse("file://" + filepath), "audio/mp3");
 
-        Intent intentnatif = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(filepath));
+        Intent intenttt = new Intent(activity, MusicPlayerActivity.class);
 
-        intentnatif.setDataAndType(Uri.parse("file://" + filepath), "audio/mp3");
+        PendingIntent pendingIntenttt = TaskStackBuilder.create(activity)
+                .addNextIntent(intenttt)
+                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
         if (notifManager == null) {
@@ -255,34 +252,35 @@ public class DownloadAsyncTask extends AsyncTask<String,String,String> {
             if (mChannel == null) {
                 mChannel = new NotificationChannel(id, title, importance);
                 mChannel.enableVibration(true);
+                mChannel.enableLights(true);
+                mChannel.setLightColor(Color.RED);
+                mChannel.enableVibration(true);
                 mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
                 notifManager.createNotificationChannel(mChannel);
             }
             builder = new NotificationCompat.Builder(getApplicationContext(), id);
             intent = new Intent(getApplicationContext(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intentnatif, 0);
             builder.setContentTitle(songNamee)
-                    .setSmallIcon(R.drawable.notif)
+                    .setSmallIcon(R.drawable.ic_music_note)
                     .setContentText("Download Completed ♫ ♫ \uD83D\uDE0E")
                     .setAutoCancel(true)
                     .setSound(soundUri)
-                    .setContentIntent(pendingIntent)
-                    .setTicker("Download Completed ♫ ♫ \uD83D\uDE0E")
-                    .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+                    .setContentIntent(pendingIntenttt)
+                    .setTicker("Download Completed ♫ ♫ \uD83D\uDE0E");
+
+
         } else {
             builder = new NotificationCompat.Builder(getApplicationContext(), id);
             intent = new Intent(getApplicationContext(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intentnatif, 0);
             builder.setContentTitle(songNamee)
-                    .setSmallIcon(R.drawable.notif)
+                    .setSmallIcon(R.drawable.ic_music_note)
                     .setContentText("Download Completed ♫ ♫ \uD83D\uDE0E")
                     .setSound(soundUri)
                     .setAutoCancel(true)
-                    .setContentIntent(pendingIntent)
+                    .setContentIntent(pendingIntenttt)
                     .setTicker("Download Completed ♫ ♫ \uD83D\uDE0E")
-                    .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400})
                     .setPriority(Notification.PRIORITY_HIGH);
         }
         Notification notification = builder.build();

@@ -1,5 +1,6 @@
 package com.freemusicdownloader.mp3downloader;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
@@ -10,9 +11,11 @@ import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -114,6 +117,13 @@ public class GalleryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.System.canWrite(getActivity())) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE}, 2909);
+            }
+        }
 
 
     }
@@ -232,43 +242,21 @@ public class GalleryFragment extends Fragment {
                             });
                     builder.show();
 
-
-//                    switch (index) {
-//                        case 0:
-//                            Intent intent = new Intent();
-//                            intent.setAction(Intent.ACTION_VIEW);
-//                            intent.setDataAndType(Uri.parse(listMusicurll.get(index).toString()), "audio/mp3");
-//                            startActivity(intent);
-//                            break;
-//                        case 1:
-//
-//                            delete_item(index);
-//                            adapterListMusics.notifyDataSetChanged();
-//                            break;
-//                    }
-
-
                 }
             });
-
 
             holder.btn_play_stop.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     Intent intent = new Intent();
                     intent.setAction(Intent.ACTION_VIEW);
                     intent.setDataAndType(Uri.parse(listmusicURL.get(position).toString()), "audio/mp3");
                     startActivity(intent);
-
                 }
             });
 
-
             return rowView;
-
         }
-
     }
 
     public void delete_item(final int position) {
@@ -355,22 +343,15 @@ public class GalleryFragment extends Fragment {
         {
             case R.id.action_refresh :
 
-//                Intent intent = new Intent();
-//                intent.setType("audio/*");
-//                intent.setAction(Intent.ACTION_GET_CONTENT);
-//                startActivityForResult(Intent.createChooser(intent, "Choose Track"), 1);
+                Toast.makeText(getActivity(), "Gallery Refresh ...", Toast.LENGTH_SHORT).show();
 
-                File file = new File(pathControl());
-                Uri uri = Uri.fromFile(file);
-                Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
-                getActivity().sendBroadcast(intent);
+                listMusicName = new ArrayList<String>();
+                listMusicTime = new ArrayList<String>();
+                listMusicNameCont = new ArrayList<String>();
+                getAllMusics(pathControl());
+                customAdapterListMusics adapterListMusics = new customAdapterListMusics(getActivity().getApplication(), getAllMusics(pathControl()), listMusicNameCont, listMusicName, listMusicTime);
+                mylist.setAdapter(adapterListMusics);
 
-
-
-//                Toast.makeText(getActivity(), "Gallery Refresh ...", Toast.LENGTH_SHORT).show();
-//                getAllMusics(pathControl());
-//                adapterListMusics = new customAdapterListMusics(getActivity().getApplication(), getAllMusics(pathControl()), listMusicNameCont, listMusicName, listMusicTime);
-//                mylist.setAdapter(adapterListMusics);
                 if (mylist.getAdapter().getCount() != 0) {
 //            AudienceNetworkAds.facebookLoadBanner(getActivity(), view);
 //            AudienceNetworkAds.facebookInterstitialAd(getActivity(),ads_layout,avLoadingIndicatorView);
@@ -434,36 +415,43 @@ public class GalleryFragment extends Fragment {
         if (file.isDirectory()) {
             listFile = file.listFiles();
 
+            try {
+                for (int i = 0; i < listFile.length; i++) {
 
-            for (int i = 0; i < listFile.length; i++) {
+                    f.add("file://" + listFile[i].getAbsolutePath());
 
-                f.add("file://" + listFile[i].getAbsolutePath());
+                    MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+                    mmr.setDataSource(listFile[i].getAbsolutePath());
 
-                MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-                mmr.setDataSource(listFile[i].getAbsolutePath());
+                    String timem = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                    String teee = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+                    long dur = Long.parseLong(timem);
 
-                String timem = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-                String teee = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
-                long dur = Long.parseLong(timem);
+                    String seconds = String.valueOf((dur % 60000) / 1000);
+                    String minutes = String.valueOf(dur / 60000);
+                    if (seconds.length() == 1) {
 
-                String seconds = String.valueOf((dur % 60000) / 1000);
-                String minutes = String.valueOf(dur / 60000);
-                if (seconds.length() == 1) {
+                        listMusicTime.add("0" + minutes + ":0" + seconds);
 
-                    listMusicTime.add("0" + minutes + ":0" + seconds);
+                    } else {
+                        listMusicTime.add("0" + minutes + ":" + seconds);
+                    }
 
-                } else {
-                    listMusicTime.add("0" + minutes + ":" + seconds);
+                    Date lastModDate = new Date(listFile[i].lastModified());
+
+                    listMusicName.add(listFile[i].getName());
+
+                    listMusicNameCont.add(lastModDate.toString());
+
+
                 }
-
-                Date lastModDate = new Date(listFile[i].lastModified());
-
-                listMusicName.add(listFile[i].getName());
-
-                listMusicNameCont.add(lastModDate.toString());
-
+            }catch (Exception e)
+            {
 
             }
+
+
+
         }
         return f;
     }

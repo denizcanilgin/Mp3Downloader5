@@ -6,26 +6,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.PorterDuff;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -49,6 +43,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
     AppCompatSeekBar elapsedTimeSeekBar;
     FloatingActionButton fab;
     public ServiceConnection connection;
+    private NotificationManagerCompat notificationManager;
 
     int elapsedTime = 0;
 
@@ -56,6 +51,9 @@ public class MusicPlayerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_player);
+
+        notificationManager = NotificationManagerCompat.from(this);
+
         rootView = (ViewGroup) findViewById(android.R.id.content);
         buttonPlayPause = (ImageButton) findViewById(R.id.imageButtonPlayPause);
         buttonStop = (ImageButton) findViewById(R.id.imageButtonStop);
@@ -93,7 +91,6 @@ public class MusicPlayerActivity extends AppCompatActivity {
             }
         };
 
-        // BroadcastReceiver permettant de mettre à jour le temps écoulé
         receiverElapsedTime = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -101,27 +98,19 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 Log.i("playingresult",""+a);
                 if  (!a)
                 {
-                    buttonPlayPause.setImageResource(R.drawable.ic_play_circle_outline_black_48dp);
+                    buttonPlayPause.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
                     new GlobalData().setMediaPlaybackService(mediaPlaybackService);
-//                    mediaPlaybackService.pause();
                 }
-                //else {
-//                    buttonPlayPause.setImageResource(R.drawable.ic_pause_circle_outline_black_48dp);
-//                    mediaPlaybackService.play();
-//                }
                 elapsedTime = intent.getIntExtra(MediaPlaybackService.MPS_MESSAGE, 0);
                 updateElapsedTime(elapsedTime);
             }
         };
 
-        // BroadcastReceiver remettant à zéro l'UI quand la lecture est terminée
         receiverCompleted = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                clearInfos();
             }
         };
-
 
 
         buttonPlayPause.setOnClickListener(new View.OnClickListener() {
@@ -130,23 +119,22 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 new GlobalData().setMediaPlaybackService(mediaPlaybackService);
                 int resId;
                 if (mediaPlaybackService.isPlaying()) {
-                    resId = R.drawable.ic_play_circle_outline_black_48dp;
+                    resId = R.drawable.ic_play_circle_filled_black_24dp;
                     mediaPlaybackService.pause();
                 } else {
-                    resId = R.drawable.ic_pause_circle_outline_black_48dp;
+                    resId = R.drawable.ic_pause_circle;
                     mediaPlaybackService.play();
                 }
                 buttonPlayPause.setImageResource(resId);
             }
         });
-//        buttonPlayPause.setImageResource(R.drawable.ic_play_circle_outline_black_48dp);
         buttonPlayPause.setEnabled(true);
 
         buttonStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mediaPlaybackService.stop();
-                buttonPlayPause.setImageResource(R.drawable.ic_play_circle_outline_black_48dp);
+                buttonPlayPause.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
                 buttonPlayPause.setEnabled(false);
                 clearInfos();
             }
@@ -170,17 +158,6 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 mediaPlaybackService.seekTo(seekBar.getProgress());
             }
         });
-
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Intent pour récupérer un morceau
-
-            }
-        });
-
-
 
     }
 
@@ -217,12 +194,8 @@ public class MusicPlayerActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode==RESULT_OK)
         {
-//            // Récupération de l'URI du titre choisi
-//            Uri selectedtrack = Uri.parse("content://com.android.externalstorage.documents/document/808C-1414%3AMp3Download%2FBir%20%C3%B6yk%C3%BC.mp3");
-            // Lancement de la lecture
             Uri selectedtrack = data.getData();
             mediaPlaybackService.init(selectedtrack);
-            // Initialisation des informations
             initInfos(selectedtrack);
         }
     }
@@ -234,13 +207,19 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
     private void initInfos(Uri uri) {
         if (uri != null) {
-            // Récupération des metadatas du titre
             MediaMetadataRetriever mData = new MediaMetadataRetriever();
             mData.setDataSource(this, uri);
 
             int duration = Integer.parseInt(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
 
-            titleTextView.setText(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE));
+            if (mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE) != null
+                    || mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST) == null )
+            {
+                titleTextView.setText(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE));
+                artistTextView.setText(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
+            }
+            String keyTitle = new GlobalData().getMusicName();
+            titleTextView.setText(keyTitle);
             artistTextView.setText(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
             durationTextView.setText(secondsToString(duration));
 
@@ -248,18 +227,9 @@ public class MusicPlayerActivity extends AppCompatActivity {
             elapsedTimeSeekBar.setEnabled(true);
 
             try {
-                // Récupération et affichage de la pochette
                 byte art[] = mData.getEmbeddedPicture();
                 Bitmap image = BitmapFactory.decodeByteArray(art, 0, art.length);
                 albumArt.setImageBitmap(image);
-
-                // Récupération des couleurs de la pochette avec Palette afin de les appliquer au thème
-                Palette.from(image).generate(new Palette.PaletteAsyncListener() {
-                    @Override
-                    public void onGenerated(Palette palette) {
-                        setColors(palette);
-                    }
-                });
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -271,10 +241,9 @@ public class MusicPlayerActivity extends AppCompatActivity {
         elapsedTimeSeekBar.setProgress(elapsedTime);
         elapsedTimeTextView.setText(secondsToString(elapsedTime));
 
-        // Active le bouton de mise en pause
         if (mediaPlaybackService.isPlaying()) {
             buttonPlayPause.setEnabled(true);
-            buttonPlayPause.setImageResource(R.drawable.ic_pause_circle_outline_black_48dp);
+            buttonPlayPause.setImageResource(R.drawable.ic_pause_circle);
         }
     }
 
@@ -288,40 +257,8 @@ public class MusicPlayerActivity extends AppCompatActivity {
         elapsedTimeSeekBar.setProgress(0);
         albumArt.setImageResource(R.drawable.ic_album_white_400_128dp);
         buttonPlayPause.setEnabled(false);
-        buttonPlayPause.setImageResource(R.drawable.ic_play_circle_outline_black_48dp);
-        setColors(null);
+        buttonPlayPause.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
+
     }
 
-    private void setColors(Palette palette) {
-        // Si une palette est passée, ses couleurs sont utilisées et appliquées,
-        // sinon les couleurs par défaut sont utilisées
-        int colorPrimaryDark = (palette != null) ? palette.getDarkVibrantColor(
-                ContextCompat.getColor(getApplicationContext(), R.color.blue_background)
-        ) : ContextCompat.getColor(getApplicationContext(), R.color.orange_background);
-        int colorPrimary  = (palette != null) ? palette.getVibrantColor(
-                ContextCompat.getColor(getApplicationContext(), R.color.purple_background)
-        ) : ContextCompat.getColor(getApplicationContext(), R.color.red_background);
-        int colorAccent = (palette != null) ? palette.getLightVibrantColor(
-                ContextCompat.getColor(getApplicationContext(), R.color.colorAccent)
-        ) : ContextCompat.getColor(getApplicationContext(), R.color.teal_background);
-
-
-        // La coloration de la bar de notification ne fonctionne que sur Lollipop et suppérieurs
-        if (Build.VERSION.SDK_INT >= 21) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(colorPrimaryDark);
-        }
-
-        rootView.setBackgroundColor(colorPrimary);
-
-        buttonPlayPause.setColorFilter(colorAccent);
-        buttonStop.setColorFilter(colorAccent);
-
-        elapsedTimeSeekBar.getProgressDrawable().setColorFilter(colorAccent, PorterDuff.Mode.SRC_IN);
-        elapsedTimeSeekBar.getThumb().setColorFilter(colorAccent, PorterDuff.Mode.SRC_IN);
-
-        fab.setBackgroundTintList(ColorStateList.valueOf(colorAccent));
-    }
 }

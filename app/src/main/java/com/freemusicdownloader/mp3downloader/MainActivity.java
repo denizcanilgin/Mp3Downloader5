@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
             "FAVs"
     };
 
-    // The fragments that are used as the individual pages
     private final Fragment[] PAGES = new Fragment[] {
             new GenresFragment(),
             new HomeFragment(),
@@ -46,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
     };
 
-    // The ViewPager is responsible for sliding pages (fragments) in and out upon user input
     private ViewPager mViewPager;
 
     @Override
