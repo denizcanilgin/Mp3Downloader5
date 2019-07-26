@@ -3,12 +3,32 @@ package com.freemusicdownloader.mp3downloader;
 import android.content.Intent;
 import android.net.Uri;
 
+import java.util.ArrayList;
+
 public class GlobalData {
 
     public static Uri uri;
     public static String musicName;
     public static Intent ıntent;
     public static MediaPlaybackService mediaPlaybackService;
+    public static ArrayList<String> songList;
+    public static int songListIndex;
+
+    public static int getSongListIndex() {
+        return songListIndex;
+    }
+
+    public static void setSongListIndex(int songListIndex) {
+        GlobalData.songListIndex = songListIndex;
+    }
+
+    public static ArrayList<String> getSongList() {
+        return songList;
+    }
+
+    public static void setSongList(ArrayList<String> songList) {
+        GlobalData.songList = songList;
+    }
 
     public static MediaPlaybackService getMediaPlaybackService() {
         return mediaPlaybackService;

@@ -100,6 +100,7 @@ public class GalleryFragment extends Fragment {
         listMusicNameCont = new ArrayList<String>();
 
         getAllMusics(pathControl());
+        new GlobalData().setSongList(getAllMusics(pathControl()));
 
 
         adapterListMusics = new customAdapterListMusics(getActivity().getApplication(), getAllMusics(pathControl()), listMusicNameCont, listMusicName, listMusicTime);
@@ -225,6 +226,7 @@ public class GalleryFragment extends Fragment {
                                         case 0:
                                             new GlobalData().setUri(Uri.parse(listMusicurll.get(index).toString()));
                                             new GlobalData().setMusicName(listmusicauthor.get(index).toString().trim());
+                                            new GlobalData().setSongListIndex(index);
                                             Intent ıntent = new Intent(getActivity(),MusicPlayerActivity.class);
                                             startActivity(ıntent);
                                             break;

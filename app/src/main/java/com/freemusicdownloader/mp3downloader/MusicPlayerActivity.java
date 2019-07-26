@@ -24,6 +24,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MusicPlayerActivity extends AppCompatActivity {
     boolean isBinded = false;
@@ -33,7 +36,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
     BroadcastReceiver receiverCompleted;
 
     ViewGroup rootView;
-    ImageButton buttonPlayPause;
+    ImageButton buttonPlayPause,buttonNext,buttonPrevious;
     ImageButton buttonStop;
     ImageView albumArt;
     TextView titleTextView;
@@ -42,6 +45,8 @@ public class MusicPlayerActivity extends AppCompatActivity {
     TextView durationTextView;
     AppCompatSeekBar elapsedTimeSeekBar;
     FloatingActionButton fab;
+    ArrayList<String> gallerySongList;
+    int songListIndex;
     public ServiceConnection connection;
     private NotificationManagerCompat notificationManager;
 
@@ -56,13 +61,18 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
         rootView = (ViewGroup) findViewById(android.R.id.content);
         buttonPlayPause = (ImageButton) findViewById(R.id.imageButtonPlayPause);
-        buttonStop = (ImageButton) findViewById(R.id.imageButtonStop);
+        buttonNext = (ImageButton) findViewById(R.id.imageButtonNext);
+        buttonPrevious = (ImageButton) findViewById(R.id.imageButtonPrevious);
         albumArt = (ImageView) findViewById(R.id.albumArt);
         titleTextView = (TextView) findViewById(R.id.textViewTitle);
         artistTextView = (TextView) findViewById(R.id.textViewArtist);
         elapsedTimeTextView = (TextView) findViewById(R.id.textViewElapsedTime);
         durationTextView = (TextView) findViewById(R.id.textViewDuration);
         elapsedTimeSeekBar = (AppCompatSeekBar) findViewById(R.id.seekBar);
+
+        gallerySongList = new GlobalData().getSongList();
+        songListIndex = new GlobalData().getSongListIndex();
+
          connection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
@@ -130,15 +140,6 @@ public class MusicPlayerActivity extends AppCompatActivity {
         });
         buttonPlayPause.setEnabled(true);
 
-        buttonStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mediaPlaybackService.stop();
-                buttonPlayPause.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
-                buttonPlayPause.setEnabled(false);
-                clearInfos();
-            }
-        });
 
         elapsedTimeSeekBar.setEnabled(false);
         elapsedTimeSeekBar.setProgress(0);
@@ -158,6 +159,9 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 mediaPlaybackService.seekTo(seekBar.getProgress());
             }
         });
+
+        songNext();
+        songPrevious();
 
     }
 
@@ -181,6 +185,39 @@ public class MusicPlayerActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+    }
+
+    public void songNext()
+    {
+
+        buttonNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                clearInfos();
+                songListIndex++;
+                mediaPlaybackService.init(Uri.parse(gallerySongList.get(songListIndex)));
+
+                initInfos(Uri.parse(gallerySongList.get(songListIndex)));
+                Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
+                serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+                startService(serviceIntent);
+
+            }
+        });
+    }
+
+    public void songPrevious()
+    {
+
+        buttonPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                Toast.makeText(getApplicationContext(), "Clicked Previous", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -212,14 +249,14 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
             int duration = Integer.parseInt(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
 
-            if (mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE) != null
-                    || mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST) == null )
-            {
-                titleTextView.setText(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE));
-                artistTextView.setText(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
-            }
+//            if (mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE) != null
+//                    || mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST) == null )
+//            {
+//                titleTextView.setText(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE));
+//                artistTextView.setText(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
+//            }
             String keyTitle = new GlobalData().getMusicName();
-            titleTextView.setText(keyTitle);
+            titleTextView.setText(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE));
             artistTextView.setText(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
             durationTextView.setText(secondsToString(duration));
 
