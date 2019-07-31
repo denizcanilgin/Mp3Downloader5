@@ -311,7 +311,6 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         bigViews.setOnClickPendingIntent(R.id.status_bar_collapse, pcloseIntent);
 
         String songName = new GlobalData().getMusicName();
-
         views.setTextViewText(R.id.status_bar_track_name, songName);
         bigViews.setTextViewText(R.id.status_bar_track_name, songName);
 

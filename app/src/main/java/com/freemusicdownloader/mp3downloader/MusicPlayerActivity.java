@@ -25,6 +25,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import wseemann.media.FFmpegMediaMetadataRetriever;
@@ -208,11 +209,8 @@ public class MusicPlayerActivity extends AppCompatActivity {
                     serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
                     startService(serviceIntent);
 
-                    FFmpegMediaMetadataRetriever mData = new FFmpegMediaMetadataRetriever();
-                    //mData.setDataSource(this, Uri.parse(gallerySongList.get(songListIndex)));
-                    mData.setDataSource(gallerySongList.get(songListIndex));
-                    new GlobalData().setMusicName(mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_TITLE));
-
+                    File file = new File(gallerySongList.get(songListIndex)+"");
+                    new GlobalData().setMusicName(file.getName());
 
                 } catch (Exception e) {
                     Log.i("erorrrrrrrrrrrr", "" + e);
@@ -243,10 +241,8 @@ public class MusicPlayerActivity extends AppCompatActivity {
                     serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
                     startService(serviceIntent);
 
-                    FFmpegMediaMetadataRetriever mData = new FFmpegMediaMetadataRetriever();
-                    //mData.setDataSource(this, Uri.parse(gallerySongList.get(songListIndex)));
-                    mData.setDataSource(gallerySongList.get(songListIndex));
-                    new GlobalData().setMusicName(mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_TITLE));
+                    File file = new File(gallerySongList.get(songListIndex)+"");
+                    new GlobalData().setMusicName(file.getName());
 
 
                 } catch (Exception e) {
@@ -282,17 +278,13 @@ public class MusicPlayerActivity extends AppCompatActivity {
             FFmpegMediaMetadataRetriever mData = new FFmpegMediaMetadataRetriever();
             mData.setDataSource(this, uri);
 
+            File file = new File(uri+"");
+
             int duration = Integer.parseInt(mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_DURATION));
 
-//            if (mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_TITLE) != null
-//                    || mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST) != null) {
-//                titleTextView.setText(mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_TITLE));
-//                artistTextView.setText(mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST));
-            //} else {
-                String keyTitle = new GlobalData().getMusicName();
-                titleTextView.setText(mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_TITLE));
+                titleTextView.setText(file.getName());
                 artistTextView.setText(mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST));
-           // }
+
             durationTextView.setText(secondsToString(duration));
 
             elapsedTimeSeekBar.setMax(duration);
