@@ -137,7 +137,7 @@
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
             android:singleLine="true"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
 
 

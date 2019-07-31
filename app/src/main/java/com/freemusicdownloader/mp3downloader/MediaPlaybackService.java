@@ -115,19 +115,19 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                 sendElapsedTime();
                 try {
                     Thread.sleep(250);
-                    MediaPlaybackService mediaPlaybackService = new GlobalData().getMediaPlaybackService();
-                    current_pos = mMediaPlayer.getCurrentPosition();
-
-                    if (mediaPlaybackService.isPlaying()) {
-                        bigViews.setImageViewResource(R.id.status_bar_pause, R.drawable.ic_pause_circle_filled_black_24dp);
-                        views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_pause_circle_filled_black_24dp);
-                        notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mBuilder.build());
-
-                    } else {
-                        bigViews.setImageViewResource(R.id.status_bar_pause, R.drawable.ic_play_circle_filled_black_24dp);
-                        views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_play_circle_filled_black_24dp);
-                        notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mBuilder.build());
-                    }
+//                    MediaPlaybackService mediaPlaybackService = new GlobalData().getMediaPlaybackService();
+//                    current_pos = mMediaPlayer.getCurrentPosition();
+//
+//                    if (mediaPlaybackService.isPlaying()) {
+//                        bigViews.setImageViewResource(R.id.status_bar_pause, R.drawable.ic_pause_circle_filled_black_24dp);
+//                        views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_pause_circle_filled_black_24dp);
+//                        notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mBuilder.build());
+//
+//                    } else {
+//                        bigViews.setImageViewResource(R.id.status_bar_pause, R.drawable.ic_play_circle_filled_black_24dp);
+//                        views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_play_circle_filled_black_24dp);
+//                        notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mBuilder.build());
+//                    }
 
 
                 } catch (InterruptedException e) {
@@ -138,6 +138,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     };
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void pause() {
         if (mMediaPlayer != null)
             mMediaPlayer.pause();
@@ -145,6 +146,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void play() {
         if (mMediaPlayer != null)
             mMediaPlayer.start();
@@ -309,7 +311,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         bigViews.setOnClickPendingIntent(R.id.status_bar_collapse, pcloseIntent);
 
         String songName = new GlobalData().getMusicName();
-        Log.i("asdasd", songName);
+
         views.setTextViewText(R.id.status_bar_track_name, songName);
         bigViews.setTextViewText(R.id.status_bar_track_name, songName);
 

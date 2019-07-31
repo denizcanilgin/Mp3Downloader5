@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -28,6 +27,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import wseemann.media.FFmpegMediaMetadataRetriever;
+
 public class MusicPlayerActivity extends AppCompatActivity {
     boolean isBinded = false;
     MediaPlaybackService mediaPlaybackService;
@@ -36,7 +37,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
     BroadcastReceiver receiverCompleted;
 
     ViewGroup rootView;
-    ImageButton buttonPlayPause,buttonNext,buttonPrevious;
+    ImageButton buttonPlayPause, buttonNext, buttonPrevious;
     ImageButton buttonStop;
     ImageView albumArt;
     TextView titleTextView;
@@ -73,16 +74,16 @@ public class MusicPlayerActivity extends AppCompatActivity {
         gallerySongList = new GlobalData().getSongList();
         songListIndex = new GlobalData().getSongListIndex();
 
-         connection = new ServiceConnection() {
+        connection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
-                mediaPlaybackService = ((MediaPlaybackService.IDBinder)service).getService();
+                mediaPlaybackService = ((MediaPlaybackService.IDBinder) service).getService();
                 new GlobalData().setMediaPlaybackService(mediaPlaybackService);
                 isBinded = true;
                 initInfos(mediaPlaybackService.getFile());
 
                 Uri selectedtrack = new GlobalData().getUri();
-                Log.i("receiveUri",""+selectedtrack);
+                Log.i("receiveUri", "" + selectedtrack);
                 try {
                     mediaPlaybackService.init(selectedtrack);
 
@@ -90,11 +91,11 @@ public class MusicPlayerActivity extends AppCompatActivity {
                     Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
                     serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
                     startService(serviceIntent);
-                }catch (Exception e)
-                {
-                    Log.i("erorororo",""+e);
+                } catch (Exception e) {
+                    Log.i("erorororo", "" + e);
                 }
             }
+
             @Override
             public void onServiceDisconnected(ComponentName name) {
                 isBinded = false;
@@ -105,9 +106,8 @@ public class MusicPlayerActivity extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Boolean a = mediaPlaybackService.isPlaying();
-                Log.i("playingresult",""+a);
-                if  (!a)
-                {
+                Log.i("playingresult", "" + a);
+                if (!a) {
                     buttonPlayPause.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
                     new GlobalData().setMediaPlaybackService(mediaPlaybackService);
                 }
@@ -131,6 +131,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 if (mediaPlaybackService.isPlaying()) {
                     resId = R.drawable.ic_play_circle_filled_black_24dp;
                     mediaPlaybackService.pause();
+
                 } else {
                     resId = R.drawable.ic_pause_circle;
                     mediaPlaybackService.play();
@@ -187,35 +188,70 @@ public class MusicPlayerActivity extends AppCompatActivity {
         super.onStart();
     }
 
-    public void songNext()
-    {
+    public void songNext() {
 
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                clearInfos();
-                songListIndex++;
-                mediaPlaybackService.init(Uri.parse(gallerySongList.get(songListIndex)));
+                try {
 
-                initInfos(Uri.parse(gallerySongList.get(songListIndex)));
-                Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
-                serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
-                startService(serviceIntent);
+                    clearInfos();
+                    songListIndex++;
+                    if (gallerySongList.size() == songListIndex) {
+                        songListIndex = 0;
+                    }
+                    // Stuff that updates the UI
+                    mediaPlaybackService.init(Uri.parse(gallerySongList.get(songListIndex)));
+                    initInfos(Uri.parse(gallerySongList.get(songListIndex)));
+                    Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
+                    serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+                    startService(serviceIntent);
 
+                    FFmpegMediaMetadataRetriever mData = new FFmpegMediaMetadataRetriever();
+                    //mData.setDataSource(this, Uri.parse(gallerySongList.get(songListIndex)));
+                    mData.setDataSource(gallerySongList.get(songListIndex));
+                    new GlobalData().setMusicName(mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_TITLE));
+
+
+                } catch (Exception e) {
+                    Log.i("erorrrrrrrrrrrr", "" + e);
+                }
             }
         });
     }
 
-    public void songPrevious()
-    {
+    public void songPrevious() {
 
         buttonPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
 
-                Toast.makeText(getApplicationContext(), "Clicked Previous", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Clicked Previous" + songListIndex, Toast.LENGTH_SHORT).show();
+                try {
+                    clearInfos();
+                    songListIndex--;
+                    if (songListIndex < 0) {
+
+                        songListIndex = gallerySongList.size() - 1;
+                    }
+
+                    mediaPlaybackService.init(Uri.parse(gallerySongList.get(songListIndex)));
+                    initInfos(Uri.parse(gallerySongList.get(songListIndex)));
+                    Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
+                    serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+                    startService(serviceIntent);
+
+                    FFmpegMediaMetadataRetriever mData = new FFmpegMediaMetadataRetriever();
+                    //mData.setDataSource(this, Uri.parse(gallerySongList.get(songListIndex)));
+                    mData.setDataSource(gallerySongList.get(songListIndex));
+                    new GlobalData().setMusicName(mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_TITLE));
+
+
+                } catch (Exception e) {
+                    Log.i("erorrrrrrrrrrrr", "" + e);
+                }
             }
         });
     }
@@ -229,8 +265,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode==RESULT_OK)
-        {
+        if (resultCode == RESULT_OK) {
             Uri selectedtrack = data.getData();
             mediaPlaybackService.init(selectedtrack);
             initInfos(selectedtrack);
@@ -244,20 +279,20 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
     private void initInfos(Uri uri) {
         if (uri != null) {
-            MediaMetadataRetriever mData = new MediaMetadataRetriever();
+            FFmpegMediaMetadataRetriever mData = new FFmpegMediaMetadataRetriever();
             mData.setDataSource(this, uri);
 
-            int duration = Integer.parseInt(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+            int duration = Integer.parseInt(mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_DURATION));
 
-//            if (mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE) != null
-//                    || mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST) == null )
-//            {
-//                titleTextView.setText(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE));
-//                artistTextView.setText(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
-//            }
-            String keyTitle = new GlobalData().getMusicName();
-            titleTextView.setText(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE));
-            artistTextView.setText(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
+//            if (mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_TITLE) != null
+//                    || mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST) != null) {
+//                titleTextView.setText(mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_TITLE));
+//                artistTextView.setText(mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST));
+            //} else {
+                String keyTitle = new GlobalData().getMusicName();
+                titleTextView.setText(mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_TITLE));
+                artistTextView.setText(mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST));
+           // }
             durationTextView.setText(secondsToString(duration));
 
             elapsedTimeSeekBar.setMax(duration);
@@ -265,11 +300,17 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
             try {
                 byte art[] = mData.getEmbeddedPicture();
-                Bitmap image = BitmapFactory.decodeByteArray(art, 0, art.length);
-                albumArt.setImageBitmap(image);
+                if (art != null) {
+                    Bitmap image = BitmapFactory.decodeByteArray(art, 0, art.length);
+                    albumArt.setImageBitmap(image);
+                } else {
+                    albumArt.setImageDrawable(getResources().getDrawable(R.drawable.ic_album_white_400_128dp));
+                }
+
 
             } catch (Exception e) {
                 e.printStackTrace();
+
             }
         }
     }
