@@ -29,6 +29,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     public static final String MPS_RESULT = "com.freemusicdownloader.mp3downloader.MediaPlaybackService.RESULT";
     public static final String MPS_COMPLETED = "com.freemusicdownloader.mp3downloader.MediaPlaybackService.COMPLETED";
 
+    int current_pos;
     MediaPlayer mMediaPlayer = null;
     Uri file;
     RemoteViews bigViews, views;
@@ -57,8 +58,6 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     @Override
     public void onCreate() {
         broadcastManager = LocalBroadcastManager.getInstance(this);
-        views = new RemoteViews(getPackageName(), R.layout.status_bar);
-        bigViews = new RemoteViews(getPackageName(), R.layout.status_bar_expanded);
 
         notificationManager = NotificationManagerCompat.from(this);
 
@@ -112,11 +111,12 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         @Override
         public void run() {
             while (mMediaPlayer != null) {
-                SystemClock.sleep(500);
+                SystemClock.sleep(250);
                 sendElapsedTime();
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(250);
                     MediaPlaybackService mediaPlaybackService = new GlobalData().getMediaPlaybackService();
+                    current_pos = mMediaPlayer.getCurrentPosition();
 
                     if (mediaPlaybackService.isPlaying()) {
                         bigViews.setImageViewResource(R.id.status_bar_pause, R.drawable.ic_pause_circle_filled_black_24dp);
@@ -141,11 +141,14 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     public void pause() {
         if (mMediaPlayer != null)
             mMediaPlayer.pause();
+        showNotification(R.drawable.ic_play_circle_filled_black_24dp);
+
     }
 
     public void play() {
         if (mMediaPlayer != null)
             mMediaPlayer.start();
+        showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
     }
 
     public void stop() {
@@ -153,6 +156,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             mMediaPlayer.release();
             mMediaPlayer = null;
             file = null;
+            showNotification(R.drawable.ic_play_circle_filled_black_24dp);
+
         }
     }
 
@@ -188,7 +193,16 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
-            showNotification();
+
+
+
+            showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
+
+
+            Log.i("click_event", "Clicked NOTIFICATION");
+
+
+
         } else if (intent.getAction().equals(Constants.ACTION.PREV_ACTION)) {
             Toast.makeText(this, "Clicked Previous", Toast.LENGTH_SHORT).show();
             Log.i("click_event", "Clicked Previous");
@@ -232,17 +246,22 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void showNotification() {
+    private void showNotification(int drawable) {
 
-        bigViews.setImageViewBitmap(R.id.status_bar_album_art,
+        bigViews = new RemoteViews(getPackageName(), R.layout.status_bar_expanded);
+        views = new RemoteViews(getPackageName(), R.layout.status_bar);
+
+        bigViews.setImageViewBitmap(R.drawable.smile_icon,
                 Constants.getDefaultAlbumArt(this));
-        views.setImageViewBitmap(R.id.status_bar_album_art,
+        views.setImageViewBitmap(R.drawable.smile_icon,
                 Constants.getDefaultAlbumArt(this));
 
+        bigViews.setImageViewResource(R.id.status_bar_pause,drawable);
+        views.setImageViewResource(R.id.status_bar_play,drawable);
 
         Intent notificationIntent = new Intent(this, MusicPlayerActivity.class);
         notificationIntent.setAction(Constants.ACTION.MAIN_ACTION);
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        notificationIntent.setFlags(Intent.FLAG_RECEIVER_FOREGROUND);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
                 notificationIntent, 0);
 
@@ -343,6 +362,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             Notification notification = mBuilder.build();
             notification.flags = Notification.FLAG_AUTO_CANCEL;
             notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, notification);
+
         }
 
 

@@ -14,6 +14,16 @@ public class GlobalData {
     public static ArrayList<String> songList;
     public static int songListIndex;
 
+    public static String GENRES_DECODER;
+
+    public static String getGenresDecoder() {
+        return GENRES_DECODER;
+    }
+
+    public static void setGenresDecoder(String genresDecoder) {
+        GENRES_DECODER = genresDecoder;
+    }
+
     public static int getSongListIndex() {
         return songListIndex;
     }

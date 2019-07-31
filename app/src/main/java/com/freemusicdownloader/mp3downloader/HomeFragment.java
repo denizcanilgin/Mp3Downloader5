@@ -63,6 +63,8 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 /* Fragment used as page 1 */
 public class HomeFragment extends Fragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
+
+
     private int[] items = new int[]{
             R.string.action_st_play,
             R.string.action_st_download,
@@ -682,9 +684,12 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
         protected customAdapterListMusics doInBackground(String... strings) {
             Document doc = null;
 
+            String SELECTED_GENRES = new GlobalData().getGenresDecoder();
+            if(SELECTED_GENRES == null)
+                SELECTED_GENRES = Constants.GENRES_MOSTPOPULARSONGS;
 
             try {
-                doc = Jsoup.connect(decodeString("aHR0cDovL21wM3BuLm5ldC9zZWFyY2gvcy9mL01vc3QrcG9wdWxhcitzb25ncy8")).get();
+                doc = Jsoup.connect(decodeString(SELECTED_GENRES)).get();
 
                 Elements body = doc.select("div#xbody");
 

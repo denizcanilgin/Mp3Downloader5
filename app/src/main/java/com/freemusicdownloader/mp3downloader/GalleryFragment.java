@@ -345,16 +345,19 @@ public class GalleryFragment extends Fragment {
         {
             case R.id.action_refresh :
 
-                Toast.makeText(getActivity(), "Gallery Refresh ...", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getActivity(), "Gallery Refresh ...", Toast.LENGTH_SHORT).show();
 
                 listMusicName = new ArrayList<String>();
                 listMusicTime = new ArrayList<String>();
                 listMusicNameCont = new ArrayList<String>();
                 getAllMusics(pathControl());
                 customAdapterListMusics adapterListMusics = new customAdapterListMusics(getActivity().getApplication(), getAllMusics(pathControl()), listMusicNameCont, listMusicName, listMusicTime);
+                mylist.invalidate();
                 mylist.setAdapter(adapterListMusics);
 
                 if (mylist.getAdapter().getCount() != 0) {
+
+
 //            AudienceNetworkAds.facebookLoadBanner(getActivity(), view);
 //            AudienceNetworkAds.facebookInterstitialAd(getActivity(),ads_layout,avLoadingIndicatorView);
                 }

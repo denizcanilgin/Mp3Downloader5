@@ -38,77 +38,30 @@ public class GenresFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
 
+
         switch (view.getId()){
 
-            case  R.id.card_Rock:
-                RockFragment nextRock= new RockFragment();
-                getActivity().getFragmentManager().beginTransaction()
-                        .replace(R.id.genres_layout, nextRock, "findThisFragment")
-                        .addToBackStack(null)
-                        .commit();
-            break;
-
-            case  R.id.card_jazz:
-                JazzFragment nextJazz= new JazzFragment();
-                getActivity().getFragmentManager().beginTransaction()
-                        .replace(R.id.genres_layout, nextJazz, "findThisFragment")
-                        .addToBackStack(null)
-                        .commit();
-                break;
-
-            case  R.id.card_acustic:
-
-                AcousticFragment nextAcoustic = new AcousticFragment();
-                getActivity().getFragmentManager().beginTransaction()
-                        .replace(R.id.genres_layout, nextAcoustic, "findThisFragment")
-                        .addToBackStack(null)
-                        .commit();
-
-            break;
-
-            case  R.id.card_classical:
-
-                ClassicalFragment nextClassical = new ClassicalFragment();
-                getActivity().getFragmentManager().beginTransaction()
-                        .replace(R.id.genres_layout, nextClassical, "findThisFragment")
-                        .addToBackStack(null)
-                        .commit();
-                break;
-
-            case  R.id.card_relax:
-
-                RelaxFragment nextRelax = new RelaxFragment();
-                getActivity().getFragmentManager().beginTransaction()
-                        .replace(R.id.genres_layout, nextRelax, "findThisFragment")
-                        .addToBackStack(null)
-                        .commit();
-                break;
-
-            case  R.id.card_metal:
-
-                MetalFragment nextMetal = new MetalFragment();
-                getActivity().getFragmentManager().beginTransaction()
-                        .replace(R.id.genres_layout, nextMetal, "findThisFragment")
-                        .addToBackStack(null)
-                        .commit();
-                break;
-            case  R.id.card_bass:
-
-                BassFragment nextBass = new BassFragment();
-                getActivity().getFragmentManager().beginTransaction()
-                        .replace(R.id.genres_layout, nextBass, "findThisFragment")
-                        .addToBackStack(null)
-                        .commit();
-                break;
-
-
-
-
-
-
+            case  R.id.card_Rock: passToHome(Constants.GENRES_ROCK);break;
+            case  R.id.card_jazz: passToHome(Constants.GENRES_JAZZ);break;
+            case  R.id.card_acustic: passToHome(Constants.GENRES_ACOUSTIC);break;
+            case  R.id.card_classical: passToHome(Constants.GENRES_CLASSICAL);break;
+            case  R.id.card_relax: passToHome(Constants.GENRES_RELAX);break;
+            case  R.id.card_metal: passToHome(Constants.GENRES_METAL); break;
+            case  R.id.card_bass: passToHome(Constants.GENRES_BASSDRUM);break;
 
         }
 
+    }
+
+    public void passToHome(String decoder){
+        GlobalData globalData = new GlobalData();
+        globalData.setGenresDecoder(decoder);
+
+        HomeFragment homeFragment = new HomeFragment();
+        getActivity().getFragmentManager().beginTransaction()
+                .replace(R.id.genres_layout, homeFragment, "findThisFragment")
+                .addToBackStack(null)
+                .commit();
     }
 
     public void define(View rootView){
