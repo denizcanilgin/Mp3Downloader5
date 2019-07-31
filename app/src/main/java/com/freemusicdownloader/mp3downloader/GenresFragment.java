@@ -7,13 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.freemusicdownloader.mp3downloader.Genres.AcousticFragment;
-import com.freemusicdownloader.mp3downloader.Genres.BassFragment;
-import com.freemusicdownloader.mp3downloader.Genres.ClassicalFragment;
-import com.freemusicdownloader.mp3downloader.Genres.JazzFragment;
-import com.freemusicdownloader.mp3downloader.Genres.MetalFragment;
-import com.freemusicdownloader.mp3downloader.Genres.RelaxFragment;
-import com.freemusicdownloader.mp3downloader.Genres.RockFragment;
 
 public class GenresFragment extends Fragment implements View.OnClickListener {
 
