@@ -52,6 +52,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             return MediaPlaybackService.this;
         }
     }
+    
+    //deniz
 
     IDBinder idBinder = new IDBinder();
 
@@ -68,6 +70,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         notificationManager = NotificationManagerCompat.from(this);
 
         super.onCreate();
+        
+        Log.i("asdsad","asdasd");
     }
 
     @Override
