@@ -222,6 +222,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                 play();
             }
 
+            Log.i("commit","asdasd");
+
             notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mBuilder.build());
 
 
