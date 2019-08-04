@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -23,7 +24,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -39,7 +39,6 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
     ViewGroup rootView;
     ImageButton buttonPlayPause, buttonNext, buttonPrevious;
-    ImageButton buttonStop;
     ImageView albumArt;
     TextView titleTextView;
     TextView artistTextView;
@@ -60,6 +59,9 @@ public class MusicPlayerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_music_player);
 
         notificationManager = NotificationManagerCompat.from(this);
+
+        Thread updateThread = new Thread(sendUpdates);
+        updateThread.start();
 
         rootView = (ViewGroup) findViewById(android.R.id.content);
         buttonPlayPause = (ImageButton) findViewById(R.id.imageButtonPlayPause);
@@ -162,10 +164,147 @@ public class MusicPlayerActivity extends AppCompatActivity {
             }
         });
 
-        songNext();
-        songPrevious();
-
     }
+
+    private Runnable sendUpdates = new Runnable() {
+        @Override
+        public void run() {
+
+            while (true) {
+                SystemClock.sleep(250);
+
+                try {
+                    Thread.sleep(250);
+
+                    Boolean f = new GlobalData().getClickNext();
+                    if (f != null) {
+                        if (f == true) {
+
+                            new GlobalData().setClickNext(false);
+
+
+                            runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+
+                                    int notifCounter = new GlobalData().getCounter();
+                                    Log.i("aaaaaaaaaaaa", "geldiiii" + notifCounter);
+                                    clearInfos();
+                                    notifCounter++;
+                                    if (gallerySongList.size() == notifCounter) {
+                                        notifCounter = 0;
+                                    }
+                                    // Stuff that updates the UI
+                                    mediaPlaybackService.init(Uri.parse(gallerySongList.get(notifCounter)));
+                                    initInfos(Uri.parse(gallerySongList.get(notifCounter)));
+                                    Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
+                                    serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+                                    startService(serviceIntent);
+
+                                    File file = new File(gallerySongList.get(notifCounter) + "");
+                                    new GlobalData().setMusicName(file.getName());
+                                    new GlobalData().setSongListIndex(notifCounter);
+                                }
+                            });
+
+                        }
+                    }
+                    Boolean ff = new GlobalData().getClickPrevious();
+                    if (ff != null) {
+                        if (ff == true) {
+
+                            new GlobalData().setClickPrevious(false);
+
+
+                            runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+
+                                    int notifCounter = new GlobalData().getCounter();
+
+                                    clearInfos();
+                                    notifCounter--;
+                                    if (notifCounter < 0) {
+                                        notifCounter = gallerySongList.size() - 1;
+                                    }
+                                    // Stuff that updates the UI
+                                    mediaPlaybackService.init(Uri.parse(gallerySongList.get(notifCounter)));
+                                    initInfos(Uri.parse(gallerySongList.get(notifCounter)));
+                                    Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
+                                    serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+                                    startService(serviceIntent);
+
+                                    File file = new File(gallerySongList.get(notifCounter) + "");
+                                    new GlobalData().setMusicName(file.getName());
+                                    new GlobalData().setSongListIndex(notifCounter);
+                                }
+                            });
+
+                        }
+                    }
+
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+        }
+    };
+
+    public void songNextt(View v) {
+        try {
+
+            clearInfos();
+            songListIndex++;
+            if (gallerySongList.size() == songListIndex) {
+                songListIndex = 0;
+            }
+            // Stuff that updates the UI
+            mediaPlaybackService.init(Uri.parse(gallerySongList.get(songListIndex)));
+            initInfos(Uri.parse(gallerySongList.get(songListIndex)));
+            Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
+            serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+            startService(serviceIntent);
+
+            File file = new File(gallerySongList.get(songListIndex) + "");
+            new GlobalData().setMusicName(file.getName());
+            new GlobalData().setSongListIndex(songListIndex);
+
+        } catch (Exception e) {
+            Log.i("erorrrrrrrrrrrr", "" + e);
+        }
+    }
+
+    public void songPrevious(View v) {
+
+        try {
+            clearInfos();
+            songListIndex--;
+            if (songListIndex < 0) {
+
+                songListIndex = gallerySongList.size() - 1;
+            }
+
+            mediaPlaybackService.init(Uri.parse(gallerySongList.get(songListIndex)));
+            initInfos(Uri.parse(gallerySongList.get(songListIndex)));
+            Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
+            serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+            startService(serviceIntent);
+
+            File file = new File(gallerySongList.get(songListIndex) + "");
+            new GlobalData().setMusicName(file.getName());
+            new GlobalData().setSongListIndex(songListIndex);
+
+
+        } catch (Exception e) {
+            Log.i("erorrrrrrrrrrrr", "" + e);
+        }
+    }
+
 
     @Override
     protected void onResume() {
@@ -187,69 +326,9 @@ public class MusicPlayerActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-    }
 
-    public void songNext() {
-
-        buttonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                try {
-
-                    clearInfos();
-                    songListIndex++;
-                    if (gallerySongList.size() == songListIndex) {
-                        songListIndex = 0;
-                    }
-                    // Stuff that updates the UI
-                    mediaPlaybackService.init(Uri.parse(gallerySongList.get(songListIndex)));
-                    initInfos(Uri.parse(gallerySongList.get(songListIndex)));
-                    Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
-                    serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
-                    startService(serviceIntent);
-
-                    File file = new File(gallerySongList.get(songListIndex)+"");
-                    new GlobalData().setMusicName(file.getName());
-
-                } catch (Exception e) {
-                    Log.i("erorrrrrrrrrrrr", "" + e);
-                }
-            }
-        });
-    }
-
-    public void songPrevious() {
-
-        buttonPrevious.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                Toast.makeText(getApplicationContext(), "Clicked Previous" + songListIndex, Toast.LENGTH_SHORT).show();
-                try {
-                    clearInfos();
-                    songListIndex--;
-                    if (songListIndex < 0) {
-
-                        songListIndex = gallerySongList.size() - 1;
-                    }
-
-                    mediaPlaybackService.init(Uri.parse(gallerySongList.get(songListIndex)));
-                    initInfos(Uri.parse(gallerySongList.get(songListIndex)));
-                    Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
-                    serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
-                    startService(serviceIntent);
-
-                    File file = new File(gallerySongList.get(songListIndex)+"");
-                    new GlobalData().setMusicName(file.getName());
-
-
-                } catch (Exception e) {
-                    Log.i("erorrrrrrrrrrrr", "" + e);
-                }
-            }
-        });
+        int a = new GlobalData().getCounter();
+        Log.i("aasdasdaaaaaa", "" + a);
     }
 
     @Override
@@ -273,17 +352,19 @@ public class MusicPlayerActivity extends AppCompatActivity {
         return String.format("%2d:%02d", time / 60, time % 60);
     }
 
-    private void initInfos(Uri uri) {
+    public void initInfos(Uri uri) {
         if (uri != null) {
             FFmpegMediaMetadataRetriever mData = new FFmpegMediaMetadataRetriever();
             mData.setDataSource(this, uri);
 
-            File file = new File(uri+"");
+            File file = new File(uri + "");
 
             int duration = Integer.parseInt(mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_DURATION));
 
-                titleTextView.setText(file.getName());
-                artistTextView.setText(mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST));
+
+            titleTextView.setText(file.getName());
+
+            artistTextView.setText(mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST));
 
             durationTextView.setText(secondsToString(duration));
 
@@ -294,6 +375,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 byte art[] = mData.getEmbeddedPicture();
                 if (art != null) {
                     Bitmap image = BitmapFactory.decodeByteArray(art, 0, art.length);
+                    new GlobalData().setSongPicture(image);
                     albumArt.setImageBitmap(image);
                 } else {
                     albumArt.setImageDrawable(getResources().getDrawable(R.drawable.ic_album_white_400_128dp));
@@ -317,7 +399,9 @@ public class MusicPlayerActivity extends AppCompatActivity {
         }
     }
 
-    private void clearInfos() {
+
+    public void clearInfos() {
+
         durationTextView.setText("");
         elapsedTimeTextView.setText("");
         titleTextView.setText("-");

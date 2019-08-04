@@ -30,7 +30,7 @@ import java.net.URLConnection;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class DownloadAsyncTask extends AsyncTask<String,String,String> {
+public class DownloadAsyncTask extends AsyncTask<String, String, String> {
 
     private String url;
     private String filename;
@@ -42,8 +42,10 @@ public class DownloadAsyncTask extends AsyncTask<String,String,String> {
     private NotificationCompat.Builder builder;
     private NotificationManagerCompat notificationManager;
     private String songName;
+    private File folder;
+    private static final int MY_PERMISSION_REQUEST_CODE = 1001;
 
-    public  DownloadAsyncTask(String url, String filename, Activity activity, int NOTIFY_ID) {
+    public DownloadAsyncTask(String url, String filename, Activity activity, int NOTIFY_ID) {
         this.url = url;
         this.filename = filename;
         this.activity = activity;
@@ -73,10 +75,13 @@ public class DownloadAsyncTask extends AsyncTask<String,String,String> {
 
             Boolean isSDPresent = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
 
+
+
             OutputStream output = null;
             if (isSDPresent) {
 
-                File folder = new File(Environment.getExternalStorageDirectory() +
+
+                folder = new File(Environment.getExternalStorageDirectory() +
                         File.separator + "Mp3Download");
 
 
@@ -89,12 +94,13 @@ public class DownloadAsyncTask extends AsyncTask<String,String,String> {
                         File.separator + "Mp3Download/" + aurl[1];
 
 
+
                 output = new FileOutputStream(currentimagepath);
 
 
             } else {
 
-                File folder = new File(activity.getApplication().getFilesDir() +
+                folder = new File(activity.getApplication().getFilesDir() +
                         File.separator + "Mp3Download/" + aurl[1]);
 
 
@@ -149,8 +155,7 @@ public class DownloadAsyncTask extends AsyncTask<String,String,String> {
                         .setContentIntent(pendingIntent)
                         .setProgress(100, 0, false)
                         .setPriority(Notification.PRIORITY_HIGH);
-            }
-            else {
+            } else {
                 builder = new NotificationCompat.Builder(getApplicationContext(), id);
                 intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -170,7 +175,7 @@ public class DownloadAsyncTask extends AsyncTask<String,String,String> {
                 total += count;
                 try {
                     final long finalTotal = total;
-                     new Thread(new Runnable() {
+                    new Thread(new Runnable() {
                         @Override
                         public void run() {
                             builder.setContentTitle(songName)
@@ -184,8 +189,8 @@ public class DownloadAsyncTask extends AsyncTask<String,String,String> {
 
                         }
                     }).start();
-                }catch (Exception e){
-                    Log.i("errorror","download failed");
+                } catch (Exception e) {
+                    Log.i("errorror", "download failed");
                 }
                 output.write(data, 0, count);
 
@@ -194,7 +199,7 @@ public class DownloadAsyncTask extends AsyncTask<String,String,String> {
             output.close();
             input.close();
         } catch (Exception e) {
-            Log.i("erorrorr",""+e);
+            Log.i("erorrorr", "" + e);
 
         }
         return null;
@@ -207,14 +212,9 @@ public class DownloadAsyncTask extends AsyncTask<String,String,String> {
 
         Toast.makeText(activity, "" + songName + " downloaded", Toast.LENGTH_SHORT).show();
 
-        builder.setSmallIcon(R.drawable.ic_file_download_black_24dp)
-                .setProgress(0, 0, false)
-                .setOngoing(true)
-                .setOnlyAlertOnce(true)
-                .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
 
         notificationManager.cancel(NOTIFY_ID);
-        createNotification(currentimagepath,songName);
+        createNotification(currentimagepath, songName);
         new GlobalData().setUri(Uri.parse(currentimagepath));
         new GlobalData().setMusicName(songName);
 
@@ -222,7 +222,8 @@ public class DownloadAsyncTask extends AsyncTask<String,String,String> {
     }
 
 
-    public void createNotification(String filepath,String songNamee) {
+
+    public void createNotification(String filepath, String songNamee) {
         String id = "default_channel_id";
         String title = "Default Channel";
         Intent intent;
@@ -230,7 +231,7 @@ public class DownloadAsyncTask extends AsyncTask<String,String,String> {
         NotificationCompat.Builder builder;
 
 
-         Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 //
 //        Intent intentnatif = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(filepath));
 //

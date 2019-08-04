@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -199,6 +200,14 @@ public class GalleryFragment extends Fragment {
             holder.btn_play_stop = (ImageButton) rowView.findViewById(R.id.playstop2);
 
 
+            try {
+
+                String s = listmusicname.get(position).toString().trim();
+            }catch (Exception e )
+            {
+                Log.i("aaaaaaaaaa",""+e);
+            }
+
             holder.txt_music_name.setText(listmusicname.get(position).toString().trim());
             holder.txt_music_author.setText(listmusicauthor.get(position).toString().trim());
             holder.txt_music_time.setText(listmusictime.get(position).toString().trim());
@@ -233,6 +242,8 @@ public class GalleryFragment extends Fragment {
                                         case 1:
                                             delete_item(index);
                                             adapterListMusics.notifyDataSetChanged();
+                                            getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                                                    Uri.parse("file://" + Environment.getExternalStorageDirectory())));
                                             break;
                                         case 2:
                                             share_selected_song(listmusicname.get(position),listmusicauthor.get(position));

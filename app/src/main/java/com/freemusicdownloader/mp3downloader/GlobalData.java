@@ -1,6 +1,7 @@
 package com.freemusicdownloader.mp3downloader;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 
 import java.util.ArrayList;
@@ -13,6 +14,42 @@ public class GlobalData {
     public static MediaPlaybackService mediaPlaybackService;
     public static ArrayList<String> songList;
     public static int songListIndex;
+    public static int Counter;
+    public static Boolean clickNext;
+    public static Boolean clickPrevious;
+    public static Bitmap songPicture;
+
+    public static Bitmap getSongPicture() {
+        return songPicture;
+    }
+
+    public static void setSongPicture(Bitmap songPicture) {
+        GlobalData.songPicture = songPicture;
+    }
+
+    public static Boolean getClickNext() {
+        return clickNext;
+    }
+
+    public static void setClickNext(Boolean clickNext) {
+        GlobalData.clickNext = clickNext;
+    }
+
+    public static Boolean getClickPrevious() {
+        return clickPrevious;
+    }
+
+    public static void setClickPrevious(Boolean clickPrevious) {
+        GlobalData.clickPrevious = clickPrevious;
+    }
+
+    public static int getCounter() {
+        return Counter;
+    }
+
+    public static void setCounter(int counter) {
+        Counter = counter;
+    }
 
     public static String GENRES_DECODER;
 

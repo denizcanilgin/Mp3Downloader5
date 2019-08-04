@@ -116,6 +116,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginTop="15dp"
             android:layout_marginRight="10dp"
+            android:onClick="songPrevious"
             android:background="@null"
             android:padding="@dimen/fab_margin"
             android:src="@drawable/ic_skip_previous" />
@@ -140,6 +141,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginTop="15dp"
             android:background="@null"
+            android:onClick="songNextt"
             android:padding="@dimen/fab_margin"
             android:src="@drawable/ic_skip_next" />
 

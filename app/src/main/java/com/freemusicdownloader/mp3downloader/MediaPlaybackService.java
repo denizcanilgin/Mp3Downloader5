@@ -7,6 +7,8 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -23,16 +25,20 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
+import wseemann.media.FFmpegMediaMetadataRetriever;
 
 public class MediaPlaybackService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
     public static final String MPS_MESSAGE = "com.freemusicdownloader.mp3downloader.MediaPlaybackService.MESSAGE";
     public static final String MPS_RESULT = "com.freemusicdownloader.mp3downloader.MediaPlaybackService.RESULT";
     public static final String MPS_COMPLETED = "com.freemusicdownloader.mp3downloader.MediaPlaybackService.COMPLETED";
 
-    int current_pos;
     MediaPlayer mMediaPlayer = null;
     Uri file;
     RemoteViews bigViews, views;
+    ArrayList<String> gallerySongList;
+    int songListIndex;
 
     private NotificationManager notifManager;
     NotificationCompat.Builder mBuilder;
@@ -81,6 +87,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         return super.onUnbind(intent);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void init(Uri file) {
         this.file = file;
 
@@ -115,20 +122,6 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                 sendElapsedTime();
                 try {
                     Thread.sleep(250);
-//                    MediaPlaybackService mediaPlaybackService = new GlobalData().getMediaPlaybackService();
-//                    current_pos = mMediaPlayer.getCurrentPosition();
-//
-//                    if (mediaPlaybackService.isPlaying()) {
-//                        bigViews.setImageViewResource(R.id.status_bar_pause, R.drawable.ic_pause_circle_filled_black_24dp);
-//                        views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_pause_circle_filled_black_24dp);
-//                        notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mBuilder.build());
-//
-//                    } else {
-//                        bigViews.setImageViewResource(R.id.status_bar_pause, R.drawable.ic_play_circle_filled_black_24dp);
-//                        views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_play_circle_filled_black_24dp);
-//                        notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mBuilder.build());
-//                    }
-
 
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -153,6 +146,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void stop() {
         if (mMediaPlayer != null) {
             mMediaPlayer.release();
@@ -196,18 +190,15 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
         if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
 
-
-
             showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
-
-
             Log.i("click_event", "Clicked NOTIFICATION");
-
-
-
         } else if (intent.getAction().equals(Constants.ACTION.PREV_ACTION)) {
-            Toast.makeText(this, "Clicked Previous", Toast.LENGTH_SHORT).show();
-            Log.i("click_event", "Clicked Previous");
+
+            gallerySongList = new GlobalData().getSongList();
+            songListIndex = new GlobalData().getSongListIndex();
+            new GlobalData().setCounter(songListIndex);
+            new GlobalData().setClickPrevious(true);
+
         } else if (intent.getAction().equals(Constants.ACTION.PLAY_ACTION)) {
             play();
             Log.i("click_event", "Clicked Play");
@@ -231,8 +222,13 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
 
         } else if (intent.getAction().equals(Constants.ACTION.NEXT_ACTION)) {
-            Toast.makeText(this, "Clicked Next", Toast.LENGTH_SHORT).show();
-            Log.i("click_event", "Clicked Next");
+
+            gallerySongList = new GlobalData().getSongList();
+            songListIndex = new GlobalData().getSongListIndex();
+            new GlobalData().setCounter(songListIndex);
+            new GlobalData().setClickNext(true);
+
+
         } else if (intent.getAction().equals(
                 Constants.ACTION.STOPFOREGROUND_ACTION)) {
             Log.i("click_event", "Received Stop Foreground Intent");
@@ -253,13 +249,14 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         bigViews = new RemoteViews(getPackageName(), R.layout.status_bar_expanded);
         views = new RemoteViews(getPackageName(), R.layout.status_bar);
 
+
         bigViews.setImageViewBitmap(R.drawable.smile_icon,
                 Constants.getDefaultAlbumArt(this));
         views.setImageViewBitmap(R.drawable.smile_icon,
                 Constants.getDefaultAlbumArt(this));
 
-        bigViews.setImageViewResource(R.id.status_bar_pause,drawable);
-        views.setImageViewResource(R.id.status_bar_play,drawable);
+        bigViews.setImageViewResource(R.id.status_bar_pause, drawable);
+        views.setImageViewResource(R.id.status_bar_play, drawable);
 
         Intent notificationIntent = new Intent(this, MusicPlayerActivity.class);
         notificationIntent.setAction(Constants.ACTION.MAIN_ACTION);
@@ -304,8 +301,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         views.setOnClickPendingIntent(R.id.status_bar_next, pnextIntent);
         bigViews.setOnClickPendingIntent(R.id.status_bar_next, pnextIntent);
 //
-//        views.setOnClickPendingIntent(R.id.status_bar_prev, ppreviousIntent);
-//        bigViews.setOnClickPendingIntent(R.id.status_bar_prev, ppreviousIntent);
+        views.setOnClickPendingIntent(R.id.status_bar_prev, ppreviousIntent);
+        bigViews.setOnClickPendingIntent(R.id.status_bar_prev, ppreviousIntent);
 
         views.setOnClickPendingIntent(R.id.status_bar_collapse, pcloseIntent);
         bigViews.setOnClickPendingIntent(R.id.status_bar_collapse, pcloseIntent);
@@ -313,6 +310,23 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         String songName = new GlobalData().getMusicName();
         views.setTextViewText(R.id.status_bar_track_name, songName);
         bigViews.setTextViewText(R.id.status_bar_track_name, songName);
+
+        gallerySongList = new GlobalData().getSongList();
+        songListIndex = new GlobalData().getSongListIndex();
+
+        FFmpegMediaMetadataRetriever mData = new FFmpegMediaMetadataRetriever();
+        mData.setDataSource(this, Uri.parse(gallerySongList.get(songListIndex)));
+
+        byte art[] = mData.getEmbeddedPicture();
+        if (art != null) {
+            Bitmap image = BitmapFactory.decodeByteArray(art, 0, art.length);
+            new GlobalData().setSongPicture(image);
+            bigViews.setImageViewBitmap(R.id.status_bar_album_art, image);
+            views.setImageViewBitmap(R.id.status_bar_album_art, image);
+        } else {
+            bigViews.setImageViewBitmap(R.id.status_bar_album_art, Constants.getDefaultAlbumArt(this));
+            views.setImageViewBitmap(R.id.status_bar_album_art, Constants.getDefaultAlbumArt(this));
+        }
 
         views.setTextViewText(R.id.status_bar_artist_name, "Artist Name");
         bigViews.setTextViewText(R.id.status_bar_artist_name, "Artist Name");
@@ -325,15 +339,17 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            int importance = NotificationManager.IMPORTANCE_LOW;
+            int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel notificationChannel = notifManager.getNotificationChannel(id);
             if (notificationChannel == null) {
                 notificationChannel = new NotificationChannel(id, title, importance);
                 notificationChannel.setSound(null, null);
+                notificationChannel.setLockscreenVisibility(Notification.BADGE_ICON_LARGE);
                 notifManager.createNotificationChannel(notificationChannel);
+
             }
             notificationChannel.setSound(null, null);
-            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
 
             mBuilder = new NotificationCompat.Builder(getApplicationContext(), id);
             mBuilder.setSmallIcon(R.drawable.ic_music_note)
@@ -344,7 +360,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                     .setOnlyAlertOnce(true);
 
             Notification notification = mBuilder.build();
-            notification.flags = Notification.FLAG_AUTO_CANCEL;
+            notification.flags = Notification.FLAG_ONGOING_EVENT;
             notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, notification);
 
         } else {
@@ -361,7 +377,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
 
             Notification notification = mBuilder.build();
-            notification.flags = Notification.FLAG_AUTO_CANCEL;
+            notification.flags = Notification.FLAG_ONGOING_EVENT;
             notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, notification);
 
         }

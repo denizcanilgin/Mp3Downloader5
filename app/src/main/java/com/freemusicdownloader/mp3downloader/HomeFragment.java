@@ -204,6 +204,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
         inflater.inflate(R.menu.search_music, menu);
         mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
        // mLogoView = (ImageView) menu.findItem(R.id.action_logo).getActionView();
