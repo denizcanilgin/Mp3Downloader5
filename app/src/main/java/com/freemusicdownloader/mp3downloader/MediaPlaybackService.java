@@ -177,6 +177,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     public void onCompletion(MediaPlayer mp) {
         Intent intent = new Intent(MPS_COMPLETED);
         broadcastManager.sendBroadcast(intent);
+        showNotification(R.drawable.ic_play_circle_filled_black_24dp);
     }
 
     private void sendElapsedTime() {
@@ -240,10 +241,11 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             Log.i("click_event", "Received Stop Foreground Intent");
             Toast.makeText(this, "Service Stoped", Toast.LENGTH_SHORT).show();
 
-            stop();
-            stopForeground(true);
+            //stop();
+            mMediaPlayer.pause();
+            //stopForeground(true);
             notificationManager.cancel(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE);
-            System.exit(0);
+            //System.exit(0);
         }
 
         return START_STICKY;
