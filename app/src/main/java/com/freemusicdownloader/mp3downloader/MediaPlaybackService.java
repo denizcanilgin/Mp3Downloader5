@@ -40,6 +40,9 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     ArrayList<String> gallerySongList;
     int songListIndex;
 
+    public Intent notificationIntent ;
+    public PendingIntent pendingIntent;
+
     private NotificationManager notifManager;
     NotificationCompat.Builder mBuilder;
     String NOTIFICATION_CHANNEL_ID = "com.freemusicdownloader.mp3downloader";
@@ -279,11 +282,11 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         bigViews.setImageViewResource(R.id.status_bar_pause, drawable);
         views.setImageViewResource(R.id.status_bar_play, drawable);
 
-        Intent notificationIntent = new Intent(this, MusicPlayerActivity.class);
+        notificationIntent = new Intent(this, MusicPlayerActivity.class);
         notificationIntent.setAction(Constants.ACTION.MAIN_ACTION);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                notificationIntent, 0);
+        pendingIntent = PendingIntent.getActivity(this, 0,
+                notificationIntent,0);
 
         Intent previousIntent = new Intent(this, MediaPlaybackService.class);
         previousIntent.setAction(Constants.ACTION.PREV_ACTION);
