@@ -1,5 +1,6 @@
 package com.freemusicdownloader.mp3downloader;
 
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,6 +10,7 @@ import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
@@ -27,6 +29,7 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import wseemann.media.FFmpegMediaMetadataRetriever;
 
@@ -329,7 +332,6 @@ public class MusicPlayerActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
         Log.i("DESTROYED","FALSE");
         int a = new GlobalData().getCounter();
     }
@@ -344,6 +346,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
 
 
 
@@ -428,5 +431,6 @@ public class MusicPlayerActivity extends AppCompatActivity {
         buttonPlayPause.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
 
     }
+
 
 }
