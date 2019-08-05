@@ -309,6 +309,9 @@ public class MusicPlayerActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
 
+        Log.i("DESTROYED","RESUME");
+
+
         getApplicationContext().bindService(new Intent(getApplicationContext(),
                 MediaPlaybackService.class), connection, BIND_AUTO_CREATE);
 
@@ -327,8 +330,8 @@ public class MusicPlayerActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        Log.i("DESTROYED","FALSE");
         int a = new GlobalData().getCounter();
-        Log.i("aasdasdaaaaaa", "" + a);
     }
 
     @Override
@@ -337,6 +340,17 @@ public class MusicPlayerActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiverCompleted);
         super.onPause();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+
+
+        Log.i("DESTROYED","TRUE");
+    }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

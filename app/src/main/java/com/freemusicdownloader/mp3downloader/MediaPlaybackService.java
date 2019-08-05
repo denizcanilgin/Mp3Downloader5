@@ -87,8 +87,21 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
     @Override
     public boolean onUnbind(Intent intent) {
+        Log.i("DESTROYED","unBinded");
+        //notificationManager.cancel(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE);
         stop();
         return super.onUnbind(intent);
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+        Log.i("TASK_REMOVED","TRUE");
+
+        mMediaPlayer.pause();
+        notificationManager.cancel(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE);
+
+        stopSelf();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -370,6 +383,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             Notification notification = mBuilder.build();
             notification.flags = Notification.FLAG_ONGOING_EVENT;
             notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, notification);
+
 
         } else {
 
