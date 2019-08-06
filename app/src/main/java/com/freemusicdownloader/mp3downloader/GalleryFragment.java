@@ -62,6 +62,8 @@ public class GalleryFragment extends Fragment {
     public MediaPlayer mp;
     private SwipeMenuCreator mMenuCreator;
 
+    private TextView tv_downloadedempty;
+
     public customAdapterListMusics.Holder lastPlayed;
     public ProgressDialog mydialog;
 
@@ -83,6 +85,8 @@ public class GalleryFragment extends Fragment {
         ads_layout = rootView.findViewById(R.id.ads_layout);
         ads_layout.setVisibility(View.INVISIBLE);
         avLoadingIndicatorView = rootView.findViewById(R.id.avi);
+        tv_downloadedempty = rootView.findViewById(R.id.tv_downloaded_empty);
+
 
         FacebookSdk.sdkInitialize(getActivity());
         AppEventsLogger.activateApp(getActivity().getApplication());
@@ -110,6 +114,10 @@ public class GalleryFragment extends Fragment {
         if (mylist.getAdapter().getCount() != 0) {
 //            AudienceNetworkAds.facebookLoadBanner(getActivity(), view);
 //            AudienceNetworkAds.facebookInterstitialAd(getActivity(),ads_layout,avLoadingIndicatorView);
+            tv_downloadedempty.setVisibility(View.GONE);
+        }else
+        {
+            tv_downloadedempty.setVisibility(View.VISIBLE);
         }
 
 
@@ -244,6 +252,14 @@ public class GalleryFragment extends Fragment {
                                             adapterListMusics.notifyDataSetChanged();
                                             getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
                                                     Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+
+                                            if (mylist.getAdapter().getCount() != 0) {
+                                                tv_downloadedempty.setVisibility(View.GONE);
+                                            }else
+                                            {
+                                                tv_downloadedempty.setVisibility(View.VISIBLE);
+                                            }
+
                                             break;
                                         case 2:
                                             share_selected_song(listmusicname.get(position),listmusicauthor.get(position));
@@ -274,42 +290,22 @@ public class GalleryFragment extends Fragment {
 
     public void delete_item(final int position) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Delete");
-        builder.setMessage("Do you really want to delete this song!!!");
-        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
+        try {
+            File file = new File(Uri.parse(listMusicurll.get(position)).getPath());
+            file.exists();
+            file.delete();
+            listMusicName = new ArrayList<String>();
+            listMusicTime = new ArrayList<String>();
+            listMusicNameCont = new ArrayList<String>();
+            getAllMusics(pathControl());
+            customAdapterListMusics adapterListMusics = new customAdapterListMusics(getActivity().getApplication(), getAllMusics(pathControl()), listMusicNameCont, listMusicName, listMusicTime);
+            mylist.setAdapter(adapterListMusics);
 
+            Toast.makeText(getActivity(), "Song Deleted!", Toast.LENGTH_SHORT).show();
 
-            }
-        });
-
-
-        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-
-                try {
-                    File file = new File(Uri.parse(listMusicurll.get(position)).getPath());
-                    file.exists();
-                    file.delete();
-                    listMusicName = new ArrayList<String>();
-                    listMusicTime = new ArrayList<String>();
-                    listMusicNameCont = new ArrayList<String>();
-                    getAllMusics(pathControl());
-                    customAdapterListMusics adapterListMusics = new customAdapterListMusics(getActivity().getApplication(), getAllMusics(pathControl()), listMusicNameCont, listMusicName, listMusicTime);
-                    mylist.setAdapter(adapterListMusics);
-
-                    Toast.makeText(getActivity(), "Song Deleted!", Toast.LENGTH_SHORT).show();
-
-                } catch (Exception e) {
-                    Toast.makeText(getActivity(), "An Error Accoured!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-
-        builder.show();
-
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "An Error Occurred!", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -365,6 +361,15 @@ public class GalleryFragment extends Fragment {
                 customAdapterListMusics adapterListMusics = new customAdapterListMusics(getActivity().getApplication(), getAllMusics(pathControl()), listMusicNameCont, listMusicName, listMusicTime);
                 mylist.invalidate();
                 mylist.setAdapter(adapterListMusics);
+
+                if (mylist.getAdapter().getCount() != 0) {
+
+                    tv_downloadedempty.setVisibility(View.GONE);
+                }else
+                {
+                    tv_downloadedempty.setVisibility(View.VISIBLE);
+                }
+
 
                 if (mylist.getAdapter().getCount() != 0) {
 

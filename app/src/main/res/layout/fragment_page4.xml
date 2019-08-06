@@ -12,7 +12,27 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         android:background="@drawable/main_header_selector" >
+
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="Your favourites are empty!"
+                android:id="@+id/tv_fav_empty"
+                android:visibility="invisible"
+                android:textSize="24dp"
+                android:fontFamily="@font/boldc"
+                android:padding="40dp"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 
 
 
@@ -70,7 +90,9 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:src="@drawable/bc2"
-            android:visibility="gone" />
+            android:visibility="invisible" />
+
+
 
         <TextView
             android:id="@+id/song_result"

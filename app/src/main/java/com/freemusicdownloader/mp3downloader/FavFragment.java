@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wang.avi.AVLoadingIndicatorView;
@@ -33,6 +34,7 @@ public class FavFragment extends Fragment implements View.OnClickListener {
 
     private ListView lvSong;
     private ArrayList<FavMusic> songList;
+    private TextView tv_empty_fav;
     Activity activity;
     GlobalClass globalClass;
     private FavMusicsAdapter adapter;
@@ -61,6 +63,13 @@ public class FavFragment extends Fragment implements View.OnClickListener {
 
         songList = globalClass.getSavedFavSongs(activity);
         lvSong = (ListView) rootView.findViewById(R.id.listView);
+        tv_empty_fav = rootView.findViewById(R.id.tv_fav_empty);
+
+        if(songList.isEmpty())
+            tv_empty_fav.setVisibility(View.VISIBLE);
+        else
+            tv_empty_fav.setVisibility(View.GONE);
+
 
         if (songList != null) {
             adapter = new FavMusicsAdapter(activity, songList);
@@ -108,6 +117,11 @@ public class FavFragment extends Fragment implements View.OnClickListener {
                                                     songList.remove(songList.get(position));
                                                     globalClass.saveFavSongs(activity,songList);
                                                     lvSong.setAdapter(adapter);
+
+                                                    if(songList.isEmpty())
+                                                        tv_empty_fav.setVisibility(View.VISIBLE);
+                                                    else
+                                                        tv_empty_fav.setVisibility(View.GONE);
 
                                                     break;
 
