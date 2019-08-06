@@ -191,6 +191,7 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
                     }).start();
                 } catch (Exception e) {
                     Log.i("errorror", "download failed");
+                    Toast.makeText(getApplicationContext(),"An error occurred: " + e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
                 output.write(data, 0, count);
 
@@ -218,8 +219,8 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
         new GlobalData().setUri(Uri.parse(currentimagepath));
         new GlobalData().setMusicName(songName);
 
-
     }
+
 
 
 
@@ -254,7 +255,7 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
                 mChannel = new NotificationChannel(id, title, importance);
                 mChannel.enableVibration(true);
                 mChannel.enableLights(true);
-                mChannel.setLightColor(Color.RED);
+                mChannel.setLightColor(Color.GREEN);
                 mChannel.enableVibration(true);
                 mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
                 notifManager.createNotificationChannel(mChannel);
@@ -264,11 +265,11 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             builder.setContentTitle(songNamee)
                     .setSmallIcon(R.drawable.ic_music_note)
-                    .setContentText("Download Completed ♫ ♫ \uD83D\uDE0E")
+                    .setContentText("Download Completed ♫ ♫ \uD83D\uDE0A")
                     .setAutoCancel(true)
                     .setSound(soundUri)
                     .setContentIntent(pendingIntenttt)
-                    .setTicker("Download Completed ♫ ♫ \uD83D\uDE0E");
+                    .setTicker("Download Completed ♫ ♫ \uD83D\uDE0A");
 
 
         } else {
@@ -277,11 +278,11 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             builder.setContentTitle(songNamee)
                     .setSmallIcon(R.drawable.ic_music_note)
-                    .setContentText("Download Completed ♫ ♫ \uD83D\uDE0E")
+                    .setContentText("Download Completed ♫ ♫ \uD83D\uDE0A")
                     .setSound(soundUri)
                     .setAutoCancel(true)
                     .setContentIntent(pendingIntenttt)
-                    .setTicker("Download Completed ♫ ♫ \uD83D\uDE0E")
+                    .setTicker("Download Completed ♫ ♫ \uD83D\uDE0A")
                     .setPriority(Notification.PRIORITY_HIGH);
         }
         Notification notification = builder.build();

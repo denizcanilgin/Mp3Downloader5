@@ -1,21 +1,31 @@
 package com.freemusicdownloader.mp3downloader;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcel;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,6 +33,10 @@ import android.widget.Toast;
 
 import com.androidsx.rateme.OnRatingListener;
 import com.androidsx.rateme.RateMeDialog;
+
+import org.michaelbel.bottomsheet.BottomSheet;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -34,14 +48,29 @@ public class MainActivity extends AppCompatActivity {
     public Toolbar toolbar;
 
     // Titles of the individual pages (displayed in tabs)
-    private final String[] PAGE_TITLES = new String[] {
+    private final String[] PAGE_TITLES = new String[]{
             "GENRES",
             "HOME",
             "GALLERY",
             "FAV"
     };
 
-    private final Fragment[] PAGES = new Fragment[] {
+    private int[] items = new int[]{
+            R.string.action_st_play,
+            R.string.action_st_download,
+            R.string.action_st_share,
+            R.string.action_st_favorite
+    };
+
+    private int[] icons = new int[]{
+            R.drawable.ic_play_arrow_black_24dp,
+            R.drawable.ic_file_download_black_24dp,
+            R.drawable.ic_share_black_24dp,
+            R.drawable.ic_favorite_black_24dp
+    };
+
+
+    private final Fragment[] PAGES = new Fragment[]{
             new GenresFragment(),
             new HomeFragment(),
             new GalleryFragment(),
@@ -67,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
         new Handler().postDelayed(
-                new Runnable(){
+                new Runnable() {
                     @Override
                     public void run() {
                         tabLayout.getTabAt(1).select();
@@ -78,13 +107,56 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        getMenuInflater().inflate(R.menu.menu_folder, menu);
-        return super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.null_menu, menu);
+        return true;
     }
+
+
+    public void showBottomMenu() {
+
+        BottomSheet.Builder builder = new BottomSheet.Builder(this);
+        builder.setTitle("Settings")
+                .setWindowDimming(134)
+                .setBackgroundColor(getResources().getColor(R.color.white))
+                .setTitleTextColor(getResources().getColor(R.color.dark_primary))
+                .setItemTextColor(getResources().getColor(R.color.dark_primary))
+                .setIconColor(getResources().getColor(R.color.dark_primary))
+                .setDividers(true)
+                .setItems(items, icons, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        switch (i) {
+
+                            case 0:
+                                break;
+                            case 1:
+
+                                break;
+                            case 2:
+
+
+                                break;
+                            case 3:
+                                //Toast.makeText(getActivity(), "Favori", Toast.LENGTH_SHORT).show();
+
+                                break;
+                        }
+
+                    }
+                });
+        builder.show();
+
+
+    }
+
+
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
