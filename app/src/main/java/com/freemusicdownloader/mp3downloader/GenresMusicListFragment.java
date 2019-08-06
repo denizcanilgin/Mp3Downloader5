@@ -61,7 +61,7 @@ import java.util.List;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /* Fragment used as page 1 */
-public class HomeFragment extends Fragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+public class GenresMusicListFragment extends Fragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
 
 
@@ -113,7 +113,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
     LinearLayout noNetworkLayout;
     AVLoadingIndicatorView avLoadingIndicatorView;
     private ViewPager viewpager;
-
+    private String SELECTED_GENRES;
     private NotificationManagerCompat notificationManager;
 
     @SuppressLint("NewApi")
@@ -128,6 +128,8 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+
+        SELECTED_GENRES = new GlobalData().getGenresDecoder();
 
         view = getActivity().getWindow().getDecorView().getRootView();
         // AudienceNetworkAds.facebookLoadBanner(getActivity(), view);
@@ -202,18 +204,6 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
         return false;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
-        inflater.inflate(R.menu.search_music, menu);
-        mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-       // mLogoView = (ImageView) menu.findItem(R.id.action_logo).getActionView();
-        mSearchView.setQueryHint("Enter your mp3 name ...");
-
-        setupSearchView();
-
-        super.onCreateOptionsMenu(menu, inflater);
-    }
 
     class PlayMusicAction extends AsyncTask<Uri, Uri, Uri> {
 
@@ -685,7 +675,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
         protected customAdapterListMusics doInBackground(String... strings) {
             Document doc = null;
 
-            String SELECTED_GENRES = new GlobalData().getGenresDecoder();
+
             if(SELECTED_GENRES == null)
                 SELECTED_GENRES = Constants.GENRES_MOSTPOPULARSONGS;
 
@@ -783,8 +773,8 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
             mSearchView.setSearchableInfo(info);
         }
 //
-        mSearchView.setOnQueryTextListener(HomeFragment.this);
-        mSearchView.setOnCloseListener(HomeFragment.this);
+        mSearchView.setOnQueryTextListener(GenresMusicListFragment.this);
+        mSearchView.setOnCloseListener(GenresMusicListFragment.this);
 
         mSearchView.setIconifiedByDefault(true);
         //  mSearchView.setFocusable(false);

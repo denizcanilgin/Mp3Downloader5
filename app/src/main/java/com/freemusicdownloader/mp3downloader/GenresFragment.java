@@ -50,9 +50,9 @@ public class GenresFragment extends Fragment implements View.OnClickListener {
         GlobalData globalData = new GlobalData();
         globalData.setGenresDecoder(decoder);
 
-        HomeFragment homeFragment = new HomeFragment();
+        GenresMusicListFragment genresMusicListFragment = new GenresMusicListFragment();
         getActivity().getFragmentManager().beginTransaction()
-                .replace(R.id.genres_layout, homeFragment, "findThisFragment")
+                .replace(R.id.genres_layout, genresMusicListFragment, "findThisFragment")
                 .addToBackStack(null)
                 .commit();
     }
