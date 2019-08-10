@@ -101,6 +101,8 @@
         android:background="@color/white"
         android:visibility="gone" />
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -109,6 +111,8 @@
         android:gravity="center"
         android:orientation="horizontal">
 
+
+
         <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/imageButtonPrevious"
             android:layout_width="40dp"
@@ -116,7 +120,6 @@
             android:layout_gravity="center_vertical"
             android:layout_marginTop="15dp"
             android:layout_marginRight="10dp"
-            android:onClick="songPrevious"
             android:background="@null"
             android:padding="@dimen/fab_margin"
             android:src="@drawable/ic_skip_previous" />
@@ -141,9 +144,23 @@
             android:layout_gravity="center_vertical"
             android:layout_marginTop="15dp"
             android:background="@null"
-            android:onClick="songNextt"
             android:padding="@dimen/fab_margin"
             android:src="@drawable/ic_skip_next" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_replayButton"
+            android:src="@drawable/ic_repeat_black_24dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+
+    </LinearLayout>
+
 </LinearLayout>
