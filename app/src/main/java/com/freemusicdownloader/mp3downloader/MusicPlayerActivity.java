@@ -33,7 +33,7 @@ import java.util.List;
 
 import wseemann.media.FFmpegMediaMetadataRetriever;
 
-public class MusicPlayerActivity extends AppCompatActivity {
+public class MusicPlayerActivity extends AppCompatActivity implements View.OnClickListener {
     boolean isBinded = false;
     MediaPlaybackService mediaPlaybackService;
 
@@ -43,6 +43,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
     ViewGroup rootView;
     ImageButton buttonPlayPause, buttonNext, buttonPrevious;
     ImageView albumArt;
+    ImageView iv_replaybutton;
     TextView titleTextView;
     TextView artistTextView;
     TextView elapsedTimeTextView;
@@ -68,17 +69,22 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
         rootView = (ViewGroup) findViewById(android.R.id.content);
         buttonPlayPause = (ImageButton) findViewById(R.id.imageButtonPlayPause);
+        buttonPlayPause.setOnClickListener(this);
         buttonNext = (ImageButton) findViewById(R.id.imageButtonNext);
+        buttonNext.setOnClickListener(this);
         buttonPrevious = (ImageButton) findViewById(R.id.imageButtonPrevious);
+        buttonPrevious.setOnClickListener(this);
         albumArt = (ImageView) findViewById(R.id.albumArt);
         titleTextView = (TextView) findViewById(R.id.textViewTitle);
         artistTextView = (TextView) findViewById(R.id.textViewArtist);
         elapsedTimeTextView = (TextView) findViewById(R.id.textViewElapsedTime);
         durationTextView = (TextView) findViewById(R.id.textViewDuration);
         elapsedTimeSeekBar = (AppCompatSeekBar) findViewById(R.id.seekBar);
-
+        iv_replaybutton = (ImageView) findViewById(R.id.iv_replayButton);
         gallerySongList = new GlobalData().getSongList();
         songListIndex = new GlobalData().getSongListIndex();
+
+        iv_replaybutton.setOnClickListener(this);
 
         connection = new ServiceConnection() {
             @Override
@@ -119,6 +125,20 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 }
                 elapsedTime = intent.getIntExtra(MediaPlaybackService.MPS_MESSAGE, 0);
                 updateElapsedTime(elapsedTime);
+
+                Log.i("GLOBALDATADURATION"," : " + GlobalData.getSongDuration());
+                Log.i("ELAPSEDTIME"," : " + elapsedTime);
+
+//                if(( (GlobalData.getSongDuration() - elapsedTime) < 150 )){
+//                            Log.i("FINISHED","YES!");
+//                    if(GlobalData.isRepeatSong()) Log.i("REPEAT","START OVER!");
+//                        else{ songNextt(); Log.i("NEXTSONG","YES!");}
+//                }
+
+                gallerySongList = new GlobalData().getSongList();
+                songListIndex = new GlobalData().getSongListIndex();
+                initInfos(Uri.parse(gallerySongList.get(songListIndex)));
+
             }
         };
 
@@ -258,7 +278,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
         }
     };
 
-    public void songNextt(View v) {
+    public void songNextt() {
         try {
 
             clearInfos();
@@ -282,7 +302,30 @@ public class MusicPlayerActivity extends AppCompatActivity {
         }
     }
 
-    public void songPrevious(View v) {
+    public void repeatSong() {
+        try {
+
+            clearInfos();
+            if (gallerySongList.size() == songListIndex) {
+                songListIndex = 0;
+            }
+            // Stuff that updates the UI
+            mediaPlaybackService.init(Uri.parse(gallerySongList.get(songListIndex)));
+            initInfos(Uri.parse(gallerySongList.get(songListIndex)));
+            Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
+            serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+            startService(serviceIntent);
+
+            File file = new File(gallerySongList.get(songListIndex) + "");
+            new GlobalData().setMusicName(file.getName());
+            new GlobalData().setSongListIndex(songListIndex);
+
+        } catch (Exception e) {
+            Log.i("erorrrrrrrrrrrr", "" + e);
+        }
+    }
+
+    public void songPrevious() {
 
         try {
             clearInfos();
@@ -433,4 +476,44 @@ public class MusicPlayerActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onClick(View view) {
+
+        switch(view.getId()){
+
+            case R.id.iv_replayButton :
+
+                Log.i("BUTTON_PUSHED","REPLAY");
+
+                if(GlobalData.isRepeatSong() == false)
+                {
+                    GlobalData.setRepeatSong(true);
+                    iv_replaybutton.setImageResource(R.drawable.ic_repeat_one_black_24dp);
+                }else if(GlobalData.isRepeatSong() == true){
+                    GlobalData.setRepeatSong(false);
+                    iv_replaybutton.setImageResource(R.drawable.ic_repeat_black_24dp);
+                }
+
+                break;
+
+            case R.id.imageButtonNext:
+
+                songNextt();
+
+                break;
+
+            case R.id.imageButtonPrevious:
+
+                songPrevious();
+
+                break;
+
+            case R.id.imageButtonPlayPause:
+
+
+                break;
+
+        }
+
+    }
 }

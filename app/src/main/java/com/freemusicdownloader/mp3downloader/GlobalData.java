@@ -18,6 +18,24 @@ public class GlobalData {
     public static Boolean clickNext;
     public static Boolean clickPrevious;
     public static Bitmap songPicture;
+    public static boolean repeatSong;
+    public static int songDuration;
+
+    public static boolean isRepeatSong() {
+        return repeatSong;
+    }
+
+    public static int getSongDuration() {
+        return songDuration;
+    }
+
+    public static void setSongDuration(int songDuration) {
+        GlobalData.songDuration = songDuration;
+    }
+
+    public static void setRepeatSong(boolean repeatSong) {
+        GlobalData.repeatSong = repeatSong;
+    }
 
     public static Bitmap getSongPicture() {
         return songPicture;

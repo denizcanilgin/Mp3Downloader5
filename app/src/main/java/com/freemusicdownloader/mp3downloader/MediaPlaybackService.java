@@ -129,7 +129,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     @Override
     public void onPrepared(MediaPlayer mp) {
         mp.start();
-
+        showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
         Thread updateThread = new Thread(sendUpdates);
         updateThread.start();
     }
@@ -138,10 +138,32 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         @Override
         public void run() {
             while (mMediaPlayer != null) {
-                SystemClock.sleep(250);
+                SystemClock.sleep(350);
                 sendElapsedTime();
+                if(isFinished()){
+
+                    if(GlobalData.isRepeatSong()){
+
+                        //init(file);
+
+
+                    }else{
+                        Log.i("REPEAT","OFF!!");
+
+//                        songListIndex++;
+//                        gallerySongList = new GlobalData().getSongList();
+//                        songListIndex = new GlobalData().getSongListIndex();
+//                        new GlobalData().setCounter(songListIndex);
+//                        showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
+//                        init(Uri.parse(gallerySongList.get(songListIndex)));
+
+                    }
+
+                }
+
+
                 try {
-                    Thread.sleep(250);
+                    Thread.sleep(350);
 
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -149,6 +171,22 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             }
         }
     };
+
+    public boolean isFinished(){
+
+        boolean isFinished = false;
+
+        try{
+        if(( (GlobalData.getSongDuration() - mMediaPlayer.getCurrentPosition()) < 150 )) {
+            Log.i("FINISHED", "YES!");
+            isFinished = true;
+            }
+        }catch (Exception e){
+
+            Log.i("ERROR","" + e.getMessage());
+        }
+        return isFinished;
+    }
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -208,6 +246,9 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        Log.i("DURATION : ", "" + mMediaPlayer.getDuration());
+        GlobalData.setSongDuration(mMediaPlayer.getDuration());
 
         if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
 
@@ -324,7 +365,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
         views.setOnClickPendingIntent(R.id.status_bar_next, pnextIntent);
         bigViews.setOnClickPendingIntent(R.id.status_bar_next, pnextIntent);
-//
+
         views.setOnClickPendingIntent(R.id.status_bar_prev, ppreviousIntent);
         bigViews.setOnClickPendingIntent(R.id.status_bar_prev, ppreviousIntent);
 
