@@ -190,6 +190,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             mMediaPlayer.pause();
         showNotification(R.drawable.ic_play_circle_filled_black_24dp);
 
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -197,6 +198,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         if (mMediaPlayer != null)
             mMediaPlayer.start();
         showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -242,8 +244,6 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-
-        try {
             if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
 
                 showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
@@ -265,18 +265,20 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
                 Log.i("click_event", "Clicked Pause");
                 playbackService = new GlobalData().getMediaPlaybackService();
+                Boolean a = playbackService.isPlaying();
+                Log.i("aaaaaaaaaa",""+a);
 
                 if (playbackService.isPlaying()) {
                     bigViews.setImageViewResource(R.id.status_bar_pause, R.drawable.ic_play_circle_filled_black_24dp);
                     views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_play_circle_filled_black_24dp);
                     pause();
+                    Log.i("infoooooorr","pause");
                 } else {
                     bigViews.setImageViewResource(R.id.status_bar_pause, R.drawable.ic_pause_circle_filled_black_24dp);
                     views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_pause_circle_filled_black_24dp);
                     play();
+                    Log.i("infoooooorr","play");
                 }
-
-                Log.i("commit", "asdasd");
 
                 notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mBuilder.build());
 
@@ -297,12 +299,6 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                     mMediaPlayer.pause();
                 notificationManager.cancel(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE);
             }
-
-        } catch (Exception e) {
-            Toast.makeText(this, "An Error Occured.", Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(i);
-        }
 
         return START_STICKY;
     }
@@ -378,18 +374,21 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         gallerySongList = new GlobalData().getSongList();
         songListIndex = new GlobalData().getSongListIndex();
 
-        FFmpegMediaMetadataRetriever mData = new FFmpegMediaMetadataRetriever();
-        mData.setDataSource(this, Uri.parse(gallerySongList.get(songListIndex)));
+        if (gallerySongList != null || songListIndex != 0) {
 
-        byte art[] = mData.getEmbeddedPicture();
-        if (art != null) {
-            Bitmap image = BitmapFactory.decodeByteArray(art, 0, art.length);
-            new GlobalData().setSongPicture(image);
-            bigViews.setImageViewBitmap(R.id.status_bar_album_art, image);
-            views.setImageViewBitmap(R.id.status_bar_album_art, image);
-        } else {
-            bigViews.setImageViewBitmap(R.id.status_bar_album_art, Constants.getDefaultAlbumArt(this));
-            views.setImageViewBitmap(R.id.status_bar_album_art, Constants.getDefaultAlbumArt(this));
+            FFmpegMediaMetadataRetriever mData = new FFmpegMediaMetadataRetriever();
+            mData.setDataSource(this, Uri.parse(gallerySongList.get(songListIndex)));
+
+            byte art[] = mData.getEmbeddedPicture();
+            if (art != null) {
+                Bitmap image = BitmapFactory.decodeByteArray(art, 0, art.length);
+                new GlobalData().setSongPicture(image);
+                bigViews.setImageViewBitmap(R.id.status_bar_album_art, image);
+                views.setImageViewBitmap(R.id.status_bar_album_art, image);
+            } else {
+                bigViews.setImageViewBitmap(R.id.status_bar_album_art, Constants.getDefaultAlbumArt(this));
+                views.setImageViewBitmap(R.id.status_bar_album_art, Constants.getDefaultAlbumArt(this));
+            }
         }
 
         views.setTextViewText(R.id.status_bar_artist_name, "Artist Name");
@@ -421,6 +420,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                     .setCustomContentView(views)
                     .setCustomBigContentView(bigViews)
                     .setContentIntent(pendingIntent)
+                    .setPriority(Notification.PRIORITY_HIGH)
                     .setOnlyAlertOnce(true);
 
             Notification notification = mBuilder.build();
@@ -438,6 +438,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                     .setAutoCancel(true)
                     .setContentIntent(pendingIntent)
                     .setOngoing(true)
+                    .setPriority(Notification.PRIORITY_HIGH)
                     .setOnlyAlertOnce(true);
 
 

@@ -91,6 +91,8 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
 
                 currentimagepath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC) +
                         File.separator + aurl[1];
+//                currentimagepath = Environment.getExternalStorageDirectory() +
+//                        File.separator + "Mp3Download/" + aurl[1];
 
 
                 output = new FileOutputStream(currentimagepath);
@@ -218,7 +220,6 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
         createNotification(currentimagepath, songName);
         new GlobalData().setUri(Uri.parse(currentimagepath));
         new GlobalData().setMusicName(songName);
-
 
     }
 

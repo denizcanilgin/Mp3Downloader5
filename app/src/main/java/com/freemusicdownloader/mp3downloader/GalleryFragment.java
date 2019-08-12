@@ -206,14 +206,6 @@ public class GalleryFragment extends Fragment {
             holder.txt_music_time = (TextView) rowView.findViewById(R.id.musictime);
             holder.btn_play_stop = (ImageButton) rowView.findViewById(R.id.playstop2);
 
-
-            try {
-
-                String s = listmusicname.get(position).toString().trim();
-            } catch (Exception e) {
-                Log.i("aaaaaaaaaa", "" + e);
-            }
-
             holder.txt_music_name.setText(listmusicname.get(position).toString().trim());
             holder.txt_music_author.setText(listmusicauthor.get(position).toString().trim());
             holder.txt_music_time.setText(listmusictime.get(position).toString().trim());

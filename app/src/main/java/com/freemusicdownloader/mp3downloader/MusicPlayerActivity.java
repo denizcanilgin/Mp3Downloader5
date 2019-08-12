@@ -216,22 +216,17 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                     if (f != null) {
                         if (f == true) {
 
-
-
-
                             runOnUiThread(new Runnable() {
 
                                 @Override
                                 public void run() {
 
                                     int notifCounter = new GlobalData().getCounter();
-                                    Log.i("aaaaaaaaaaaa", "geldiiii" + notifCounter);
                                     clearInfos();
                                     notifCounter++;
                                     if (gallerySongList.size() == notifCounter) {
                                         notifCounter = 0;
                                     }
-                                    // Stuff that updates the UI
                                     mediaPlaybackService.init(Uri.parse(gallerySongList.get(notifCounter)));
                                     initInfos(Uri.parse(gallerySongList.get(notifCounter)));
                                     Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
@@ -250,8 +245,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                     Boolean ff = new GlobalData().getClickPrevious();
                     if (ff != null) {
                         if (ff == true) {
-
-                            new GlobalData().setClickPrevious(false);
 
 
                             runOnUiThread(new Runnable() {
@@ -276,6 +269,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                                     File file = new File(gallerySongList.get(notifCounter) + "");
                                     new GlobalData().setMusicName(file.getName());
                                     new GlobalData().setSongListIndex(notifCounter);
+                                    new GlobalData().setClickPrevious(false);
                                 }
                             });
 
