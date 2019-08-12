@@ -58,17 +58,19 @@ public class FavFragment extends Fragment implements View.OnClickListener {
     };
 
     @Override
-    public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_page4, container, false);
 
         songList = globalClass.getSavedFavSongs(activity);
         lvSong = (ListView) rootView.findViewById(R.id.listView);
         tv_empty_fav = rootView.findViewById(R.id.tv_fav_empty);
 
-        if(songList.isEmpty())
-            tv_empty_fav.setVisibility(View.VISIBLE);
-        else
-            tv_empty_fav.setVisibility(View.GONE);
+        if (songList != null) {
+            if (songList.isEmpty())
+                tv_empty_fav.setVisibility(View.VISIBLE);
+            else
+                tv_empty_fav.setVisibility(View.GONE);
+        }
 
 
         if (songList != null) {
@@ -78,7 +80,7 @@ public class FavFragment extends Fragment implements View.OnClickListener {
 
                 public void onItemClick(AdapterView<?> parent, View arg1,
                                         final int position, long arg3) {
-                   // Toast.makeText(getActivity(),"playing : " + songList.get(position).getMusicName(),0).show();
+                    // Toast.makeText(getActivity(),"playing : " + songList.get(position).getMusicName(),0).show();
 
 
                     BottomSheet.Builder builder = new BottomSheet.Builder(getActivity());
@@ -90,47 +92,47 @@ public class FavFragment extends Fragment implements View.OnClickListener {
                             .setIconColor(getResources().getColor(R.color.dark_primary))
                             .setDividers(true)
                             .setItems(items, icons, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
 
-                                            switch (i){
+                                    switch (i) {
 
-                                                case 0:
-                                                    Toast.makeText(getActivity(),"playing : " + songList.get(position).getMusicName(),0).show();
-                                                        play_selected_song(position);
-                                                    break;
-                                                case 1:
+                                        case 0:
+                                            Toast.makeText(getActivity(), "playing : " + songList.get(position).getMusicName(), 0).show();
+                                            play_selected_song(position);
+                                            break;
+                                        case 1:
 
-                                                    download_selected_song(position);
+                                            download_selected_song(position);
 
-                                                    break;
+                                            break;
 
-                                                case 2:
+                                        case 2:
 
-                                                    share_selected_song(songList.get(position).getMusicName(),songList.get(position).getMusicAuthor());
+                                            share_selected_song(songList.get(position).getMusicName(), songList.get(position).getMusicAuthor());
 
-                                                    break;
+                                            break;
 
-                                                case 3:
+                                        case 3:
 
-                                                    GlobalClass globalClass = new GlobalClass();
-                                                    songList.remove(songList.get(position));
-                                                    globalClass.saveFavSongs(activity,songList);
-                                                    lvSong.setAdapter(adapter);
+                                            GlobalClass globalClass = new GlobalClass();
+                                            songList.remove(songList.get(position));
+                                            globalClass.saveFavSongs(activity, songList);
+                                            lvSong.setAdapter(adapter);
 
-                                                    if(songList.isEmpty())
-                                                        tv_empty_fav.setVisibility(View.VISIBLE);
-                                                    else
-                                                        tv_empty_fav.setVisibility(View.GONE);
+                                            if (songList.isEmpty())
+                                                tv_empty_fav.setVisibility(View.VISIBLE);
+                                            else
+                                                tv_empty_fav.setVisibility(View.GONE);
 
-                                                    break;
+                                            break;
 
-                                            }
+                                    }
 
-                                        }
-                                    });
-                                    builder.show();
-                                    globalClass.removeFavSong(getActivity(), songList.get(position));
+                                }
+                            });
+                    builder.show();
+                    globalClass.removeFavSong(getActivity(), songList.get(position));
 
                 }
             });
@@ -142,7 +144,7 @@ public class FavFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onCreate( Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = getActivity();
         globalClass = new GlobalClass();
@@ -153,13 +155,13 @@ public class FavFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    public void play_selected_song(int position){
+    public void play_selected_song(int position) {
 
-       // Toast.makeText(getActivity(), "Play", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getActivity(), "Play", Toast.LENGTH_SHORT).show();
 
         try {
-                PlayMusicAction playMusicAction = new PlayMusicAction();
-                playMusicAction.doInBackground(Uri.parse(songList.get(position).getMusicURL().toString()));
+            PlayMusicAction playMusicAction = new PlayMusicAction();
+            playMusicAction.doInBackground(Uri.parse(songList.get(position).getMusicURL().toString()));
 
         } catch (Exception e) {
 //            new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
@@ -187,7 +189,7 @@ public class FavFragment extends Fragment implements View.OnClickListener {
 //                    })
 //
 //                    .show();
-       }
+        }
 
 
     }
@@ -241,7 +243,7 @@ public class FavFragment extends Fragment implements View.OnClickListener {
         return found;
     }
 
-    public void download_selected_song(int songPos){
+    public void download_selected_song(int songPos) {
 
         Toast.makeText(getActivity(), "Download", Toast.LENGTH_SHORT).show();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -278,12 +280,12 @@ public class FavFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    public void share_selected_song(String songName, String songAuthor){
+    public void share_selected_song(String songName, String songAuthor) {
 
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, "You should listen to this amazing song! \n \n " + songName + " - " + songAuthor
-         + " \n \n https://play.google.com/store/apps/details?id=com.freemusicdownloader.mp3downloader");
+                + " \n \n https://play.google.com/store/apps/details?id=com.freemusicdownloader.mp3downloader");
         sendIntent.setType("text/plain");
         startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.app_name)));
 

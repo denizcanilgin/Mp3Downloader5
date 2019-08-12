@@ -114,6 +114,33 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
             }
         };
 
+//        receiverElapsedTime = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                Boolean a = mediaPlaybackService.isPlaying();
+//                Log.i("playingresult", "" + a);
+//                if (!a) {
+//                    buttonPlayPause.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
+//                    new GlobalData().setMediaPlaybackService(mediaPlaybackService);
+//                }
+//                elapsedTime = intent.getIntExtra(MediaPlaybackService.MPS_MESSAGE, 0);
+//                updateElapsedTime(elapsedTime);
+//
+//                Log.i("GLOBALDATADURATION"," : " + GlobalData.getSongDuration());
+//                Log.i("ELAPSEDTIME"," : " + elapsedTime);
+//
+////                if(( (GlobalData.getSongDuration() - elapsedTime) < 150 )){
+////                            Log.i("FINISHED","YES!");
+////                    if(GlobalData.isRepeatSong()) Log.i("REPEAT","START OVER!");
+////                        else{ songNextt(); Log.i("NEXTSONG","YES!");}
+////                }
+//
+//                gallerySongList = new GlobalData().getSongList();
+//                songListIndex = new GlobalData().getSongListIndex();
+//                initInfos(Uri.parse(gallerySongList.get(songListIndex)));
+//
+//            }
+//        };
         receiverElapsedTime = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -125,20 +152,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                 }
                 elapsedTime = intent.getIntExtra(MediaPlaybackService.MPS_MESSAGE, 0);
                 updateElapsedTime(elapsedTime);
-
-                Log.i("GLOBALDATADURATION"," : " + GlobalData.getSongDuration());
-                Log.i("ELAPSEDTIME"," : " + elapsedTime);
-
-//                if(( (GlobalData.getSongDuration() - elapsedTime) < 150 )){
-//                            Log.i("FINISHED","YES!");
-//                    if(GlobalData.isRepeatSong()) Log.i("REPEAT","START OVER!");
-//                        else{ songNextt(); Log.i("NEXTSONG","YES!");}
-//                }
-
-                gallerySongList = new GlobalData().getSongList();
-                songListIndex = new GlobalData().getSongListIndex();
-                initInfos(Uri.parse(gallerySongList.get(songListIndex)));
-
             }
         };
 
@@ -194,16 +207,16 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         public void run() {
 
             while (true) {
-                SystemClock.sleep(250);
+                SystemClock.sleep(150);
 
                 try {
-                    Thread.sleep(250);
+                    Thread.sleep(150);
 
                     Boolean f = new GlobalData().getClickNext();
                     if (f != null) {
                         if (f == true) {
 
-                            new GlobalData().setClickNext(false);
+
 
 
                             runOnUiThread(new Runnable() {
@@ -228,6 +241,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                                     File file = new File(gallerySongList.get(notifCounter) + "");
                                     new GlobalData().setMusicName(file.getName());
                                     new GlobalData().setSongListIndex(notifCounter);
+                                    new GlobalData().setClickNext(false);
                                 }
                             });
 
@@ -481,20 +495,20 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
 
         switch(view.getId()){
 
-            case R.id.iv_replayButton :
-
-                Log.i("BUTTON_PUSHED","REPLAY");
-
-                if(GlobalData.isRepeatSong() == false)
-                {
-                    GlobalData.setRepeatSong(true);
-                    iv_replaybutton.setImageResource(R.drawable.ic_repeat_one_black_24dp);
-                }else if(GlobalData.isRepeatSong() == true){
-                    GlobalData.setRepeatSong(false);
-                    iv_replaybutton.setImageResource(R.drawable.ic_repeat_black_24dp);
-                }
-
-                break;
+//            case R.id.iv_replayButton :
+//
+//                Log.i("BUTTON_PUSHED","REPLAY");
+//
+//                if(GlobalData.isRepeatSong() == false)
+//                {
+//                    GlobalData.setRepeatSong(true);
+//                    iv_replaybutton.setImageResource(R.drawable.ic_repeat_one_black_24dp);
+//                }else if(GlobalData.isRepeatSong() == true){
+//                    GlobalData.setRepeatSong(false);
+//                    iv_replaybutton.setImageResource(R.drawable.ic_repeat_black_24dp);
+//                }
+//
+//                break;
 
             case R.id.imageButtonNext:
 

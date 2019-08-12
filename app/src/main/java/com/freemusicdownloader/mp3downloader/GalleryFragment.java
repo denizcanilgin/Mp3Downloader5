@@ -115,8 +115,7 @@ public class GalleryFragment extends Fragment {
 //            AudienceNetworkAds.facebookLoadBanner(getActivity(), view);
 //            AudienceNetworkAds.facebookInterstitialAd(getActivity(),ads_layout,avLoadingIndicatorView);
             tv_downloadedempty.setVisibility(View.GONE);
-        }else
-        {
+        } else {
             tv_downloadedempty.setVisibility(View.VISIBLE);
         }
 
@@ -211,9 +210,8 @@ public class GalleryFragment extends Fragment {
             try {
 
                 String s = listmusicname.get(position).toString().trim();
-            }catch (Exception e )
-            {
-                Log.i("aaaaaaaaaa",""+e);
+            } catch (Exception e) {
+                Log.i("aaaaaaaaaa", "" + e);
             }
 
             holder.txt_music_name.setText(listmusicname.get(position).toString().trim());
@@ -244,7 +242,7 @@ public class GalleryFragment extends Fragment {
                                             new GlobalData().setUri(Uri.parse(listMusicurll.get(index).toString()));
                                             new GlobalData().setMusicName(listmusicauthor.get(index).toString().trim());
                                             new GlobalData().setSongListIndex(index);
-                                            Intent ıntent = new Intent(getActivity(),MusicPlayerActivity.class);
+                                            Intent ıntent = new Intent(getActivity(), MusicPlayerActivity.class);
                                             startActivity(ıntent);
                                             break;
                                         case 1:
@@ -255,14 +253,13 @@ public class GalleryFragment extends Fragment {
 
                                             if (mylist.getAdapter().getCount() != 0) {
                                                 tv_downloadedempty.setVisibility(View.GONE);
-                                            }else
-                                            {
+                                            } else {
                                                 tv_downloadedempty.setVisibility(View.VISIBLE);
                                             }
 
                                             break;
                                         case 2:
-                                            share_selected_song(listmusicname.get(position),listmusicauthor.get(position));
+                                            share_selected_song(listmusicname.get(position), listmusicauthor.get(position));
                                             break;
 
                                     }
@@ -286,6 +283,13 @@ public class GalleryFragment extends Fragment {
 
             return rowView;
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i("starttt","start coming");
+
     }
 
     public void delete_item(final int position) {
@@ -323,7 +327,7 @@ public class GalleryFragment extends Fragment {
 
     }
 
-    public void share_selected_song(String songName, String songAuthor){
+    public void share_selected_song(String songName, String songAuthor) {
 
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
@@ -348,11 +352,10 @@ public class GalleryFragment extends Fragment {
 
         int id = item.getItemId();
 
-        switch (id)
-        {
-            case R.id.action_refresh :
+        switch (id) {
+            case R.id.action_refresh:
 
-               // Toast.makeText(getActivity(), "Gallery Refresh ...", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getActivity(), "Gallery Refresh ...", Toast.LENGTH_SHORT).show();
 
                 listMusicName = new ArrayList<String>();
                 listMusicTime = new ArrayList<String>();
@@ -365,8 +368,7 @@ public class GalleryFragment extends Fragment {
                 if (mylist.getAdapter().getCount() != 0) {
 
                     tv_downloadedempty.setVisibility(View.GONE);
-                }else
-                {
+                } else {
                     tv_downloadedempty.setVisibility(View.VISIBLE);
                 }
 
@@ -466,11 +468,9 @@ public class GalleryFragment extends Fragment {
 
 
                 }
-            }catch (Exception e)
-            {
+            } catch (Exception e) {
 
             }
-
 
 
         }
@@ -480,7 +480,7 @@ public class GalleryFragment extends Fragment {
     public String pathControl() {
 
 
-        String path = Environment.getExternalStorageDirectory() + File.separator + "Mp3Download/";
+        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath() + File.separator;
 
         if (path != null) {
             return path;

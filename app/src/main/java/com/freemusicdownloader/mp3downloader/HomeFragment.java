@@ -346,7 +346,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
                 public void onItemClick(AdapterView<?> adapterView, View view, final int songPos, long l) {
 
                     BottomSheet.Builder builder = new BottomSheet.Builder(getActivity());
-                    builder.setTitle(listmusicauthor.get(position).toString() + "\n- " + listmusicauthor.get(position).toString())
+                    builder.setTitle(listmusicauthor.get(songPos).toString() + "\n- " + listmusicauthor.get(songPos).toString())
                             .setWindowDimming(134)
                             .setBackgroundColor(getResources().getColor(R.color.white))
                             .setTitleTextColor(getResources().getColor(R.color.dark_primary))
@@ -685,12 +685,8 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
         protected customAdapterListMusics doInBackground(String... strings) {
             Document doc = null;
 
-            String SELECTED_GENRES = new GlobalData().getGenresDecoder();
-            if(SELECTED_GENRES == null)
-                SELECTED_GENRES = Constants.GENRES_MOSTPOPULARSONGS;
-
             try {
-                doc = Jsoup.connect(decodeString(SELECTED_GENRES)).get();
+                doc = Jsoup.connect(decodeString(Constants.GENRES_HOMEPAGES)).get();
 
                 Elements body = doc.select("div#xbody");
 

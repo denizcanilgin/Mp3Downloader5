@@ -677,7 +677,7 @@ public class GenresMusicListFragment extends Fragment implements SearchView.OnQu
 
 
             if(SELECTED_GENRES == null)
-                SELECTED_GENRES = Constants.GENRES_MOSTPOPULARSONGS;
+                SELECTED_GENRES = Constants.GENRES_HOMEPAGES;
 
             try {
                 doc = Jsoup.connect(decodeString(SELECTED_GENRES)).get();

@@ -13,7 +13,7 @@ public class Constants {
     public static String GENRES_RELAX = "aHR0cDovL21wM3BuLmluZm8vdG9wL3JlbGF4Lw";
     public static String GENRES_ROCK = "aHR0cDovL21wM3BuLmluZm8vdG9wL3JvY2sv";
     public static String GENRES_METAL = "aHR0cDovL21wM3BuLmluZm8vdG9wL21ldGFsLw";
-    public static String GENRES_MOSTPOPULARSONGS = "aHR0cDovL21wM3BuLm5ldC9zZWFyY2gvcy9mL01vc3QrcG9wdWxhcitzb25ncy8";
+    public static String GENRES_HOMEPAGES = "aHR0cHM6Ly90dm94eS5uZXQvc2VhcmNoL3MvZi9yaWhhbm5hLw";
 
 
 
@@ -31,7 +31,7 @@ public class Constants {
     }
 
     public interface NOTIFICATION_ID {
-        public static int FOREGROUND_SERVICE = 101;
+        public static int FOREGROUND_SERVICE = 1907;
     }
 
     public static Bitmap getDefaultAlbumArt(Context context) {

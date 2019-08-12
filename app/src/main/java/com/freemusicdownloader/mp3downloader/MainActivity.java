@@ -49,8 +49,9 @@ public class MainActivity extends AppCompatActivity {
 
     // Titles of the individual pages (displayed in tabs)
     private final String[] PAGE_TITLES = new String[]{
-            "GENRES",
+
             "HOME",
+            "GENRES",
             "GALLERY",
             "FAV"
     };
@@ -71,8 +72,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     private final Fragment[] PAGES = new Fragment[]{
-            new GenresFragment(),
+
             new HomeFragment(),
+            new GenresFragment(),
             new GalleryFragment(),
             new FavFragment()
 
@@ -95,13 +97,13 @@ public class MainActivity extends AppCompatActivity {
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
-        new Handler().postDelayed(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        tabLayout.getTabAt(1).select();
-                    }
-                }, 1);
+//        new Handler().postDelayed(
+//                new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        tabLayout.getTabAt(1).select();
+//                    }
+//                }, 1);
         tabLayout.setupWithViewPager(mViewPager);
 
     }
@@ -152,10 +154,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
-
-
-
 
 
     @Override
@@ -238,8 +236,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void float_action(View view) {
 
-        Toast.makeText(getApplicationContext(),"fav",0).show();
-
+        Toast.makeText(getApplicationContext(), "fav", 0).show();
 
 
     }

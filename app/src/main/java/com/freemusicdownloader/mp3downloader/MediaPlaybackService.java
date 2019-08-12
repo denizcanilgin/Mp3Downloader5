@@ -40,7 +40,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     ArrayList<String> gallerySongList;
     int songListIndex;
 
-    public Intent notificationIntent ;
+    public Intent notificationIntent;
     public PendingIntent pendingIntent;
 
     private NotificationManager notifManager;
@@ -55,7 +55,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             return MediaPlaybackService.this;
         }
     }
-    
+
     //deniz
 
     IDBinder idBinder = new IDBinder();
@@ -73,8 +73,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         notificationManager = NotificationManagerCompat.from(this);
 
         super.onCreate();
-        
-        Log.i("asdsad","asdasd");
+
+        Log.i("asdsad", "asdasd");
     }
 
     @Override
@@ -90,7 +90,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
     @Override
     public boolean onUnbind(Intent intent) {
-        Log.i("DESTROYED","unBinded");
+        Log.i("DESTROYED", "unBinded");
         //notificationManager.cancel(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE);
         stop();
         return super.onUnbind(intent);
@@ -99,7 +99,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
-        Log.i("TASK_REMOVED","TRUE");
+        Log.i("TASK_REMOVED", "TRUE");
 
         mMediaPlayer.pause();
         notificationManager.cancel(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE);
@@ -138,32 +138,10 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         @Override
         public void run() {
             while (mMediaPlayer != null) {
-                SystemClock.sleep(350);
+                SystemClock.sleep(250);
                 sendElapsedTime();
-                if(isFinished()){
-
-                    if(GlobalData.isRepeatSong()){
-
-                        //init(file);
-
-
-                    }else{
-                        Log.i("REPEAT","OFF!!");
-
-//                        songListIndex++;
-//                        gallerySongList = new GlobalData().getSongList();
-//                        songListIndex = new GlobalData().getSongListIndex();
-//                        new GlobalData().setCounter(songListIndex);
-//                        showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
-//                        init(Uri.parse(gallerySongList.get(songListIndex)));
-
-                    }
-
-                }
-
-
                 try {
-                    Thread.sleep(350);
+                    Thread.sleep(250);
 
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -172,18 +150,18 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         }
     };
 
-    public boolean isFinished(){
+    public boolean isFinished() {
 
         boolean isFinished = false;
 
-        try{
-        if(( (GlobalData.getSongDuration() - mMediaPlayer.getCurrentPosition()) < 150 )) {
-            Log.i("FINISHED", "YES!");
-            isFinished = true;
+        try {
+            if (((GlobalData.getSongDuration() - mMediaPlayer.getCurrentPosition()) < 150)) {
+                Log.i("FINISHED", "YES!");
+                isFinished = true;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
-            Log.i("ERROR","" + e.getMessage());
+            Log.i("ERROR", "" + e.getMessage());
         }
         return isFinished;
     }
@@ -235,7 +213,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     }
 
     private void sendElapsedTime() {
-        // Utilisation du BroadcastReceiver local pour envoyer la durée passée
+
         Intent intent = new Intent(MPS_RESULT);
         if (mMediaPlayer != null)
             intent.putExtra(MPS_MESSAGE, mMediaPlayer.getCurrentPosition());
@@ -247,62 +225,66 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        Log.i("DURATION : ", "" + mMediaPlayer.getDuration());
-        GlobalData.setSongDuration(mMediaPlayer.getDuration());
 
-        if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
+        try {
+            if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
 
-            showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
-            Log.i("click_event", "Clicked NOTIFICATION");
-        } else if (intent.getAction().equals(Constants.ACTION.PREV_ACTION)) {
+                showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
+                Log.i("click_event", "Clicked NOTIFICATION");
 
-            gallerySongList = new GlobalData().getSongList();
-            songListIndex = new GlobalData().getSongListIndex();
-            new GlobalData().setCounter(songListIndex);
-            new GlobalData().setClickPrevious(true);
+                Log.i("DURATION : ", "" + mMediaPlayer.getDuration());
+                GlobalData.setSongDuration(mMediaPlayer.getDuration());
+            } else if (intent.getAction().equals(Constants.ACTION.PREV_ACTION)) {
 
-        } else if (intent.getAction().equals(Constants.ACTION.PLAY_ACTION)) {
-            play();
-            Log.i("click_event", "Clicked Play");
-        } else if (intent.getAction().equals(Constants.ACTION.PAUSE_ACTION)) {
+                gallerySongList = new GlobalData().getSongList();
+                songListIndex = new GlobalData().getSongListIndex();
+                new GlobalData().setCounter(songListIndex);
+                new GlobalData().setClickPrevious(true);
 
-            Log.i("click_event", "Clicked Pause");
-            playbackService = new GlobalData().getMediaPlaybackService();
-            Boolean a = playbackService.isPlaying();
-            Log.i("infoooPlay", "" + a);
-            if (playbackService.isPlaying()) {
-                bigViews.setImageViewResource(R.id.status_bar_pause, R.drawable.ic_play_circle_filled_black_24dp);
-                views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_play_circle_filled_black_24dp);
-                pause();
-            } else {
-                bigViews.setImageViewResource(R.id.status_bar_pause, R.drawable.ic_pause_circle_filled_black_24dp);
-                views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_pause_circle_filled_black_24dp);
+            } else if (intent.getAction().equals(Constants.ACTION.PLAY_ACTION)) {
                 play();
+                Log.i("click_event", "Clicked Play");
+            } else if (intent.getAction().equals(Constants.ACTION.PAUSE_ACTION)) {
+
+                Log.i("click_event", "Clicked Pause");
+                playbackService = new GlobalData().getMediaPlaybackService();
+
+                if (playbackService.isPlaying()) {
+                    bigViews.setImageViewResource(R.id.status_bar_pause, R.drawable.ic_play_circle_filled_black_24dp);
+                    views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_play_circle_filled_black_24dp);
+                    pause();
+                } else {
+                    bigViews.setImageViewResource(R.id.status_bar_pause, R.drawable.ic_pause_circle_filled_black_24dp);
+                    views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_pause_circle_filled_black_24dp);
+                    play();
+                }
+
+                Log.i("commit", "asdasd");
+
+                notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mBuilder.build());
+
+
+            } else if (intent.getAction().equals(Constants.ACTION.NEXT_ACTION)) {
+
+                gallerySongList = new GlobalData().getSongList();
+                songListIndex = new GlobalData().getSongListIndex();
+                new GlobalData().setCounter(songListIndex);
+                new GlobalData().setClickNext(true);
+
+
+            } else if (intent.getAction().equals(
+                    Constants.ACTION.STOPFOREGROUND_ACTION)) {
+                Log.i("click_event", "Received Stop Foreground Intent");
+
+                if (mMediaPlayer != null)
+                    mMediaPlayer.pause();
+                notificationManager.cancel(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE);
             }
 
-            Log.i("commit","asdasd");
-
-            notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mBuilder.build());
-
-
-        } else if (intent.getAction().equals(Constants.ACTION.NEXT_ACTION)) {
-
-            gallerySongList = new GlobalData().getSongList();
-            songListIndex = new GlobalData().getSongListIndex();
-            new GlobalData().setCounter(songListIndex);
-            new GlobalData().setClickNext(true);
-
-
-        } else if (intent.getAction().equals(
-                Constants.ACTION.STOPFOREGROUND_ACTION)) {
-            Log.i("click_event", "Received Stop Foreground Intent");
-            Toast.makeText(this, "Service Stoped", Toast.LENGTH_SHORT).show();
-
-            //stop();
-            mMediaPlayer.pause();
-            //stopForeground(true);
-            notificationManager.cancel(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE);
-            //System.exit(0);
+        } catch (Exception e) {
+            Toast.makeText(this, "An Error Occured.", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(i);
         }
 
         return START_STICKY;
@@ -327,7 +309,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         notificationIntent.setAction(Constants.ACTION.MAIN_ACTION);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         pendingIntent = PendingIntent.getActivity(this, 0,
-                notificationIntent,0);
+                notificationIntent, 0);
 
         Intent previousIntent = new Intent(this, MediaPlaybackService.class);
         previousIntent.setAction(Constants.ACTION.PREV_ACTION);

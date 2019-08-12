@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
@@ -76,7 +77,6 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
             Boolean isSDPresent = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
 
 
-
             OutputStream output = null;
             if (isSDPresent) {
 
@@ -89,10 +89,8 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
                     folder.mkdir();
                 }
 
-
-                currentimagepath = Environment.getExternalStorageDirectory() +
-                        File.separator + "Mp3Download/" + aurl[1];
-
+                currentimagepath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC) +
+                        File.separator + aurl[1];
 
 
                 output = new FileOutputStream(currentimagepath);
@@ -125,8 +123,6 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
             PendingIntent pendingIntent;
 
 
-            Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
             Intent intentnatif = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(currentimagepath));
 
             intentnatif.setDataAndType(Uri.parse("file://" + currentimagepath), "audio/mp3");
@@ -141,7 +137,6 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
                 if (mChannel == null) {
                     mChannel = new NotificationChannel(id, title, importance);
                     mChannel.enableVibration(true);
-                    mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
                     notifManager.createNotificationChannel(mChannel);
                 }
                 builder = new NotificationCompat.Builder(activity, id);
@@ -191,7 +186,7 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
                     }).start();
                 } catch (Exception e) {
                     Log.i("errorror", "download failed");
-                    Toast.makeText(getApplicationContext(),"An error occurred: " + e.getMessage(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "An error occurred: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 output.write(data, 0, count);
 
@@ -199,6 +194,11 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
             output.flush();
             output.close();
             input.close();
+
+            Intent intent1 = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            intent1.setData(Uri.parse("file://"+currentimagepath));
+            getApplicationContext().sendBroadcast(intent1);
+
         } catch (Exception e) {
             Log.i("erorrorr", "" + e);
 
@@ -219,9 +219,8 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
         new GlobalData().setUri(Uri.parse(currentimagepath));
         new GlobalData().setMusicName(songName);
 
+
     }
-
-
 
 
     public void createNotification(String filepath, String songNamee) {
