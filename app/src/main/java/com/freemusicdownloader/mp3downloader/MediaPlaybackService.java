@@ -140,6 +140,23 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             while (mMediaPlayer != null) {
                 SystemClock.sleep(250);
                 sendElapsedTime();
+
+                if(isFinished()){
+
+                    if(GlobalData.isRepeatSong()){
+                        play();
+                    }else{
+                        Log.i("REPEAT","OFF!!");
+
+                        gallerySongList = new GlobalData().getSongList();
+                        songListIndex = new GlobalData().getSongListIndex();
+                        new GlobalData().setCounter(songListIndex);
+                        new GlobalData().setClickNext(true);
+
+                    }
+
+                }
+
                 try {
                     Thread.sleep(250);
 
@@ -155,7 +172,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         boolean isFinished = false;
 
         try {
-            if (((GlobalData.getSongDuration() - mMediaPlayer.getCurrentPosition()) < 150)) {
+            if (((GlobalData.getSongDuration() - mMediaPlayer.getCurrentPosition()) < 100)) {
                 Log.i("FINISHED", "YES!");
                 isFinished = true;
             }

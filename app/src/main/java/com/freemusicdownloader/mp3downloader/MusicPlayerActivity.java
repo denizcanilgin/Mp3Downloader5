@@ -495,20 +495,20 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
 
         switch(view.getId()){
 
-//            case R.id.iv_replayButton :
-//
-//                Log.i("BUTTON_PUSHED","REPLAY");
-//
-//                if(GlobalData.isRepeatSong() == false)
-//                {
-//                    GlobalData.setRepeatSong(true);
-//                    iv_replaybutton.setImageResource(R.drawable.ic_repeat_one_black_24dp);
-//                }else if(GlobalData.isRepeatSong() == true){
-//                    GlobalData.setRepeatSong(false);
-//                    iv_replaybutton.setImageResource(R.drawable.ic_repeat_black_24dp);
-//                }
-//
-//                break;
+            case R.id.iv_replayButton :
+
+                Log.i("BUTTON_PUSHED","REPLAY");
+
+                if(GlobalData.isRepeatSong() == false)
+                {
+                    GlobalData.setRepeatSong(true);
+                    iv_replaybutton.setImageResource(R.drawable.ic_repeat_one_black_24dp);
+                }else if(GlobalData.isRepeatSong() == true){
+                    GlobalData.setRepeatSong(false);
+                    iv_replaybutton.setImageResource(R.drawable.ic_repeat_black_24dp);
+                }
+
+                break;
 
             case R.id.imageButtonNext:
 
