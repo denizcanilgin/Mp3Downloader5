@@ -114,33 +114,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
             }
         };
 
-//        receiverElapsedTime = new BroadcastReceiver() {
-//            @Override
-//            public void onReceive(Context context, Intent intent) {
-//                Boolean a = mediaPlaybackService.isPlaying();
-//                Log.i("playingresult", "" + a);
-//                if (!a) {
-//                    buttonPlayPause.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
-//                    new GlobalData().setMediaPlaybackService(mediaPlaybackService);
-//                }
-//                elapsedTime = intent.getIntExtra(MediaPlaybackService.MPS_MESSAGE, 0);
-//                updateElapsedTime(elapsedTime);
-//
-//                Log.i("GLOBALDATADURATION"," : " + GlobalData.getSongDuration());
-//                Log.i("ELAPSEDTIME"," : " + elapsedTime);
-//
-////                if(( (GlobalData.getSongDuration() - elapsedTime) < 150 )){
-////                            Log.i("FINISHED","YES!");
-////                    if(GlobalData.isRepeatSong()) Log.i("REPEAT","START OVER!");
-////                        else{ songNextt(); Log.i("NEXTSONG","YES!");}
-////                }
-//
-//                gallerySongList = new GlobalData().getSongList();
-//                songListIndex = new GlobalData().getSongListIndex();
-//                initInfos(Uri.parse(gallerySongList.get(songListIndex)));
-//
-//            }
-//        };
         receiverElapsedTime = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -170,10 +143,12 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                 if (mediaPlaybackService.isPlaying()) {
                     resId = R.drawable.ic_play_circle_filled_black_24dp;
                     mediaPlaybackService.pause();
+                    mediaPlaybackService.buttonPauseUpdate();
 
                 } else {
                     resId = R.drawable.ic_pause_circle;
                     mediaPlaybackService.play();
+                    mediaPlaybackService.buttonPlayUpdate();
                 }
                 buttonPlayPause.setImageResource(resId);
             }
@@ -234,6 +209,8 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                                     startService(serviceIntent);
 
                                     File file = new File(gallerySongList.get(notifCounter) + "");
+                                    Boolean a = new GlobalData().isIsGalleryUpdate();
+                                    Log.i("sdsdsdsdsd",""+a);
                                     new GlobalData().setMusicName(file.getName());
                                     new GlobalData().setSongListIndex(notifCounter);
                                     new GlobalData().setClickNext(false);
@@ -265,6 +242,8 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                                     Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
                                     serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
                                     startService(serviceIntent);
+
+
 
                                     File file = new File(gallerySongList.get(notifCounter) + "");
                                     new GlobalData().setMusicName(file.getName());
@@ -310,28 +289,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    public void repeatSong() {
-        try {
-
-            clearInfos();
-            if (gallerySongList.size() == songListIndex) {
-                songListIndex = 0;
-            }
-            // Stuff that updates the UI
-            mediaPlaybackService.init(Uri.parse(gallerySongList.get(songListIndex)));
-            initInfos(Uri.parse(gallerySongList.get(songListIndex)));
-            Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
-            serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
-            startService(serviceIntent);
-
-            File file = new File(gallerySongList.get(songListIndex) + "");
-            new GlobalData().setMusicName(file.getName());
-            new GlobalData().setSongListIndex(songListIndex);
-
-        } catch (Exception e) {
-            Log.i("erorrrrrrrrrrrr", "" + e);
-        }
-    }
 
     public void songPrevious() {
 
@@ -397,9 +354,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-
-
 
         Log.i("DESTROYED","TRUE");
     }
@@ -516,10 +470,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
 
                 break;
 
-            case R.id.imageButtonPlayPause:
-
-
-                break;
 
         }
 

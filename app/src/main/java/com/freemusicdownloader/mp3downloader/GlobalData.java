@@ -18,7 +18,17 @@ public class GlobalData {
     public static Boolean clickNext;
     public static Boolean clickPrevious;
     public static Bitmap songPicture;
-    public static boolean repeatSong;
+    public static boolean repeatSong = false;
+    public static boolean isGalleryUpdate;
+
+    public static boolean isIsGalleryUpdate() {
+        return isGalleryUpdate;
+    }
+
+    public static void setIsGalleryUpdate(boolean isGalleryUpdate) {
+        GlobalData.isGalleryUpdate = isGalleryUpdate;
+    }
+
     public static int songDuration;
 
     public static boolean isRepeatSong() {

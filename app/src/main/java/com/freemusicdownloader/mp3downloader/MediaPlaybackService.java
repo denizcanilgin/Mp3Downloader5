@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -141,17 +142,19 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                 SystemClock.sleep(250);
                 sendElapsedTime();
 
-                if(isFinished()){
+                if (isFinished()) {
 
-                    if(GlobalData.isRepeatSong()){
+                    if (GlobalData.isRepeatSong()) {
                         play();
-                    }else{
-                        Log.i("REPEAT","OFF!!");
+                        buttonPlayUpdate();
+                    } else {
+                        Log.i("REPEAT", "OFF!!");
 
                         gallerySongList = new GlobalData().getSongList();
                         songListIndex = new GlobalData().getSongListIndex();
                         new GlobalData().setCounter(songListIndex);
                         new GlobalData().setClickNext(true);
+                        showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
 
                     }
 
@@ -172,7 +175,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         boolean isFinished = false;
 
         try {
-            if (((GlobalData.getSongDuration() - mMediaPlayer.getCurrentPosition()) < 100)) {
+            if (((GlobalData.getSongDuration() - mMediaPlayer.getCurrentPosition()) < 500)) {
                 Log.i("FINISHED", "YES!");
                 isFinished = true;
             }
@@ -188,8 +191,6 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     public void pause() {
         if (mMediaPlayer != null)
             mMediaPlayer.pause();
-        showNotification(R.drawable.ic_play_circle_filled_black_24dp);
-
 
     }
 
@@ -197,8 +198,17 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     public void play() {
         if (mMediaPlayer != null)
             mMediaPlayer.start();
-        showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
 
+    }
+
+    public void buttonPlayUpdate() {
+        play();
+        showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
+    }
+
+    public void buttonPauseUpdate() {
+        pause();
+        showNotification(R.drawable.ic_play_circle_filled_black_24dp);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -243,62 +253,63 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+//
+//        if(intent.getAction().equals("") || intent.getAction().isEmpty() != true) {
 
-            if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
+        if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
 
-                showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
-                Log.i("click_event", "Clicked NOTIFICATION");
+            // showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
+            Log.i("click_event", "Clicked NOTIFICATION");
 
-                Log.i("DURATION : ", "" + mMediaPlayer.getDuration());
-                GlobalData.setSongDuration(mMediaPlayer.getDuration());
-            } else if (intent.getAction().equals(Constants.ACTION.PREV_ACTION)) {
+            Log.i("DURATION : ", "" + mMediaPlayer.getDuration());
+            GlobalData.setSongDuration(mMediaPlayer.getDuration());
+        } else if (intent.getAction().equals(Constants.ACTION.PREV_ACTION)) {
 
-                gallerySongList = new GlobalData().getSongList();
-                songListIndex = new GlobalData().getSongListIndex();
-                new GlobalData().setCounter(songListIndex);
-                new GlobalData().setClickPrevious(true);
+            gallerySongList = new GlobalData().getSongList();
+            songListIndex = new GlobalData().getSongListIndex();
+            new GlobalData().setCounter(songListIndex);
+            new GlobalData().setClickPrevious(true);
 
-            } else if (intent.getAction().equals(Constants.ACTION.PLAY_ACTION)) {
-                play();
-                Log.i("click_event", "Clicked Play");
-            } else if (intent.getAction().equals(Constants.ACTION.PAUSE_ACTION)) {
+            Log.i("click_event", "Clicked Prevvvv");
 
-                Log.i("click_event", "Clicked Pause");
-                playbackService = new GlobalData().getMediaPlaybackService();
-                Boolean a = playbackService.isPlaying();
-                Log.i("aaaaaaaaaa",""+a);
+        } else if (intent.getAction().equals(Constants.ACTION.PLAY_ACTION)) {
+            play();
+            Log.i("click_event", "Clicked Play");
+        } else if (intent.getAction().equals(Constants.ACTION.PAUSE_ACTION)) {
 
-                if (playbackService.isPlaying()) {
-                    bigViews.setImageViewResource(R.id.status_bar_pause, R.drawable.ic_play_circle_filled_black_24dp);
-                    views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_play_circle_filled_black_24dp);
-                    pause();
-                    Log.i("infoooooorr","pause");
-                } else {
-                    bigViews.setImageViewResource(R.id.status_bar_pause, R.drawable.ic_pause_circle_filled_black_24dp);
-                    views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_pause_circle_filled_black_24dp);
-                    play();
-                    Log.i("infoooooorr","play");
-                }
-
-                notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mBuilder.build());
+            playbackService = new GlobalData().getMediaPlaybackService();
 
 
-            } else if (intent.getAction().equals(Constants.ACTION.NEXT_ACTION)) {
+            if (playbackService.isPlaying()) {
 
-                gallerySongList = new GlobalData().getSongList();
-                songListIndex = new GlobalData().getSongListIndex();
-                new GlobalData().setCounter(songListIndex);
-                new GlobalData().setClickNext(true);
+                buttonPauseUpdate();
+            } else {
+                buttonPlayUpdate();
 
-
-            } else if (intent.getAction().equals(
-                    Constants.ACTION.STOPFOREGROUND_ACTION)) {
-                Log.i("click_event", "Received Stop Foreground Intent");
-
-                if (mMediaPlayer != null)
-                    mMediaPlayer.pause();
-                notificationManager.cancel(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE);
             }
+
+            notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mBuilder.build());
+
+
+        } else if (intent.getAction().equals(Constants.ACTION.NEXT_ACTION)) {
+
+            gallerySongList = new GlobalData().getSongList();
+            songListIndex = new GlobalData().getSongListIndex();
+            new GlobalData().setCounter(songListIndex);
+            new GlobalData().setClickNext(true);
+
+
+            Log.i("click_event", "Clicked nextt");
+
+
+        } else if (intent.getAction().equals(
+                Constants.ACTION.STOPFOREGROUND_ACTION)) {
+            Log.i("click_event", "Received Stop Foreground Intent");
+
+            if (mMediaPlayer != null)
+                mMediaPlayer.pause();
+            notificationManager.cancel(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE);
+        }
 
         return START_STICKY;
     }

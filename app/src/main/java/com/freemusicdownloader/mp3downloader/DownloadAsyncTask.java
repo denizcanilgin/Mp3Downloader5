@@ -53,6 +53,7 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
         this.NOTIFY_ID = NOTIFY_ID;
     }
 
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -209,17 +210,20 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
 
     }
 
+
+
+
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
 
         Toast.makeText(activity, "" + songName + " downloaded", Toast.LENGTH_SHORT).show();
 
-
         notificationManager.cancel(NOTIFY_ID);
         createNotification(currentimagepath, songName);
         new GlobalData().setUri(Uri.parse(currentimagepath));
         new GlobalData().setMusicName(songName);
+        new GlobalData().setIsGalleryUpdate(true);
 
     }
 
@@ -233,10 +237,6 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
 
 
         Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//
-//        Intent intentnatif = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(filepath));
-//
-//        intentnatif.setDataAndType(Uri.parse("file://" + filepath), "audio/mp3");
 
         Intent intenttt = new Intent(activity, MusicPlayerActivity.class);
 
@@ -256,8 +256,7 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
                 mChannel.enableVibration(true);
                 mChannel.enableLights(true);
                 mChannel.setLightColor(Color.GREEN);
-                mChannel.enableVibration(true);
-                mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+                mChannel.enableVibration(false);
                 notifManager.createNotificationChannel(mChannel);
             }
             builder = new NotificationCompat.Builder(getApplicationContext(), id);
