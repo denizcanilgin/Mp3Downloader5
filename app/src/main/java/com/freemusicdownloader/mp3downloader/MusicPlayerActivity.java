@@ -20,12 +20,14 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -478,4 +480,39 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         }
 
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        Log.i("KEY_PUSHED","keyEvent : " + event.getFlags() + " keyCode : " + keyCode);
+
+        if(keyCode == 79){
+
+            new GlobalData().setMediaPlaybackService(mediaPlaybackService);
+            int resId;
+            if (mediaPlaybackService.isPlaying()) {
+                resId = R.drawable.ic_play_circle_filled_black_24dp;
+                mediaPlaybackService.pause();
+                mediaPlaybackService.buttonPauseUpdate();
+
+            } else {
+                resId = R.drawable.ic_pause_circle;
+                mediaPlaybackService.play();
+                mediaPlaybackService.buttonPlayUpdate();
+            }
+            buttonPlayPause.setImageResource(resId);
+
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return super.onKeyDown(keyCode, event);
+        }
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_MEDIA_PLAY:
+                //yourMediaController.dispatchMediaButtonEvent(event);
+                return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 }
