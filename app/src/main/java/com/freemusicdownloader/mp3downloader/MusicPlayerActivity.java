@@ -214,6 +214,10 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                                     new GlobalData().setMusicName(file.getName());
                                     new GlobalData().setSongListIndex(notifCounter);
                                     new GlobalData().setClickNext(false);
+//
+//                                    MediaPlaybackService mediaPlaybackService = new MediaPlaybackService();
+//                                    mediaPlaybackService.showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
+
                                 }
                             });
 
