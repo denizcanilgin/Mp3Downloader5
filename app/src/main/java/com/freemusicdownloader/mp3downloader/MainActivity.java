@@ -97,13 +97,16 @@ public class MainActivity extends AppCompatActivity {
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
-//        new Handler().postDelayed(
-//                new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        tabLayout.getTabAt(1).select();
-//                    }
-//                }, 1);
+        new Handler().postDelayed(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        tabLayout.getTabAt(0).setIcon(R.drawable.ic_cloud_download_black_24dp);
+                        tabLayout.getTabAt(1).setIcon(R.drawable.ic_library_music_black_24dp);
+                        tabLayout.getTabAt(2).setIcon(R.drawable.ic_folder_black_24dp);
+                        tabLayout.getTabAt(3).setIcon(R.drawable.ic_favorite_black_24dp);
+                    }
+                }, 1);
         tabLayout.setupWithViewPager(mViewPager);
 
     }
@@ -234,13 +237,6 @@ public class MainActivity extends AppCompatActivity {
                 .show(getFragmentManager(), "custom-dialog");
     }
 
-    public void float_action(View view) {
-
-        Toast.makeText(getApplicationContext(), "fav", 0).show();
-
-
-    }
-
 
     /* PagerAdapter for supplying the ViewPager with the pages (fragments) to display. */
     public class MyPagerAdapter extends FragmentPagerAdapter {
@@ -259,10 +255,11 @@ public class MainActivity extends AppCompatActivity {
             return PAGES.length;
         }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return PAGE_TITLES[position];
-        }
+//        @Override
+//        public CharSequence getPageTitle(int position) {
+//            return PAGE_TITLES[position];
+//        }
+
 
     }
 }
