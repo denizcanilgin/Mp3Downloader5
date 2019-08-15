@@ -220,8 +220,10 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             file = null;
             showNotification(R.drawable.ic_play_circle_filled_black_24dp);
 
+
         }
     }
+
 
     public void seekTo(int msec) {
         mMediaPlayer.seekTo(msec);

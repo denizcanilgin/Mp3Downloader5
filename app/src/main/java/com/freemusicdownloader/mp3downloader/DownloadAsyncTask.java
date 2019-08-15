@@ -211,13 +211,12 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
     }
 
 
-
-
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
 
         Toast.makeText(activity, "" + songName + " downloaded", Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, "" + songName + " added 'GALLERY'", Toast.LENGTH_SHORT).show();
 
         notificationManager.cancel(NOTIFY_ID);
         createNotification(currentimagepath, songName);
@@ -238,7 +237,7 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
 
         Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        Intent intenttt = new Intent(activity, MusicPlayerActivity.class);
+        Intent intenttt = new Intent(activity, MainActivity.class);
 
         PendingIntent pendingIntenttt = TaskStackBuilder.create(activity)
                 .addNextIntent(intenttt)

@@ -782,6 +782,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
         mSearchView.setOnQueryTextListener(HomeFragment.this);
         mSearchView.setOnCloseListener(HomeFragment.this);
 
+
         mSearchView.setIconifiedByDefault(true);
         //  mSearchView.setFocusable(false);
         // mSearchView.setIconified(false);
