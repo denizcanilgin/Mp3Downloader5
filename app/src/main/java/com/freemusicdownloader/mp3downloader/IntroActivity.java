@@ -3,6 +3,7 @@ package com.freemusicdownloader.mp3downloader;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,17 @@ public class IntroActivity extends AppIntro {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
+        //setNavBarColor(R.color.white);
+        setColorDoneText(R.color.black);
+       // setBarColor(R.color.color_gray);
+        setNextArrowColor(R.color.black);
+        setColorSkipButton(R.color.black);
+        setSeparatorColor(R.color.black);
+        setColorSkipButton(R.color.black);
+        setIndicatorColor(R.color.black,R.color.black);
 
 
 
@@ -50,19 +62,11 @@ public class IntroActivity extends AppIntro {
     }
 
     private void finish_by_virginty() {
-        final SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        int virginity_lost = sharedPref.getInt("virgin",0);
-
-        if(virginity_lost == 1 ) {
-
-            finish();
-
-        }else{
 
             Intent i = new Intent(IntroActivity.this, MainActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
-        }
+
 
     }
 

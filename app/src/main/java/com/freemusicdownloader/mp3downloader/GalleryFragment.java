@@ -120,19 +120,43 @@ public class GalleryFragment extends Fragment {
             }
         }
 
+
         return rootView;
+    }
+
+    private void refresh() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.System.canWrite(getActivity())) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE}, 2909);
+
+                listMusicName = new ArrayList<String>();
+                listMusicTime = new ArrayList<String>();
+                listMusicNameCont = new ArrayList<String>();
+                getAllMusics(pathControl());
+                customAdapterListMusics adapterListMusics = new customAdapterListMusics(getActivity().getApplication(), getAllMusics(pathControl()), listMusicNameCont, listMusicName, listMusicTime);
+                mylist.invalidate();
+                mylist.setAdapter(adapterListMusics);
+
+                if (mylist.getAdapter().getCount() != 0) {
+
+                    tv_downloadedempty.setVisibility(View.GONE);
+                } else {
+                    tv_downloadedempty.setVisibility(View.VISIBLE);
+                }
+
+
+            }
+        }
+
     }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.System.canWrite(getActivity())) {
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE}, 2909);
-            }
-        }
+
 
 
     }

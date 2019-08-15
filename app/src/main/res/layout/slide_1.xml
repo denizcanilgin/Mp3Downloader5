@@ -2,28 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:layout_gravity="center"
+    android:gravity="top"
+    android:padding="10dp"
+    android:background="@color/colorWhite">
 
     <ImageView
         android:id="@+id/image1"
-        android:layout_width="420dp"
-        android:layout_height="420dp"
-        android:layout_marginTop="11dp"
-        android:src="@drawable/s1" />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/image1"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:layout_marginRight="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerInParent="true"
-        android:textColor="#fff"
-        android:textStyle="bold"
-        android:text="  Pick your favorite styles and find the songs among millions of them!"
-        android:textSize="18sp"/>
+        android:src="@drawable/ss6" />
+
 
 </RelativeLayout>

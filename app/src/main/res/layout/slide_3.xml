@@ -2,30 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue_background">
+    android:background="@color/white">
 
+    <LinearLayout
+        android:gravity="top"
+        android:paddingBottom="100dp" android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <ImageView
         android:id="@+id/image1"
-        android:layout_width="420dp"
-        android:layout_height="420dp"
-        android:src="@drawable/ss5"
-        android:layout_marginTop="11dp"
-        />
-
-    <TextView
+        android:layout_gravity="top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/image1"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:layout_marginRight="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerInParent="true"
-        android:textColor="#fff"
-        android:textStyle="bold"
-        android:text="  Keep downloading in the background, and be notified whenever it is ready!"
-        android:textSize="18sp"/>
+        android:src="@drawable/ss2"
+        />
 
+    </LinearLayout>
 
 </RelativeLayout>
