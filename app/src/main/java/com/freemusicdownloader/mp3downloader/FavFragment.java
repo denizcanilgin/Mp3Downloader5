@@ -65,15 +65,11 @@ public class FavFragment extends Fragment implements View.OnClickListener {
         lvSong = (ListView) rootView.findViewById(R.id.listView);
         tv_empty_fav = rootView.findViewById(R.id.tv_fav_empty);
 
-        if (songList != null) {
-            if (songList.isEmpty())
-                tv_empty_fav.setVisibility(View.VISIBLE);
-            else
-                tv_empty_fav.setVisibility(View.GONE);
-        }
+
 
 
         if (songList != null) {
+            tv_empty_fav.setVisibility(View.GONE);
             adapter = new FavMusicsAdapter(activity, songList);
             lvSong.setAdapter(adapter);
             lvSong.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -137,7 +133,11 @@ public class FavFragment extends Fragment implements View.OnClickListener {
                 }
             });
 
+        }else{
+                tv_empty_fav.setVisibility(View.VISIBLE);
         }
+
+
 
 
         return rootView;

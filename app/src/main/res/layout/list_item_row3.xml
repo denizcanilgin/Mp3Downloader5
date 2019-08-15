@@ -34,8 +34,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Deneme 1"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+
+            android:text="Music"
             android:textStyle="bold"
             android:fontFamily="@font/light"
             android:layout_marginTop="5dp"
@@ -47,7 +48,6 @@
 
         <TextView
             android:fontFamily="@font/light"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"

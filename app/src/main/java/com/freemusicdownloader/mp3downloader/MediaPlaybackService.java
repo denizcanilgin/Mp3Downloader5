@@ -139,22 +139,23 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         @Override
         public void run() {
             while (mMediaPlayer != null) {
-                SystemClock.sleep(250);
+                SystemClock.sleep(200);
                 sendElapsedTime();
 
                 if (isFinished()) {
 
                     if (GlobalData.isRepeatSong()) {
-                        play();
                         buttonPlayUpdate();
+
                     } else {
                         Log.i("REPEAT", "OFF!!");
+
 
                         gallerySongList = new GlobalData().getSongList();
                         songListIndex = new GlobalData().getSongListIndex();
                         new GlobalData().setCounter(songListIndex);
                         new GlobalData().setClickNext(true);
-                        showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
+                        //showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
 
                     }
 
@@ -175,7 +176,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         boolean isFinished = false;
 
         try {
-            if (((GlobalData.getSongDuration() - mMediaPlayer.getCurrentPosition()) < 500)) {
+            if (((GlobalData.getSongDuration() - mMediaPlayer.getCurrentPosition()) < 700)) {
                 Log.i("FINISHED", "YES!");
                 isFinished = true;
             }
@@ -238,7 +239,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     public void onCompletion(MediaPlayer mp) {
         Intent intent = new Intent(MPS_COMPLETED);
         broadcastManager.sendBroadcast(intent);
-        showNotification(R.drawable.ic_play_circle_filled_black_24dp);
+        //showNotification(R.drawable.ic_play_circle_filled_black_24dp);
     }
 
     private void sendElapsedTime() {
@@ -315,7 +316,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void showNotification(int drawable) {
+    public void showNotification(int drawable) {
 
         bigViews = new RemoteViews(getPackageName(), R.layout.status_bar_expanded);
         views = new RemoteViews(getPackageName(), R.layout.status_bar);

@@ -23,7 +23,6 @@
             <TextView
                 android:text="Your favourites are empty!"
                 android:id="@+id/tv_fav_empty"
-                android:visibility="invisible"
                 android:textSize="24dp"
                 android:fontFamily="@font/boldc"
                 android:padding="40dp"

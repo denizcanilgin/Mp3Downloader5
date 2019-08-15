@@ -111,14 +111,14 @@ public class GalleryFragment extends Fragment {
         adapterListMusics = new customAdapterListMusics(getActivity().getApplication(), getAllMusics(pathControl()), listMusicNameCont, listMusicName, listMusicTime);
 
         mylist.setAdapter(adapterListMusics);
-        if (mylist.getAdapter().getCount() != 0) {
-//            AudienceNetworkAds.facebookLoadBanner(getActivity(), view);
-//            AudienceNetworkAds.facebookInterstitialAd(getActivity(),ads_layout,avLoadingIndicatorView);
-            tv_downloadedempty.setVisibility(View.GONE);
-        } else {
-            tv_downloadedempty.setVisibility(View.VISIBLE);
-        }
 
+        if(mylist != null) {
+            if (mylist.getAdapter().getCount() != 0) {
+                tv_downloadedempty.setVisibility(View.GONE);
+            } else {
+                tv_downloadedempty.setVisibility(View.VISIBLE);
+            }
+        }
 
         return rootView;
     }
