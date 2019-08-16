@@ -245,7 +245,7 @@ public class FavFragment extends Fragment implements View.OnClickListener {
 
     public void download_selected_song(int songPos) {
 
-        Toast.makeText(getActivity(), "Download", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getActivity(), "Download", Toast.LENGTH_SHORT).show();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.System.canWrite(getContext())) {
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
