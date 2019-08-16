@@ -7,6 +7,7 @@ import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -131,45 +132,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void showBottomMenu() {
-
-        BottomSheet.Builder builder = new BottomSheet.Builder(this);
-        builder.setTitle("Settings")
-                .setWindowDimming(134)
-                .setBackgroundColor(getResources().getColor(R.color.white))
-                .setTitleTextColor(getResources().getColor(R.color.dark_primary))
-                .setItemTextColor(getResources().getColor(R.color.dark_primary))
-                .setIconColor(getResources().getColor(R.color.dark_primary))
-                .setDividers(true)
-                .setItems(items, icons, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                        switch (i) {
-
-                            case 0:
-                                break;
-                            case 1:
-
-                                break;
-                            case 2:
-
-
-                                break;
-                            case 3:
-                                //Toast.makeText(getActivity(), "Favori", Toast.LENGTH_SHORT).show();
-
-                                break;
-                        }
-
-                    }
-                });
-        builder.show();
-
-
-    }
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -220,12 +182,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void showCustomRateMeDialog() {
 
-
+        final String appPackageName = getPackageName();
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+        } catch (android.content.ActivityNotFoundException anfe) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+        }
     }
 
 
-
-    /* PagerAdapter for supplying the ViewPager with the pages (fragments) to display. */
     public class MyPagerAdapter extends FragmentPagerAdapter {
 
         public MyPagerAdapter(FragmentManager fragmentManager) {
@@ -242,10 +207,6 @@ public class MainActivity extends AppCompatActivity {
             return PAGES.length;
         }
 
-//        @Override
-//        public CharSequence getPageTitle(int position) {
-//            return PAGE_TITLES[position];
-//        }
 
 
     }
