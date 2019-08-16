@@ -20,6 +20,15 @@ public class GlobalData {
     public static Bitmap songPicture;
     public static boolean repeatSong = false;
     public static boolean isGalleryUpdate;
+    public static boolean isFinished;
+
+    public static boolean isIsFinished() {
+        return isFinished;
+    }
+
+    public static void setIsFinished(boolean isFinished) {
+        GlobalData.isFinished = isFinished;
+    }
 
     public static boolean isIsGalleryUpdate() {
         return isGalleryUpdate;

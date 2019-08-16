@@ -145,19 +145,21 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
                 if (isFinished()) {
 
+                    Log.i("FINISHED","YES");
+
                     if (GlobalData.isRepeatSong()) {
                         buttonPlayUpdate();
 
                     } else {
                         Log.i("REPEAT", "OFF!!");
 
-
-                    if(new GlobalData().getClickNext() == null ||!(new GlobalData().getClickNext())) {
-                        gallerySongList = new GlobalData().getSongList();
-                        songListIndex = new GlobalData().getSongListIndex();
-                        new GlobalData().setCounter(songListIndex);
-                        new GlobalData().setClickNext(true);
-                    }
+                    //NEXT SONG WE COULDN'T DO IT AT THIS VERSION
+//                    if(new GlobalData().getClickNext() == null ||!(new GlobalData().getClickNext())) {
+//                        gallerySongList = new GlobalData().getSongList();
+//                        songListIndex = new GlobalData().getSongListIndex();
+//                        new GlobalData().setCounter(songListIndex);
+//                        new GlobalData().setClickNext(true);
+//                    }
 
                         //showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
 
@@ -203,7 +205,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     public void play() {
         if (mMediaPlayer != null)
             mMediaPlayer.start();
-
+        
     }
 
     public void buttonPlayUpdate() {
@@ -245,6 +247,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     public void onCompletion(MediaPlayer mp) {
         Intent intent = new Intent(MPS_COMPLETED);
         broadcastManager.sendBroadcast(intent);
+        GlobalData.setIsFinished(true);
+
         //showNotification(R.drawable.ic_play_circle_filled_black_24dp);
     }
 

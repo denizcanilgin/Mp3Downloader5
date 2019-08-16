@@ -23,10 +23,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
-import com.androidsx.rateme.OnRatingListener;
-import com.androidsx.rateme.RateMeDialog;
 
+import org.jetbrains.annotations.NotNull;
 import org.michaelbel.bottomsheet.BottomSheet;
+
+import java.util.Arrays;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -218,34 +219,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showCustomRateMeDialog() {
-        new RateMeDialog.Builder(getPackageName(), getString(R.string.app_name))
-                .setHeaderBackgroundColor(getResources().getColor(R.color.colorAccent))
-                .setBodyBackgroundColor(getResources().getColor(R.color.colorPrimaryDark))
-                .setBodyTextColor(getResources().getColor(R.color.colorAccent))
-                .enableFeedbackByEmail("polishmusicbear@gmail.com")
-                .showAppIcon(R.mipmap.icon)
-                .setShowShareButton(true)
-                .setRateButtonBackgroundColor(getResources().getColor(R.color.colorPrimary))
-                .setRateButtonPressedBackgroundColor(getResources().getColor(R.color.colorAccent))
-                .setOnRatingListener(new OnRatingListener() {
-                    @Override
-                    public void onRating(OnRatingListener.RatingAction action, float rating) {
 
-                    }
 
-                    @Override
-                    public int describeContents() {
-                        return 0;
-                    }
-
-                    @Override
-                    public void writeToParcel(Parcel dest, int flags) {
-                        // Nothing to write
-                    }
-                })
-                .build()
-                .show(getFragmentManager(), "custom-dialog");
     }
+
 
 
     /* PagerAdapter for supplying the ViewPager with the pages (fragments) to display. */
