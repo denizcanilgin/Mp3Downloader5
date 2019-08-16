@@ -378,7 +378,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
 
                                             //Toast.makeText(getActivity(), "Play", Toast.LENGTH_SHORT).show();
                                             if (countAds % 4 == 0) {
-                                                 AudienceNetworkAds.facebookInterstitialAd(getActivity(), ads_layout, avLoadingIndicatorView);
+                                                 AudienceNetworkAds.facebookInterstitialAd(getActivity());
                                             }
                                             try {
 
@@ -469,7 +469,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
                                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
                                                         new DownloadAsyncTask(listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3", getActivity(), 3).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3");
                                                 } else if (countAds == 2) {
-                                                         AudienceNetworkAds.facebookInterstitialAd(getActivity(),ads_layout,avLoadingIndicatorView);
+                                                         AudienceNetworkAds.facebookInterstitialAd(getActivity());
                                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
                                                         new DownloadAsyncTask(listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3", getActivity(), 4).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3");
                                                 } else if (countAds == 3) {
@@ -478,7 +478,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
                                                 } else if (countAds == 4) {
                                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
                                                         new DownloadAsyncTask(listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3", getActivity(), 100).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3");
-                                                        AudienceNetworkAds.facebookInterstitialAd(getActivity(),ads_layout,avLoadingIndicatorView);
+                                                        AudienceNetworkAds.facebookInterstitialAd(getActivity());
 
                                                     countAds = 0;
                                                 }
@@ -488,7 +488,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
                                                 new DownloadFileAsync().execute(listmusicURL.get(songPos), listmusicname.get(songPos).toString());
 
                                                 if (countAds % 3 == 0) {
-                                                    AudienceNetworkAds.facebookInterstitialAd(getActivity(), ads_layout, avLoadingIndicatorView);
+                                                    AudienceNetworkAds.facebookInterstitialAd(getActivity());
                                                 }
 
                                             }

@@ -79,22 +79,17 @@ public class AudienceNetworkAds {
 
 
 
-    public static void facebookInterstitialAd(final Activity context, final LinearLayout adsLayout, final AVLoadingIndicatorView avLoadingIndicatorView)
+    public static void facebookInterstitialAd(final Activity context)
     {
 
 
         interstitialAd = new InterstitialAd(context, context.getResources().getString(
                 R.string.facebook_Intersitial));
-        adsLayout.setVisibility(View.VISIBLE);
-        startAnim(avLoadingIndicatorView);
-
 
         interstitialAd.setAdListener(new InterstitialAdListener() {
             @Override
             public void onInterstitialDisplayed(Ad ad) {
 
-                adsLayout.setVisibility(View.INVISIBLE);
-                stopAnim(avLoadingIndicatorView);
 
             }
 
@@ -102,15 +97,12 @@ public class AudienceNetworkAds {
             @Override
             public void onInterstitialDismissed(Ad ad) {
 
-                adsLayout.setVisibility(View.INVISIBLE);
-                stopAnim(avLoadingIndicatorView);
+
             }
 
             @Override
             public void onError(Ad ad, AdError adError) {
 
-                adsLayout.setVisibility(View.INVISIBLE);
-                stopAnim(avLoadingIndicatorView);
                 Admob.createLoadInterstitial(context);
             }
 
@@ -123,24 +115,17 @@ public class AudienceNetworkAds {
             @Override
             public void onAdClicked(Ad ad) {
 
-                adsLayout.setVisibility(View.INVISIBLE);
-                stopAnim(avLoadingIndicatorView);
 
             }
 
             @Override
             public void onLoggingImpression(Ad ad) {
 
-                adsLayout.setVisibility(View.INVISIBLE);
-                stopAnim(avLoadingIndicatorView);
+
 
             }
         });
         interstitialAd.loadAd();
-
-
-
-
 
         cnt=context;
 
