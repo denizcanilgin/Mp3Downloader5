@@ -4,42 +4,29 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcel;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v13.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.androidsx.rateme.OnRatingListener;
 import com.androidsx.rateme.RateMeDialog;
 
 import org.michaelbel.bottomsheet.BottomSheet;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -76,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     private final Fragment[] PAGES = new Fragment[]{
 
-            new HomeFragment(),
+            new SearchFragment(),
             new GenresFragment(),
             new GalleryFragment(),
             new FavFragment()
@@ -99,6 +86,13 @@ public class MainActivity extends AppCompatActivity {
             editor.apply();
             Intent intent = new Intent(this, IntroActivity.class); // Call the AppIntro java class
             startActivity(intent);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.System.canWrite(getApplicationContext())) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE}, 2909);
+            }
         }
 
 

@@ -4,6 +4,9 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
@@ -13,12 +16,14 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.Settings;
@@ -52,17 +57,25 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.michaelbel.bottomsheet.BottomSheet;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-/* Fragment used as page 1 */
-public class HomeFragment extends Fragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+import static android.content.Context.NOTIFICATION_SERVICE;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
+/* Fragment used as page 1 */
+public class SearchFragment extends Fragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
 
     private int[] items = new int[]{
@@ -96,6 +109,9 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
     public AlertDialog alert;
     public AlertDialog alerttt;
     private SweetAlertDialog pDialog;
+    public String currentimagepath;
+
+    private Boolean succesffuly_downloaded;
 
 
     private SearchView mSearchView;
@@ -113,6 +129,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
     LinearLayout noNetworkLayout;
     AVLoadingIndicatorView avLoadingIndicatorView;
     private ViewPager viewpager;
+    private String songNameeee;
 
     private NotificationManagerCompat notificationManager;
 
@@ -245,7 +262,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
         }
     }
 
-    public void share_selected_song(String songName, String songAuthor){
+    public void share_selected_song(String songName, String songAuthor) {
 
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
@@ -434,16 +451,17 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 
                                             break;
                                         case 1:
-                                           // Toast.makeText(getActivity(), "Download", Toast.LENGTH_SHORT).show();
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                                if (!Settings.System.canWrite(getContext())) {
-                                                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                                            Manifest.permission.READ_EXTERNAL_STORAGE}, 2909);
-                                                }
-                                            }
+                                            // Toast.makeText(getActivity(), "Download", Toast.LENGTH_SHORT).show();
+//                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                                                if (!Settings.System.canWrite(getContext())) {
+//                                                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                                                            Manifest.permission.READ_EXTERNAL_STORAGE}, 2909);
+//                                                }
+//                                            }
 
-                                            if (ContextCompat.checkSelfPermission(getActivity(),
-                                                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                                                if (ContextCompat.checkSelfPermission(getActivity(),
+//                                                        Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
 
                                                 if (countAds == 0) {
@@ -465,22 +483,24 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
                                                     countAds = 0;
                                                 }
                                                 countAds++;
+                                                //  }
+                                            } else {
+                                                new DownloadFileAsync().execute(listmusicURL.get(songPos), listmusicname.get(songPos).toString());
                                             }
                                             break;
                                         case 2:
-                                            share_selected_song(listmusicname.get(position),listmusicauthor.get(position));
+                                            share_selected_song(listmusicname.get(position), listmusicauthor.get(position));
 
                                             break;
                                         case 3:
-                                            //Toast.makeText(getActivity(), "Favori", Toast.LENGTH_SHORT).show();
 
-                                            FavMusic favMusic = new FavMusic(listmusicname.get(songPos),listmusicURL.get(songPos),listmusicauthor.get(songPos),listmusictime.get(songPos));
+                                            FavMusic favMusic = new FavMusic(listmusicname.get(songPos), listmusicURL.get(songPos), listmusicauthor.get(songPos), listmusictime.get(songPos));
                                             GlobalClass globalClass = new GlobalClass();
-                                            globalClass.addFavMusic(getActivity(),favMusic);
+                                            globalClass.addFavMusic(getActivity(), favMusic);
 
                                             String selected_song = listmusicauthor.get(songPos);
 
-                                            Toast.makeText(getActivity(), selected_song +" was successfully added to favorites!", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getActivity(), selected_song + " was successfully added to favorites!", Toast.LENGTH_SHORT).show();
 
                                             break;
                                     }
@@ -533,6 +553,171 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
         }
 
         return found;
+    }
+
+    class DownloadFileAsync extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //  showDialog(DIALOG_DOWNLOAD_PROGRESS);
+            barProgressDialog = new ProgressDialog(getActivity());
+            barProgressDialog.setTitle("Downloading MP3 ...");
+            barProgressDialog.setMessage("Download in progress ...");
+            barProgressDialog.setProgressStyle(barProgressDialog.STYLE_HORIZONTAL);
+            barProgressDialog.setProgress(0);
+            barProgressDialog.setMax(100);
+            barProgressDialog.show();
+            barProgressDialog.setCancelable(false);
+
+
+        }
+
+        @Override
+        protected String doInBackground(String... aurl) {
+            int count;
+
+            try {
+                succesffuly_downloaded = true;
+                URL url = new URL(aurl[0]);
+                URLConnection conexion = url.openConnection();
+                conexion.connect();
+
+                int lenghtOfFile = conexion.getContentLength();
+                //Log.d("ANDRO_ASYNC", "Lenght of file: " + lenghtOfFile);
+
+                InputStream input = new BufferedInputStream(url.openStream());
+
+                Boolean isSDPresent = android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
+
+                OutputStream output = null;
+                if (isSDPresent) {
+
+                    File folder = new File(Environment.getExternalStorageDirectory() +
+                            File.separator + "Mp3Download");
+
+
+                    if (!folder.exists()) {
+                        folder.mkdir();
+                    }
+
+
+                    currentimagepath = Environment.getExternalStorageDirectory() +
+                            File.separator + "Mp3Download/" + aurl[1];
+
+
+                    output = new FileOutputStream(currentimagepath);
+
+
+                } else {
+
+                    File folder = new File(getActivity().getApplication().getFilesDir() +
+                            File.separator + "Mp3Download/" + aurl[1]);
+
+
+                    if (!folder.exists()) {
+                        folder.mkdir();
+                    }
+
+                    currentimagepath = getActivity().getApplication().getFilesDir() +
+                            File.separator + "Mp3Download/" + aurl[1];
+
+
+                    output = new FileOutputStream(currentimagepath);
+
+
+                }
+
+
+                byte data[] = new byte[1024];
+
+                long total = 0;
+
+
+                songNameeee = aurl[1].substring(0, Math.min(aurl[1].length(), 25));
+
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+
+                    barProgressDialog.setProgress((int) ((total * 100) / lenghtOfFile));
+
+                    // publishProgress(""+(int)((total*100)/lenghtOfFile));
+                    output.write(data, 0, count);
+                }
+
+                output.flush();
+                output.close();
+                input.close();
+
+                Intent intent1 = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                intent1.setData(Uri.parse("file://"+currentimagepath));
+                getApplicationContext().sendBroadcast(intent1);
+            } catch (Exception e) {
+
+                succesffuly_downloaded = false;
+
+            }
+            return null;
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            barProgressDialog.dismiss();
+            // pd.dismiss();
+            showNotification(currentimagepath);
+
+            if(succesffuly_downloaded){
+
+                Toast.makeText(getActivity(), "" + songNameeee + " downloaded", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "" + songNameeee + " added 'GALLERY'", Toast.LENGTH_SHORT).show();
+
+
+                new GlobalData().setUri(Uri.parse(currentimagepath));
+                new GlobalData().setMusicName(songNameeee);
+                new GlobalData().setIsGalleryUpdate(true);
+
+            }else{
+
+                Toast.makeText(getActivity(), " An error occurred, check your internet connection and try again! ", Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
+    }
+
+    public void showNotification(String filepath) {
+
+        // define sound URI, the sound to be played when there's a notification
+        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        // intent triggered, you can add other intent for other actions
+        Intent intentnatif = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(filepath));
+
+        intentnatif.setDataAndType(Uri.parse("file://" + filepath), "audio/mp3");
+
+
+        PendingIntent intent = PendingIntent.getActivity(getActivity().getApplicationContext(), 0,
+                intentnatif, 0);
+
+        // this is it, we'll build the notification!
+        // in the addAction method, if you don't want any icon, just set the first param to 0
+        Notification mNotification = new Notification.Builder(getActivity().getApplicationContext())
+
+                .setContentTitle("Successful mp3 file download !")
+                .setContentText("Download directory 'SD Card'.Click to open mp3 !")
+                .setSmallIcon(android.R.drawable.ic_menu_upload)
+                .setContentIntent(intent)
+                .setSound(soundUri)
+                .build();
+
+
+        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(NOTIFICATION_SERVICE);
+
+
+        notificationManager.notify(1230, mNotification);
     }
 
 
@@ -779,8 +964,8 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
             mSearchView.setSearchableInfo(info);
         }
 //
-        mSearchView.setOnQueryTextListener(HomeFragment.this);
-        mSearchView.setOnCloseListener(HomeFragment.this);
+        mSearchView.setOnQueryTextListener(SearchFragment.this);
+        mSearchView.setOnCloseListener(SearchFragment.this);
 
 
         mSearchView.setIconifiedByDefault(true);
