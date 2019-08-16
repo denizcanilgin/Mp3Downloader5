@@ -496,8 +496,8 @@ public class GalleryFragment extends Fragment {
     public String pathControl() {
 
 
-        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath() + File.separator;
-
+        //String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath() + File.separator;
+        String path = Environment.getExternalStorageDirectory() + File.separator + "Mp3Download/";
 
         if (path != null) {
             return path;

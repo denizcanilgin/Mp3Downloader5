@@ -13,5 +13,4 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ss6" />
 
-
 </RelativeLayout>
