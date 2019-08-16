@@ -46,6 +46,9 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
     private File folder;
     private static final int MY_PERMISSION_REQUEST_CODE = 1001;
 
+    private Boolean succesffuly_downloaded;
+    private String error_message;
+
     public DownloadAsyncTask(String url, String filename, Activity activity, int NOTIFY_ID) {
         this.url = url;
         this.filename = filename;
@@ -67,6 +70,7 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
         int count;
 
         try {
+            succesffuly_downloaded = true;
             URL url = new URL(aurl[0]);
             URLConnection conexion = url.openConnection();
             conexion.connect();
@@ -189,7 +193,9 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
                     }).start();
                 } catch (Exception e) {
                     Log.i("errorror", "download failed");
-                    Toast.makeText(getApplicationContext(), "An error occurred: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    succesffuly_downloaded = false;
+                    error_message = e.getMessage();
+                    //Toast.makeText(getApplicationContext(), "An error occurred: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 output.write(data, 0, count);
 
@@ -204,7 +210,8 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
 
         } catch (Exception e) {
             Log.i("erorrorr", "" + e);
-
+            error_message = e.getMessage();
+            succesffuly_downloaded = false;
         }
         return null;
 
@@ -215,14 +222,24 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
 
-        Toast.makeText(activity, "" + songName + " downloaded", Toast.LENGTH_SHORT).show();
-        Toast.makeText(activity, "" + songName + " added 'GALLERY'", Toast.LENGTH_SHORT).show();
+        if(succesffuly_downloaded){
 
-        notificationManager.cancel(NOTIFY_ID);
-        createNotification(currentimagepath, songName);
-        new GlobalData().setUri(Uri.parse(currentimagepath));
-        new GlobalData().setMusicName(songName);
-        new GlobalData().setIsGalleryUpdate(true);
+            Toast.makeText(activity, "" + songName + " downloaded", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "" + songName + " added 'GALLERY'", Toast.LENGTH_SHORT).show();
+
+            notificationManager.cancel(NOTIFY_ID);
+            createNotification(currentimagepath, songName);
+            new GlobalData().setUri(Uri.parse(currentimagepath));
+            new GlobalData().setMusicName(songName);
+            new GlobalData().setIsGalleryUpdate(true);
+
+        }else{
+
+            Toast.makeText(activity, " An error occurred, check your internet connection and try again! ", Toast.LENGTH_SHORT).show();
+
+        }
+
+
 
     }
 

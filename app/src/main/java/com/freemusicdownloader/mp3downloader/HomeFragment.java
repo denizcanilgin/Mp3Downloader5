@@ -434,7 +434,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 
                                             break;
                                         case 1:
-                                            Toast.makeText(getActivity(), "Download", Toast.LENGTH_SHORT).show();
+                                           // Toast.makeText(getActivity(), "Download", Toast.LENGTH_SHORT).show();
                                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                                 if (!Settings.System.canWrite(getContext())) {
                                                     requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,

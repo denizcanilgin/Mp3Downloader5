@@ -498,6 +498,7 @@ public class GalleryFragment extends Fragment {
 
         String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath() + File.separator;
 
+
         if (path != null) {
             return path;
         } else {
