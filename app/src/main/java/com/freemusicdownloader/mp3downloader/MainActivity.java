@@ -22,6 +22,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
 
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private ImageView iv_icon;
+    private View view;
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     public Toolbar toolbar;
@@ -79,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        view = getWindow().getDecorView().getRootView();
+        AudienceNetworkAds.facebookLoadBanner(getApplicationContext(), view);
+
 
         SharedPreferences getPrefs = PreferenceManager
                 .getDefaultSharedPreferences(getBaseContext());
@@ -120,8 +125,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
 
     }
-
-
 
 
     @Override
@@ -206,7 +209,6 @@ public class MainActivity extends AppCompatActivity {
         public int getCount() {
             return PAGES.length;
         }
-
 
 
     }

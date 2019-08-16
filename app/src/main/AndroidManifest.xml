@@ -15,7 +15,7 @@
 
 
     <application
-        android:name="android.support.multidex.MultiDexApplication"
+        android:name=".GoogleAnalyticsApplication"
         android:allowBackup="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
@@ -62,7 +62,7 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-5713377519464333~8358171234" />
+            android:value="ca-app-pub-2610648432092774~5143753269" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

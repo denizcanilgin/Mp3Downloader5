@@ -59,6 +59,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
     int songListIndex;
     public ServiceConnection connection;
     private NotificationManagerCompat notificationManager;
+    private View view;
 
     int elapsedTime = 0;
 
@@ -66,6 +67,9 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_player);
+
+        view = getWindow().getDecorView().getRootView();
+        AudienceNetworkAds.facebookLoadBanner(getApplicationContext(), view);
 
         notificationManager = NotificationManagerCompat.from(this);
 
