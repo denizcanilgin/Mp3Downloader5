@@ -378,7 +378,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
 
                                         case 0:
 
-                                            Toast.makeText(getActivity(), "Play", Toast.LENGTH_SHORT).show();
+                                            //Toast.makeText(getActivity(), "Play", Toast.LENGTH_SHORT).show();
                                             if (countAds % 8 == 0) {
                                                 // AudienceNetworkAds.facebookInterstitialAd(getActivity(), ads_layout, avLoadingIndicatorView);
                                             }

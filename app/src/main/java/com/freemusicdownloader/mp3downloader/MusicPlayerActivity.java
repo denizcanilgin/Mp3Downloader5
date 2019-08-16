@@ -272,54 +272,64 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
     };
 
     public void songNextt() {
-        try {
 
-            clearInfos();
-            songListIndex++;
-            if (gallerySongList.size() == songListIndex) {
-                songListIndex = 0;
-            }
-            // Stuff that updates the UI
-            mediaPlaybackService.init(Uri.parse(gallerySongList.get(songListIndex)));
-            initInfos(Uri.parse(gallerySongList.get(songListIndex)));
-            Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
-            serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
-            startService(serviceIntent);
+        Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
+        serviceIntent.setAction(Constants.ACTION.NEXT_ACTION);
+        startService(serviceIntent);
+//
 
-            File file = new File(gallerySongList.get(songListIndex) + "");
-            new GlobalData().setMusicName(file.getName());
-            new GlobalData().setSongListIndex(songListIndex);
-
-        } catch (Exception e) {
-            Log.i("erorrrrrrrrrrrr", "" + e);
-        }
+//        try {
+//
+//            clearInfos();
+//            songListIndex++;
+//            if (gallerySongList.size() == songListIndex) {
+//                songListIndex = 0;
+//            }
+//            // Stuff that updates the UI
+//            mediaPlaybackService.init(Uri.parse(gallerySongList.get(songListIndex)));
+//            initInfos(Uri.parse(gallerySongList.get(songListIndex)));
+//            Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
+//            serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+//            startService(serviceIntent);
+//
+//            File file = new File(gallerySongList.get(songListIndex) + "");
+//            new GlobalData().setMusicName(file.getName());
+//            new GlobalData().setSongListIndex(songListIndex);
+//
+//        } catch (Exception e) {
+//            Log.i("erorrrrrrrrrrrr", "" + e);
+//        }
     }
 
 
     public void songPrevious() {
 
-        try {
-            clearInfos();
-            songListIndex--;
-            if (songListIndex < 0) {
+        Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
+        serviceIntent.setAction(Constants.ACTION.PREV_ACTION);
+        startService(serviceIntent);
 
-                songListIndex = gallerySongList.size() - 1;
-            }
-
-            mediaPlaybackService.init(Uri.parse(gallerySongList.get(songListIndex)));
-            initInfos(Uri.parse(gallerySongList.get(songListIndex)));
-            Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
-            serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
-            startService(serviceIntent);
-
-            File file = new File(gallerySongList.get(songListIndex) + "");
-            new GlobalData().setMusicName(file.getName());
-            new GlobalData().setSongListIndex(songListIndex);
-
-
-        } catch (Exception e) {
-            Log.i("erorrrrrrrrrrrr", "" + e);
-        }
+//        try {
+//            clearInfos();
+//            songListIndex--;
+//            if (songListIndex < 0) {
+//
+//                songListIndex = gallerySongList.size() - 1;
+//            }
+//
+//            mediaPlaybackService.init(Uri.parse(gallerySongList.get(songListIndex)));
+//            initInfos(Uri.parse(gallerySongList.get(songListIndex)));
+//            Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
+//            serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+//            startService(serviceIntent);
+//
+//            File file = new File(gallerySongList.get(songListIndex) + "");
+//            new GlobalData().setMusicName(file.getName());
+//            new GlobalData().setSongListIndex(songListIndex);
+//
+//
+//        } catch (Exception e) {
+//            Log.i("erorrrrrrrrrrrr", "" + e);
+//        }
     }
 
 

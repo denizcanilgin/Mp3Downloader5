@@ -152,10 +152,13 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                         Log.i("REPEAT", "OFF!!");
 
 
+                    if(new GlobalData().getClickNext() == null ||!(new GlobalData().getClickNext())) {
                         gallerySongList = new GlobalData().getSongList();
                         songListIndex = new GlobalData().getSongListIndex();
                         new GlobalData().setCounter(songListIndex);
                         new GlobalData().setClickNext(true);
+                    }
+
                         //showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
 
                     }
@@ -376,7 +379,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         views.setOnClickPendingIntent(R.id.status_bar_next, pnextIntent);
         bigViews.setOnClickPendingIntent(R.id.status_bar_next, pnextIntent);
 
-        views.setOnClickPendingIntent(R.id.status_bar_prev, ppreviousIntent);
+        views.setOnClickPendingIntent(R.id.status_bar_previous, ppreviousIntent);
         bigViews.setOnClickPendingIntent(R.id.status_bar_prev, ppreviousIntent);
 
         views.setOnClickPendingIntent(R.id.status_bar_collapse, pcloseIntent);
