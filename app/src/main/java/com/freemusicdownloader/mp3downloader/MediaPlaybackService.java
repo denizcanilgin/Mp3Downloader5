@@ -205,7 +205,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     public void play() {
         if (mMediaPlayer != null)
             mMediaPlayer.start();
-        
+
     }
 
     public void buttonPlayUpdate() {

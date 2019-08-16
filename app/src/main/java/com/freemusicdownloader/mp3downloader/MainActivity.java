@@ -85,6 +85,9 @@ public class MainActivity extends AppCompatActivity {
         AudienceNetworkAds.facebookLoadBanner(getApplicationContext(), view);
 
 
+        view = getWindow().getDecorView().getRootView();
+        AudienceNetworkAds.facebookLoadBanner(this, view);
+
         SharedPreferences getPrefs = PreferenceManager
                 .getDefaultSharedPreferences(getBaseContext());
         if (!getPrefs.getBoolean("first", false)) {

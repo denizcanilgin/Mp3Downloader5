@@ -113,7 +113,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
 
     private Boolean succesffuly_downloaded;
 
-
+    private int download_count;
     private SearchView mSearchView;
     private ImageView mLogoView;
 
@@ -146,9 +146,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
 
-        view = getActivity().getWindow().getDecorView().getRootView();
-        // AudienceNetworkAds.facebookLoadBanner(getActivity(), view);
-        //  AudienceNetworkAds.facebookInterstitialAd(MainActivity.this,ads_layout,avLoadingIndicatorView);
+
 
         notificationManager = NotificationManagerCompat.from(getActivity());
 
@@ -379,8 +377,8 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
                                         case 0:
 
                                             //Toast.makeText(getActivity(), "Play", Toast.LENGTH_SHORT).show();
-                                            if (countAds % 8 == 0) {
-                                                // AudienceNetworkAds.facebookInterstitialAd(getActivity(), ads_layout, avLoadingIndicatorView);
+                                            if (countAds % 4 == 0) {
+                                                 AudienceNetworkAds.facebookInterstitialAd(getActivity(), ads_layout, avLoadingIndicatorView);
                                             }
                                             try {
 
@@ -471,7 +469,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
                                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
                                                         new DownloadAsyncTask(listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3", getActivity(), 3).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3");
                                                 } else if (countAds == 2) {
-
+                                                         AudienceNetworkAds.facebookInterstitialAd(getActivity(),ads_layout,avLoadingIndicatorView);
                                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
                                                         new DownloadAsyncTask(listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3", getActivity(), 4).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3");
                                                 } else if (countAds == 3) {
@@ -480,12 +478,19 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
                                                 } else if (countAds == 4) {
                                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
                                                         new DownloadAsyncTask(listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3", getActivity(), 100).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listmusicURL.get(songPos), listmusicname.get(songPos).toString() + ".mp3");
+                                                        AudienceNetworkAds.facebookInterstitialAd(getActivity(),ads_layout,avLoadingIndicatorView);
+
                                                     countAds = 0;
                                                 }
                                                 countAds++;
                                                 //  }
                                             } else {
                                                 new DownloadFileAsync().execute(listmusicURL.get(songPos), listmusicname.get(songPos).toString());
+
+                                                if (countAds % 3 == 0) {
+                                                    AudienceNetworkAds.facebookInterstitialAd(getActivity(), ads_layout, avLoadingIndicatorView);
+                                                }
+
                                             }
                                             break;
                                         case 2:
@@ -576,6 +581,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
         @Override
         protected String doInBackground(String... aurl) {
             int count;
+
 
             try {
                 succesffuly_downloaded = true;
