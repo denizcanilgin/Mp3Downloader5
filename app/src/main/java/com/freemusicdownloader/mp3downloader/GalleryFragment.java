@@ -31,7 +31,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -60,7 +59,6 @@ public class GalleryFragment extends Fragment {
 
     public ListView mylist;
     public MediaPlayer mp;
-    private SwipeMenuCreator mMenuCreator;
 
     private TextView tv_downloadedempty;
 
@@ -148,6 +146,23 @@ public class GalleryFragment extends Fragment {
 
 
             }
+        }else{
+
+            listMusicName = new ArrayList<String>();
+            listMusicTime = new ArrayList<String>();
+            listMusicNameCont = new ArrayList<String>();
+            getAllMusics(pathControl());
+            customAdapterListMusics adapterListMusics = new customAdapterListMusics(getActivity().getApplication(), getAllMusics(pathControl()), listMusicNameCont, listMusicName, listMusicTime);
+            mylist.invalidate();
+            mylist.setAdapter(adapterListMusics);
+
+            if (mylist.getAdapter().getCount() != 0) {
+
+                tv_downloadedempty.setVisibility(View.GONE);
+            } else {
+                tv_downloadedempty.setVisibility(View.VISIBLE);
+            }
+
         }
 
     }
@@ -371,30 +386,32 @@ public class GalleryFragment extends Fragment {
         switch (id) {
             case R.id.action_refresh:
 
-                // Toast.makeText(getActivity(), "Gallery Refresh ...", Toast.LENGTH_SHORT).show();
+                refresh();
 
-                listMusicName = new ArrayList<String>();
-                listMusicTime = new ArrayList<String>();
-                listMusicNameCont = new ArrayList<String>();
-                getAllMusics(pathControl());
-                customAdapterListMusics adapterListMusics = new customAdapterListMusics(getActivity().getApplication(), getAllMusics(pathControl()), listMusicNameCont, listMusicName, listMusicTime);
-                mylist.invalidate();
-                mylist.setAdapter(adapterListMusics);
-
-                if (mylist.getAdapter().getCount() != 0) {
-
-                    tv_downloadedempty.setVisibility(View.GONE);
-                } else {
-                    tv_downloadedempty.setVisibility(View.VISIBLE);
-                }
-
-
-                if (mylist.getAdapter().getCount() != 0) {
-
-
-//            AudienceNetworkAds.facebookLoadBanner(getActivity(), view);
-//            AudienceNetworkAds.facebookInterstitialAd(getActivity(),ads_layout,avLoadingIndicatorView);
-                }
+//                // Toast.makeText(getActivity(), "Gallery Refresh ...", Toast.LENGTH_SHORT).show();
+//
+//                listMusicName = new ArrayList<String>();
+//                listMusicTime = new ArrayList<String>();
+//                listMusicNameCont = new ArrayList<String>();
+//                getAllMusics(pathControl());
+//                customAdapterListMusics adapterListMusics = new customAdapterListMusics(getActivity().getApplication(), getAllMusics(pathControl()), listMusicNameCont, listMusicName, listMusicTime);
+//                mylist.invalidate();
+//                mylist.setAdapter(adapterListMusics);
+//
+//                if (mylist.getAdapter().getCount() != 0) {
+//
+//                    tv_downloadedempty.setVisibility(View.GONE);
+//                } else {
+//                    tv_downloadedempty.setVisibility(View.VISIBLE);
+//                }
+//
+//
+//                if (mylist.getAdapter().getCount() != 0) {
+//
+//
+////            AudienceNetworkAds.facebookLoadBanner(getActivity(), view);
+////            AudienceNetworkAds.facebookInterstitialAd(getActivity(),ads_layout,avLoadingIndicatorView);
+//                }
 
                 return true;
         }

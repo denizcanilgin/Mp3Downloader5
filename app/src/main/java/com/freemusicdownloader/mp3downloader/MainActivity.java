@@ -26,8 +26,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 
-import org.jetbrains.annotations.NotNull;
-import org.michaelbel.bottomsheet.BottomSheet;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import java.util.Arrays;
 
@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageView iv_icon;
     private View view;
+    private Tracker mTracker;
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     public Toolbar toolbar;
@@ -74,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
     };
 
+
+
     private ViewPager mViewPager;
 
     @Override
@@ -81,12 +84,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         view = getWindow().getDecorView().getRootView();
         AudienceNetworkAds.facebookLoadBanner(getApplicationContext(), view);
 
+        GoogleAnalyticsApplication application = (GoogleAnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
 
-        view = getWindow().getDecorView().getRootView();
-        AudienceNetworkAds.facebookLoadBanner(this, view);
 
         SharedPreferences getPrefs = PreferenceManager
                 .getDefaultSharedPreferences(getBaseContext());
@@ -98,12 +102,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.System.canWrite(getApplicationContext())) {
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE}, 2909);
-            }
-        }
 
 
         toolbar = findViewById(R.id.toolbar);
@@ -135,6 +133,15 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_folder, menu);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mTracker.setScreenName("MP3-Smile Main Screen");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
     }
 
 

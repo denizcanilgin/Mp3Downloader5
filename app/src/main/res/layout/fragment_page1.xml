@@ -100,7 +100,6 @@
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/bc2"
             android:visibility="gone" />
 
         <TextView
@@ -117,10 +116,6 @@
             android:textStyle="bold"
             android:visibility="gone" />
 
-        <nl.dionsegijn.konfetti.KonfettiView
-            android:id="@+id/viewKonfetti"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
 
         <RelativeLayout

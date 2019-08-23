@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,7 +37,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import wseemann.media.FFmpegMediaMetadataRetriever;
 
 public class MusicPlayerActivity extends AppCompatActivity implements View.OnClickListener {
     boolean isBinded = false;
@@ -390,17 +390,17 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
 
     public void initInfos(Uri uri) {
         if (uri != null) {
-            FFmpegMediaMetadataRetriever mData = new FFmpegMediaMetadataRetriever();
+            MediaMetadataRetriever mData = new MediaMetadataRetriever();
             mData.setDataSource(this, uri);
 
             File file = new File(uri + "");
 
-            int duration = Integer.parseInt(mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_DURATION));
+            int duration = Integer.parseInt(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
 
 
             titleTextView.setText(file.getName());
 
-            artistTextView.setText(mData.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST));
+            artistTextView.setText(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
 
             durationTextView.setText(secondsToString(duration));
 

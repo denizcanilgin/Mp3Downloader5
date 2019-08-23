@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.wang.avi.AVLoadingIndicatorView;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -18,6 +20,8 @@ import java.util.TimerTask;
 public class SplashActivtiy extends Activity {
 
 
+    private AVLoadingIndicatorView avLoadingIndicatorView;
+
     @Override
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,13 +29,14 @@ public class SplashActivtiy extends Activity {
         setContentView(R.layout.activtiy_splash);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+
+        avLoadingIndicatorView = findViewById(R.id.avi);
+        avLoadingIndicatorView.setIndicator("BallClipRotatePulseIndicator");
+        startAnim();
+
         final SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPref.edit();
 
-
-//        ImageView SplashLogo = (ImageView)findViewById(R.id.splashLogo);
-//        Animation myanim = AnimationUtils.loadAnimation(this,R.anim.splashanim);
-//        SplashLogo.startAnimation(myanim);
 
         new Timer().schedule(new TimerTask() {
 
@@ -56,17 +61,26 @@ public class SplashActivtiy extends Activity {
 //
 //                }
 
-                i = new Intent(SplashActivtiy.this, MainActivity.class);
+                i = new Intent(SplashActivtiy.this,MainActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
                 startActivity(i);
 
 
-                editor.putInt("virgin", 1);
-                editor.commit();
+//                editor.putInt("virgin", 1);
+//                editor.commit();
 
             }
-        }, 2000);
+        }, 1500);
 
+    }
+
+    void startAnim(){
+        avLoadingIndicatorView.show();
+        // or avi.smoothToShow();
+    }
+
+    void stopAnim(){
+        avLoadingIndicatorView.hide();
+        // or avi.smoothToHide();
     }
 }

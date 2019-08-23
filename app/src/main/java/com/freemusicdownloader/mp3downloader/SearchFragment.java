@@ -48,6 +48,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -177,8 +178,9 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
         StrictMode.setVmPolicy(builder.build());
         builder.detectFileUriExposure();
 
-//        GoogleAnalyticsApplication application = (GoogleAnalyticsApplication) getActivity().getApplication();
-//        mTracker = application.getDefaultTracker();
+        GoogleAnalyticsApplication application = (GoogleAnalyticsApplication) getActivity().getApplication();
+        mTracker = application.getDefaultTracker();
+
 
 
         mydialog = new ProgressDialog(getActivity());
@@ -188,6 +190,13 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.System.canWrite(getApplicationContext())) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE}, 2909);
+            }
+        }
 
     }
 
@@ -376,10 +385,12 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
 
                                         case 0:
 
-                                            //Toast.makeText(getActivity(), "Play", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getActivity(), "Song will play", Toast.LENGTH_SHORT).show();
                                             if (countAds % 4 == 0) {
                                                  AudienceNetworkAds.facebookInterstitialAd(getActivity());
+                                                 countAds = 0;
                                             }
+                                            countAds++;
                                             try {
 
                                                 if (isPackageInstalled("com.google.android.music", getActivity().getPackageManager())) {
@@ -391,7 +402,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
 
 
                                                     new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
-                                                            .setTitleText("MP3 Downloader")
+                                                            .setTitleText("MP3 Downloader 2019 - Smile")
                                                             .setContentText("Please install the 'Google Play Music' for quick play.\nDo you want to install it now?")
                                                             .setConfirmButton("YES", new SweetAlertDialog.OnSweetClickListener() {
                                                                 @Override
@@ -449,17 +460,17 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
 
                                             break;
                                         case 1:
-                                            // Toast.makeText(getActivity(), "Download", Toast.LENGTH_SHORT).show();
-//                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                                                if (!Settings.System.canWrite(getContext())) {
-//                                                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-//                                                            Manifest.permission.READ_EXTERNAL_STORAGE}, 2909);
-//                                                }
-//                                            }
+                                             Toast.makeText(getActivity(), "Download will start now", Toast.LENGTH_SHORT).show();
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                if (!Settings.System.canWrite(getContext())) {
+                                                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                                            Manifest.permission.READ_EXTERNAL_STORAGE}, 2909);
+                                                }
+                                            }
 
                                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                                                if (ContextCompat.checkSelfPermission(getActivity(),
-//                                                        Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                                                if (ContextCompat.checkSelfPermission(getActivity(),
+                                                        Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
 
                                                 if (countAds == 0) {
@@ -483,14 +494,27 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
                                                     countAds = 0;
                                                 }
                                                 countAds++;
-                                                //  }
-                                            } else {
-                                                new DownloadFileAsync().execute(listmusicURL.get(songPos), listmusicname.get(songPos).toString());
+                                                  }else{
 
-                                                if (countAds % 3 == 0) {
-                                                    AudienceNetworkAds.facebookInterstitialAd(getActivity());
+                                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                        if (!Settings.System.canWrite(getApplicationContext())) {
+                                                            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                                                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2909);
+                                                        }
+                                                    }
+
                                                 }
+                                            } else {
 
+                                                if (ContextCompat.checkSelfPermission(getActivity(),
+                                                        Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                                                    new DownloadFileAsync().execute(listmusicURL.get(songPos), listmusicname.get(songPos).toString());
+
+                                                    if (countAds % 3 == 0) {
+                                                        AudienceNetworkAds.facebookInterstitialAd(getActivity());
+                                                    }
+                                                    countAds++;
+                                                }
                                             }
                                             break;
                                         case 2:
@@ -1054,9 +1078,9 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
     public void onResume() {
         super.onResume();
 
-//        mTracker.setScreenName("MP3 Main Screen");
-//        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
+        mTracker.setScreenName("MP3 Main Screen");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
     }
 

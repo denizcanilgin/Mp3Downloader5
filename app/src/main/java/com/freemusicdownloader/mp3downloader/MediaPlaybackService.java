@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
@@ -29,7 +30,6 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import wseemann.media.FFmpegMediaMetadataRetriever;
 
 public class MediaPlaybackService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
     public static final String MPS_MESSAGE = "com.freemusicdownloader.mp3downloader.MediaPlaybackService.MESSAGE";
@@ -398,7 +398,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
         if (gallerySongList != null || songListIndex != 0) {
 
-            FFmpegMediaMetadataRetriever mData = new FFmpegMediaMetadataRetriever();
+            MediaMetadataRetriever  mData = new MediaMetadataRetriever();
             mData.setDataSource(this, Uri.parse(gallerySongList.get(songListIndex)));
 
             byte art[] = mData.getEmbeddedPicture();
