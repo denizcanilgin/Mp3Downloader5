@@ -1,11 +1,10 @@
-package com.freemusicdownloader.mp3downloader;
+package com.freemusicdownloader.mp3downloader.Services;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,18 +22,20 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.widget.RemoteViews;
-import android.widget.Toast;
+
+import com.freemusicdownloader.mp3downloader.Constans.Constants;
+import com.freemusicdownloader.mp3downloader.Constans.GlobalData;
+import com.freemusicdownloader.mp3downloader.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 
 public class MediaPlaybackService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
-    public static final String MPS_MESSAGE = "com.freemusicdownloader.mp3downloader.MediaPlaybackService.MESSAGE";
-    public static final String MPS_RESULT = "com.freemusicdownloader.mp3downloader.MediaPlaybackService.RESULT";
-    public static final String MPS_COMPLETED = "com.freemusicdownloader.mp3downloader.MediaPlaybackService.COMPLETED";
+    public static final String MPS_MESSAGE = "com.freemusicdownloader.mp3downloader.Services.MediaPlaybackService.MESSAGE";
+    public static final String MPS_RESULT = "com.freemusicdownloader.mp3downloader.Services.MediaPlaybackService.RESULT";
+    public static final String MPS_COMPLETED = "com.freemusicdownloader.mp3downloader.Services.MediaPlaybackService.COMPLETED";
 
     MediaPlayer mMediaPlayer = null;
     Uri file;
@@ -143,29 +144,29 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                 SystemClock.sleep(200);
                 sendElapsedTime();
 
-                if (isFinished()) {
-
-                    Log.i("FINISHED","YES");
-
-                    if (GlobalData.isRepeatSong()) {
-                        buttonPlayUpdate();
-
-                    } else {
-                        Log.i("REPEAT", "OFF!!");
-
-                    //NEXT SONG WE COULDN'T DO IT AT THIS VERSION
-//                    if(new GlobalData().getClickNext() == null ||!(new GlobalData().getClickNext())) {
-//                        gallerySongList = new GlobalData().getSongList();
-//                        songListIndex = new GlobalData().getSongListIndex();
-//                        new GlobalData().setCounter(songListIndex);
-//                        new GlobalData().setClickNext(true);
+//                if (isFinished()) {
+//
+//                    Log.i("FINISHED", "YES");
+//
+//                    if (GlobalData.isRepeatSong()) {
+//                        buttonPlayUpdate();
+//
+//                    } else {
+//                        Log.i("REPEAT", "OFF!!");
+//
+//                        //NEXT SONG WE COULDN'T DO IT AT THIS VERSION
+////                    if(new GlobalData().getClickNext() == null ||!(new GlobalData().getClickNext())) {
+////                        gallerySongList = new GlobalData().getSongList();
+////                        songListIndex = new GlobalData().getSongListIndex();
+////                        new GlobalData().setCounter(songListIndex);
+////                        new GlobalData().setClickNext(true);
+////                    }
+//
+//                        //showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
+//
 //                    }
-
-                        //showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
-
-                    }
-
-                }
+//
+//                }
 
                 try {
                     Thread.sleep(250);
@@ -177,21 +178,21 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         }
     };
 
-    public boolean isFinished() {
-
-        boolean isFinished = false;
-
-        try {
-            if (((GlobalData.getSongDuration() - mMediaPlayer.getCurrentPosition()) < 700)) {
-                Log.i("FINISHED", "YES!");
-                isFinished = true;
-            }
-        } catch (Exception e) {
-
-            Log.i("ERROR", "" + e.getMessage());
-        }
-        return isFinished;
-    }
+//    public boolean isFinished() {
+//
+//        boolean isFinished = false;
+//
+//        try {
+//            if (((GlobalData.getSongDuration() - mMediaPlayer.getCurrentPosition()) < 700)) {
+//                Log.i("FINISHED", "YES!");
+//                isFinished = true;
+//            }
+//        } catch (Exception e) {
+//
+//            Log.i("ERROR", "" + e.getMessage());
+//        }
+//        return isFinished;
+//    }
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -264,62 +265,59 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-//
-//        if(intent.getAction().equals("") || intent.getAction().isEmpty() != true) {
 
-        if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
+        if(intent.getAction().equals("") || intent.getAction().isEmpty() != true || intent.getAction() != null) {
 
-            // showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
-            Log.i("click_event", "Clicked NOTIFICATION");
+            if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
 
-            Log.i("DURATION : ", "" + mMediaPlayer.getDuration());
-            GlobalData.setSongDuration(mMediaPlayer.getDuration());
-        } else if (intent.getAction().equals(Constants.ACTION.PREV_ACTION)) {
+                // showNotification(R.drawable.ic_pause_circle_filled_black_24dp);
+                Log.i("click_event", "Clicked NOTIFICATION");
 
-            gallerySongList = new GlobalData().getSongList();
-            songListIndex = new GlobalData().getSongListIndex();
-            new GlobalData().setCounter(songListIndex);
-            new GlobalData().setClickPrevious(true);
+//            if (mMediaPlayer.getDuration() != 0)
+//                GlobalData.setSongDuration(mMediaPlayer.getDuration());
+            } else if (intent.getAction().equals(Constants.ACTION.PREV_ACTION)) {
 
-            Log.i("click_event", "Clicked Prevvvv");
+                gallerySongList = new GlobalData().getSongList();
+                songListIndex = new GlobalData().getSongListIndex();
+                new GlobalData().setCounter(songListIndex);
+                new GlobalData().setClickPrevious(true);
 
-        } else if (intent.getAction().equals(Constants.ACTION.PLAY_ACTION)) {
-            play();
-            Log.i("click_event", "Clicked Play");
-        } else if (intent.getAction().equals(Constants.ACTION.PAUSE_ACTION)) {
+                Log.i("click_event", "Clicked Prevvvv");
 
-            playbackService = new GlobalData().getMediaPlaybackService();
+            } else if (intent.getAction().equals(Constants.ACTION.PLAY_ACTION)) {
+                play();
+                Log.i("click_event", "Clicked Play");
+            } else if (intent.getAction().equals(Constants.ACTION.PAUSE_ACTION)) {
+
+                playbackService = new GlobalData().getMediaPlaybackService();
 
 
-            if (playbackService.isPlaying()) {
+                if (playbackService.isPlaying()) {
+                    buttonPauseUpdate();
+                } else {
+                    buttonPlayUpdate();
+                }
 
-                buttonPauseUpdate();
-            } else {
-                buttonPlayUpdate();
+                notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mBuilder.build());
 
+            } else if (intent.getAction().equals(Constants.ACTION.NEXT_ACTION)) {
+
+                gallerySongList = new GlobalData().getSongList();
+                songListIndex = new GlobalData().getSongListIndex();
+                new GlobalData().setCounter(songListIndex);
+                new GlobalData().setClickNext(true);
+
+                Log.i("click_event", "Clicked nextt");
+
+
+            } else if (intent.getAction().equals(
+                    Constants.ACTION.STOPFOREGROUND_ACTION)) {
+                Log.i("click_event", "Received Stop Foreground Intent");
+
+                if (mMediaPlayer != null)
+                    mMediaPlayer.pause();
+                notificationManager.cancel(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE);
             }
-
-            notificationManager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mBuilder.build());
-
-
-        } else if (intent.getAction().equals(Constants.ACTION.NEXT_ACTION)) {
-
-            gallerySongList = new GlobalData().getSongList();
-            songListIndex = new GlobalData().getSongListIndex();
-            new GlobalData().setCounter(songListIndex);
-            new GlobalData().setClickNext(true);
-
-
-            Log.i("click_event", "Clicked nextt");
-
-
-        } else if (intent.getAction().equals(
-                Constants.ACTION.STOPFOREGROUND_ACTION)) {
-            Log.i("click_event", "Received Stop Foreground Intent");
-
-            if (mMediaPlayer != null)
-                mMediaPlayer.pause();
-            notificationManager.cancel(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE);
         }
 
         return START_STICKY;
@@ -340,7 +338,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         bigViews.setImageViewResource(R.id.status_bar_pause, drawable);
         views.setImageViewResource(R.id.status_bar_play, drawable);
 
-        notificationIntent = new Intent(this, MusicPlayerActivity.class);
+        notificationIntent = new Intent(this, MusicPlayer.class);
         notificationIntent.setAction(Constants.ACTION.MAIN_ACTION);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         pendingIntent = PendingIntent.getActivity(this, 0,
@@ -398,19 +396,22 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
         if (gallerySongList != null || songListIndex != 0) {
 
-            MediaMetadataRetriever  mData = new MediaMetadataRetriever();
-            mData.setDataSource(this, Uri.parse(gallerySongList.get(songListIndex)));
+            try {
+                MediaMetadataRetriever mData = new MediaMetadataRetriever();
+                mData.setDataSource(this, Uri.parse(gallerySongList.get(songListIndex)));
 
-            byte art[] = mData.getEmbeddedPicture();
-            if (art != null) {
-                Bitmap image = BitmapFactory.decodeByteArray(art, 0, art.length);
-                new GlobalData().setSongPicture(image);
-                bigViews.setImageViewBitmap(R.id.status_bar_album_art, image);
-                views.setImageViewBitmap(R.id.status_bar_album_art, image);
-            } else {
-                bigViews.setImageViewBitmap(R.id.status_bar_album_art, Constants.getDefaultAlbumArt(this));
-                views.setImageViewBitmap(R.id.status_bar_album_art, Constants.getDefaultAlbumArt(this));
-            }
+                byte art[] = mData.getEmbeddedPicture();
+                if (art != null) {
+                    Bitmap image = BitmapFactory.decodeByteArray(art, 0, art.length);
+                    new GlobalData().setSongPicture(image);
+                    bigViews.setImageViewBitmap(R.id.status_bar_album_art, image);
+                    views.setImageViewBitmap(R.id.status_bar_album_art, image);
+                } else {
+                    bigViews.setImageViewBitmap(R.id.status_bar_album_art, Constants.getDefaultAlbumArt(this));
+                    views.setImageViewBitmap(R.id.status_bar_album_art, Constants.getDefaultAlbumArt(this));
+                }
+            }catch (NullPointerException e){}
+
         }
 
         views.setTextViewText(R.id.status_bar_artist_name, "Artist Name");
@@ -472,9 +473,6 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
 
     }
-
-
-
 
 
 }

@@ -1,9 +1,10 @@
-package com.freemusicdownloader.mp3downloader;
+package com.freemusicdownloader.mp3downloader.Ads;
 
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
+import com.freemusicdownloader.mp3downloader.R;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;

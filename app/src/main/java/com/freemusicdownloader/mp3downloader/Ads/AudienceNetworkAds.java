@@ -1,9 +1,8 @@
-package com.freemusicdownloader.mp3downloader;
+package com.freemusicdownloader.mp3downloader.Ads;
 
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.facebook.ads.Ad;
@@ -13,6 +12,8 @@ import com.facebook.ads.AdSize;
 import com.facebook.ads.AdView;
 import com.facebook.ads.InterstitialAd;
 import com.facebook.ads.InterstitialAdListener;
+import com.freemusicdownloader.mp3downloader.Ads.Admob;
+import com.freemusicdownloader.mp3downloader.R;
 import com.wang.avi.AVLoadingIndicatorView;
 
 /**

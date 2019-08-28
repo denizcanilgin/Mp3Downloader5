@@ -15,7 +15,7 @@
 
 
     <application
-        android:name=".GoogleAnalyticsApplication"
+        android:name=".Ads.GoogleAnalyticsApplication"
         android:allowBackup="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
@@ -24,7 +24,7 @@
         tools:replace="android:icon"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
-            android:name=".SplashActivtiy"
+            android:name=".Activity.SplashActivtiy"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -35,11 +35,11 @@
         </activity>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".Activity.MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".IntroActivity"
+            android:name=".Activity.IntroActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <activity
@@ -50,11 +50,14 @@
             android:name="com.facebook.ads.AudienceNetworkActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
 
-        <activity android:name=".MusicPlayerActivity"
+        <activity android:name=".Services.MusicPlayer"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
 
-        <service android:name=".MediaPlaybackService" />
+        <activity android:name=".Activity.StreamingMp3Player"
+            android:screenOrientation="portrait"/>
+
+        <service android:name=".Services.MediaPlaybackService" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -62,7 +65,7 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-2610648432092774~5143753269" />
+            android:value="ca-app-pub-2610648432092774~5143753343" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

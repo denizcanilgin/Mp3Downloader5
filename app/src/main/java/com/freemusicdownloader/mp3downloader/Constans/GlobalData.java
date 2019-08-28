@@ -1,8 +1,10 @@
-package com.freemusicdownloader.mp3downloader;
+package com.freemusicdownloader.mp3downloader.Constans;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+
+import com.freemusicdownloader.mp3downloader.Services.MediaPlaybackService;
 
 import java.util.ArrayList;
 
@@ -10,6 +12,8 @@ public class GlobalData {
 
     public static Uri uri;
     public static String musicName;
+    public static String musicSecondName;
+    public static String streamMusicTime;
     public static Intent ıntent;
     public static MediaPlaybackService mediaPlaybackService;
     public static ArrayList<String> songList;
@@ -21,6 +25,31 @@ public class GlobalData {
     public static boolean repeatSong = false;
     public static boolean isGalleryUpdate;
     public static boolean isFinished;
+    public static String textSongURL;
+
+    public static String getStreamMusicTime() {
+        return streamMusicTime;
+    }
+
+    public static void setStreamMusicTime(String streamMusicTime) {
+        GlobalData.streamMusicTime = streamMusicTime;
+    }
+
+    public static String getMusicSecondName() {
+        return musicSecondName;
+    }
+
+    public static void setMusicSecondName(String musicSecondName) {
+        GlobalData.musicSecondName = musicSecondName;
+    }
+
+    public static String getTextSongURL() {
+        return textSongURL;
+    }
+
+    public static void setTextSongURL(String textSongURL) {
+        GlobalData.textSongURL = textSongURL;
+    }
 
     public static boolean isIsFinished() {
         return isFinished;

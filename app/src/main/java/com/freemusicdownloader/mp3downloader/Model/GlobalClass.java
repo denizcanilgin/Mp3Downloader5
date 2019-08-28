@@ -1,4 +1,4 @@
-package com.freemusicdownloader.mp3downloader;
+package com.freemusicdownloader.mp3downloader.Model;
 
 import android.app.Application;
 import android.content.Context;
@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.freemusicdownloader.mp3downloader.Model.FavMusic;
 import com.google.gson.Gson;
 
 public class GlobalClass extends Application {

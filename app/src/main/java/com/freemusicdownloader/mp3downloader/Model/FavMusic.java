@@ -1,4 +1,4 @@
-package com.freemusicdownloader.mp3downloader;
+package com.freemusicdownloader.mp3downloader.Model;
 
 public class FavMusic {
 

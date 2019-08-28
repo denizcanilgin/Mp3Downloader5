@@ -1,8 +1,10 @@
-package com.freemusicdownloader.mp3downloader;
+package com.freemusicdownloader.mp3downloader.Constans;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import com.freemusicdownloader.mp3downloader.R;
 
 public class Constants {
 

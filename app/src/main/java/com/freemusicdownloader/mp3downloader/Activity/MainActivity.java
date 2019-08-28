@@ -1,6 +1,5 @@
-package com.freemusicdownloader.mp3downloader;
+package com.freemusicdownloader.mp3downloader.Activity;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -8,14 +7,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcel;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.design.widget.TabLayout;
 import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,10 +23,15 @@ import android.view.View;
 import android.widget.ImageView;
 
 
+import com.freemusicdownloader.mp3downloader.Ads.AudienceNetworkAds;
+import com.freemusicdownloader.mp3downloader.Fragment.FavFragment;
+import com.freemusicdownloader.mp3downloader.Fragment.GalleryFragment;
+import com.freemusicdownloader.mp3downloader.Fragment.GenresFragment;
+import com.freemusicdownloader.mp3downloader.Fragment.SearchFragment;
+import com.freemusicdownloader.mp3downloader.Ads.GoogleAnalyticsApplication;
+import com.freemusicdownloader.mp3downloader.R;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-
-import java.util.Arrays;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView iv_icon;
     private View view;
     private Tracker mTracker;
+    private NotificationManagerCompat notificationManager;
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     public Toolbar toolbar;
@@ -85,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+        notificationManager = NotificationManagerCompat.from(this);
+
         view = getWindow().getDecorView().getRootView();
         AudienceNetworkAds.facebookLoadBanner(getApplicationContext(), view);
 
@@ -109,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        mViewPager.setOffscreenPageLimit(2);
+
         mViewPager.setAdapter(new MyPagerAdapter(getFragmentManager()));
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
@@ -221,5 +228,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

@@ -1,4 +1,4 @@
-package com.freemusicdownloader.mp3downloader;
+package com.freemusicdownloader.mp3downloader.Fragment;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -29,8 +29,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.util.Base64;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -43,6 +41,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.freemusicdownloader.mp3downloader.Ads.AudienceNetworkAds;
+import com.freemusicdownloader.mp3downloader.Constans.Constants;
+import com.freemusicdownloader.mp3downloader.DownloadAsync.DownloadAsyncTask;
+import com.freemusicdownloader.mp3downloader.Model.FavMusic;
+import com.freemusicdownloader.mp3downloader.Model.GlobalClass;
+import com.freemusicdownloader.mp3downloader.Constans.GlobalData;
+import com.freemusicdownloader.mp3downloader.R;
+import com.freemusicdownloader.mp3downloader.Activity.StreamingMp3Player;
 import com.google.android.gms.analytics.Tracker;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -58,7 +64,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /* Fragment used as page 1 */
 public class GenresMusicListFragment extends Fragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
@@ -95,7 +100,6 @@ public class GenresMusicListFragment extends Fragment implements SearchView.OnQu
     public static ProgressDialog mydialog;
     public AlertDialog alert;
     public AlertDialog alerttt;
-    private SweetAlertDialog pDialog;
 
 
     private SearchView mSearchView;
@@ -350,77 +354,17 @@ public class GenresMusicListFragment extends Fragment implements SearchView.OnQu
                                     switch (i) {
 
                                         case 0:
-
-                                            Toast.makeText(getActivity(), "Play", Toast.LENGTH_SHORT).show();
-                                            if (countAds % 8 == 0) {
-                                                // AudienceNetworkAds.facebookInterstitialAd(getActivity(), ads_layout, avLoadingIndicatorView);
+                                            if (countAds % 4 == 0) {
+                                                AudienceNetworkAds.facebookInterstitialAd(getActivity());
+                                                countAds = 0;
                                             }
-                                            try {
-
-                                                if (isPackageInstalled("com.google.android.music", getActivity().getPackageManager())) {
-
-                                                    PlayMusicAction playMusicAction = new PlayMusicAction();
-                                                    playMusicAction.doInBackground(Uri.parse(listmusicURL.get(songPos).toString()));
-
-                                                } else {
-
-
-                                                    new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
-                                                            .setTitleText("MP3 Downloader")
-                                                            .setContentText("Please install the 'Google Play Music' for quick play.\nDo you want to install it now?")
-                                                            .setConfirmButton("YES", new SweetAlertDialog.OnSweetClickListener() {
-                                                                @Override
-                                                                public void onClick(SweetAlertDialog sweetAlertDialog) {
-
-                                                                    final String appPackageName = getActivity().getPackageName(); // getPackageName() from Context or Activity object
-                                                                    try {
-                                                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + "com.google.android.music")));
-                                                                    } catch (android.content.ActivityNotFoundException anfe) {
-                                                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + "com.google.android.music")));
-                                                                    }
-
-                                                                }
-                                                            })
-                                                            .setCancelButton("NO", new SweetAlertDialog.OnSweetClickListener() {
-                                                                @Override
-                                                                public void onClick(SweetAlertDialog sweetAlertDialog) {
-
-                                                                    sweetAlertDialog.cancel();
-                                                                }
-                                                            })
-
-                                                            .show();
-
-                                                }
-
-                                            } catch (Exception e) {
-                                                new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
-                                                        .setTitleText("MP3 Downloader")
-                                                        .setContentText("Please install the 'Google Play Music' for quick play.\nDo you want to install it now?")
-                                                        .setConfirmButton("YES", new SweetAlertDialog.OnSweetClickListener() {
-                                                            @Override
-                                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-
-                                                                final String appPackageName = getActivity().getPackageName(); // getPackageName() from Context or Activity object
-                                                                try {
-                                                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + "com.google.android.music")));
-                                                                } catch (android.content.ActivityNotFoundException anfe) {
-                                                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + "com.google.android.music")));
-                                                                }
-
-                                                            }
-                                                        })
-                                                        .setCancelButton("NO", new SweetAlertDialog.OnSweetClickListener() {
-                                                            @Override
-                                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-
-                                                                sweetAlertDialog.cancel();
-                                                            }
-                                                        })
-
-                                                        .show();
-                                            }
-
+                                            countAds++;
+                                            new GlobalData().setMusicName(listmusicauthor.get(songPos).toString().trim());
+                                            new GlobalData().setMusicSecondName(listmusicname.get(songPos).toString().trim());
+                                            new GlobalData().setTextSongURL(listmusicURL.get(songPos).toString());
+                                            new GlobalData().setStreamMusicTime(listmusictime.get(songPos).toString().trim());
+                                            Intent intent = new Intent(getActivity(), StreamingMp3Player.class);
+                                            startActivity(intent);
 
                                             break;
                                         case 1:

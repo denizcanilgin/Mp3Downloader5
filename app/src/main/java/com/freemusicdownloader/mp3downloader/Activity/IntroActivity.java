@@ -1,15 +1,13 @@
-package com.freemusicdownloader.mp3downloader;
+package com.freemusicdownloader.mp3downloader.Activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.widget.ImageView;
-import android.widget.Toast;
 
+import com.freemusicdownloader.mp3downloader.R;
+import com.freemusicdownloader.mp3downloader.Fragment.SampleSlide;
 import com.github.paolorotolo.appintro.AppIntro;
 
 public class IntroActivity extends AppIntro {

@@ -3,18 +3,18 @@
 
 
 
-    <string name="admob_banner_ad_unit_id">ca-app-pub-2610648432092774/4242191980</string>
+    <string name="admob_banner_ad_unit_id">ca-app-pub-2610648432092774/4242191234234</string>
 
-    <string name="admob_showIntersitial_ad_unit_id">ca-app-pub-2610648432092774/9529219826</string>
+    <string name="admob_showIntersitial_ad_unit_id">ca-app-pub-2610648432092774/9529212342342</string>
 
 
     <!--Facebook music app    -->
 
-    <string name="facebook_banner">311257849559302_311259216225832</string>
+    <string name="facebook_banner">311257849559302_311259216225832a</string>
 
-    <string name="facebook_Intersitial">311257849559302_311265736225180</string>
+    <string name="facebook_Intersitial">311257849559302_311265736225180a</string>
 
-    <string name="facebook_app_id">311257849559302</string>
+    <string name="facebook_app_id">311257849559302a</string>
 
 
     <string name="bat">DOWNLOADED MUSICS</string>

@@ -1,4 +1,4 @@
-package com.freemusicdownloader.mp3downloader;
+package com.freemusicdownloader.mp3downloader.Activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.freemusicdownloader.mp3downloader.R;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.Timer;
@@ -61,7 +62,7 @@ public class SplashActivtiy extends Activity {
 //
 //                }
 
-                i = new Intent(SplashActivtiy.this,MainActivity.class);
+                i = new Intent(SplashActivtiy.this, MainActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
 

@@ -1,7 +1,8 @@
-package com.freemusicdownloader.mp3downloader;
+package com.freemusicdownloader.mp3downloader.Ads;
 
 import android.app.Application;
 
+import com.freemusicdownloader.mp3downloader.R;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 

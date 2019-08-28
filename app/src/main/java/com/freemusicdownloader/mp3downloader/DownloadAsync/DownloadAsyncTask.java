@@ -1,4 +1,4 @@
-package com.freemusicdownloader.mp3downloader;
+package com.freemusicdownloader.mp3downloader.DownloadAsync;
 
 import android.app.Activity;
 import android.app.Notification;
@@ -15,11 +15,14 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.os.SystemClock;
-import android.provider.MediaStore;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.freemusicdownloader.mp3downloader.Activity.MainActivity;
+import com.freemusicdownloader.mp3downloader.Constans.GlobalData;
+import com.freemusicdownloader.mp3downloader.R;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -37,7 +40,6 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
     private String filename;
     private Activity activity;
     private int NOTIFY_ID;
-
     public String currentimagepath;
     private NotificationManager notifManager;
     private NotificationCompat.Builder builder;
@@ -45,7 +47,6 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
     private String songName;
     private File folder;
     private static final int MY_PERMISSION_REQUEST_CODE = 1001;
-
     private Boolean succesffuly_downloaded;
     private String error_message;
 
@@ -56,7 +57,6 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
         this.NOTIFY_ID = NOTIFY_ID;
     }
 
-
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -64,6 +64,7 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
         notificationManager = NotificationManagerCompat.from(activity);
 
     }
+
 
     @Override
     protected String doInBackground(final String... aurl) {
@@ -94,8 +95,6 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
                     folder.mkdir();
                 }
 
-//                currentimagepath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC) +
-//                        File.separator + aurl[1];
                 currentimagepath = Environment.getExternalStorageDirectory() +
                         File.separator + "Mp3Download/" + aurl[1];
 
@@ -238,9 +237,6 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
             Toast.makeText(activity, " An error occurred, check your internet connection and try again! ", Toast.LENGTH_SHORT).show();
 
         }
-
-
-
     }
 
 
@@ -248,7 +244,6 @@ public class DownloadAsyncTask extends AsyncTask<String, String, String> {
         String id = "default_channel_id";
         String title = "Default Channel";
         Intent intent;
-        PendingIntent pendingIntent;
         NotificationCompat.Builder builder;
 
 

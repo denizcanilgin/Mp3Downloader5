@@ -1,6 +1,5 @@
-package com.freemusicdownloader.mp3downloader;
+package com.freemusicdownloader.mp3downloader.Services;
 
-import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -13,7 +12,6 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
@@ -29,16 +27,17 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.freemusicdownloader.mp3downloader.Ads.AudienceNetworkAds;
+import com.freemusicdownloader.mp3downloader.Constans.Constants;
+import com.freemusicdownloader.mp3downloader.Constans.GlobalData;
+import com.freemusicdownloader.mp3downloader.R;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
-public class MusicPlayerActivity extends AppCompatActivity implements View.OnClickListener {
+public class MusicPlayer extends AppCompatActivity implements View.OnClickListener {
     boolean isBinded = false;
     MediaPlaybackService mediaPlaybackService;
 
@@ -109,7 +108,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                     mediaPlaybackService.init(selectedtrack);
 
                     initInfos(selectedtrack);
-                    Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
+                    Intent serviceIntent = new Intent(MusicPlayer.this, MediaPlaybackService.class);
                     serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
                     startService(serviceIntent);
                 } catch (Exception e) {
@@ -208,20 +207,20 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                                 public void run() {
 
                                     int notifCounter = new GlobalData().getCounter();
-                                    clearInfos();
+
                                     notifCounter++;
                                     if (gallerySongList.size() == notifCounter) {
                                         notifCounter = 0;
                                     }
                                     mediaPlaybackService.init(Uri.parse(gallerySongList.get(notifCounter)));
                                     initInfos(Uri.parse(gallerySongList.get(notifCounter)));
-                                    Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
+                                    Intent serviceIntent = new Intent(MusicPlayer.this, MediaPlaybackService.class);
                                     serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
                                     startService(serviceIntent);
 
                                     File file = new File(gallerySongList.get(notifCounter) + "");
                                     Boolean a = new GlobalData().isIsGalleryUpdate();
-                                    Log.i("sdsdsdsdsd",""+a);
+                                    Log.i("sdsdsdsdsd", "" + a);
                                     new GlobalData().setMusicName(file.getName());
                                     new GlobalData().setSongListIndex(notifCounter);
                                     new GlobalData().setClickNext(false);
@@ -246,7 +245,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
 
                                     int notifCounter = new GlobalData().getCounter();
 
-                                    clearInfos();
                                     notifCounter--;
                                     if (notifCounter < 0) {
                                         notifCounter = gallerySongList.size() - 1;
@@ -254,10 +252,9 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                                     // Stuff that updates the UI
                                     mediaPlaybackService.init(Uri.parse(gallerySongList.get(notifCounter)));
                                     initInfos(Uri.parse(gallerySongList.get(notifCounter)));
-                                    Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
+                                    Intent serviceIntent = new Intent(MusicPlayer.this, MediaPlaybackService.class);
                                     serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
                                     startService(serviceIntent);
-
 
 
                                     File file = new File(gallerySongList.get(notifCounter) + "");
@@ -290,7 +287,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
             // Stuff that updates the UI
             mediaPlaybackService.init(Uri.parse(gallerySongList.get(songListIndex)));
             initInfos(Uri.parse(gallerySongList.get(songListIndex)));
-            Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
+            Intent serviceIntent = new Intent(MusicPlayer.this, MediaPlaybackService.class);
             serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
             startService(serviceIntent);
 
@@ -316,7 +313,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
 
             mediaPlaybackService.init(Uri.parse(gallerySongList.get(songListIndex)));
             initInfos(Uri.parse(gallerySongList.get(songListIndex)));
-            Intent serviceIntent = new Intent(MusicPlayerActivity.this, MediaPlaybackService.class);
+            Intent serviceIntent = new Intent(MusicPlayer.this, MediaPlaybackService.class);
             serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
             startService(serviceIntent);
 
@@ -334,7 +331,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onResume() {
 
-        Log.i("DESTROYED","RESUME");
+        Log.i("DESTROYED", "RESUME");
 
 
         getApplicationContext().bindService(new Intent(getApplicationContext(),
@@ -354,8 +351,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i("DESTROYED","FALSE");
-        int a = new GlobalData().getCounter();
     }
 
     @Override
@@ -369,9 +364,8 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
     protected void onDestroy() {
         super.onDestroy();
 
-        Log.i("DESTROYED","TRUE");
+        Log.i("DESTROYED", "TRUE");
     }
-
 
 
     @Override
@@ -390,24 +384,27 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
 
     public void initInfos(Uri uri) {
         if (uri != null) {
-            MediaMetadataRetriever mData = new MediaMetadataRetriever();
-            mData.setDataSource(this, uri);
-
-            File file = new File(uri + "");
-
-            int duration = Integer.parseInt(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
-
-
-            titleTextView.setText(file.getName());
-
-            artistTextView.setText(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
-
-            durationTextView.setText(secondsToString(duration));
-
-            elapsedTimeSeekBar.setMax(duration);
-            elapsedTimeSeekBar.setEnabled(true);
 
             try {
+                MediaMetadataRetriever mData = new MediaMetadataRetriever();
+
+                mData.setDataSource(this, uri);
+
+                File file = new File(uri + "");
+
+                int duration = Integer.parseInt(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+
+
+                titleTextView.setText(file.getName());
+                titleTextView.setSelected(true);
+
+                artistTextView.setText(mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
+
+                durationTextView.setText(secondsToString(duration));
+
+                elapsedTimeSeekBar.setMax(duration);
+                elapsedTimeSeekBar.setEnabled(true);
+
                 byte art[] = mData.getEmbeddedPicture();
                 if (art != null) {
                     Bitmap image = BitmapFactory.decodeByteArray(art, 0, art.length);
@@ -416,12 +413,14 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                 } else {
                     albumArt.setImageDrawable(getResources().getDrawable(R.drawable.ic_album_white_400_128dp));
                 }
-
-
-            } catch (Exception e) {
+            }catch (Exception e)
+            {
+                Log.i( "asdasdasdasd","asdasdasd");
+                Log.i( "asdasdasdasd","asdasdasd");
                 e.printStackTrace();
 
             }
+
         }
     }
 
@@ -435,37 +434,19 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-
-    public void clearInfos() {
-
-        elapsedTime = 0;
-        elapsedTimeSeekBar.setEnabled(false);
-        elapsedTimeSeekBar.setProgress(0);
-        durationTextView.setText("");
-        elapsedTimeTextView.setText("");
-        titleTextView.setText("-");
-        artistTextView.setText("-");
-        albumArt.setImageResource(R.drawable.ic_album_white_400_128dp);
-        buttonPlayPause.setEnabled(false);
-        buttonPlayPause.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
-
-    }
-
-
     @Override
     public void onClick(View view) {
 
-        switch(view.getId()){
+        switch (view.getId()) {
 
-            case R.id.iv_replayButton :
+            case R.id.iv_replayButton:
 
-                Log.i("BUTTON_PUSHED","REPLAY");
+                Log.i("BUTTON_PUSHED", "REPLAY");
 
-                if(GlobalData.isRepeatSong() == false)
-                {
+                if (GlobalData.isRepeatSong() == false) {
                     GlobalData.setRepeatSong(true);
                     iv_replaybutton.setImageResource(R.drawable.ic_repeat_one_black_24dp);
-                }else if(GlobalData.isRepeatSong() == true){
+                } else if (GlobalData.isRepeatSong() == true) {
                     GlobalData.setRepeatSong(false);
                     iv_replaybutton.setImageResource(R.drawable.ic_repeat_black_24dp);
                 }
@@ -492,9 +473,9 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-        Log.i("KEY_PUSHED","keyEvent : " + event.getFlags() + " keyCode : " + keyCode);
+        Log.i("KEY_PUSHED", "keyEvent : " + event.getFlags() + " keyCode : " + keyCode);
 
-        if(keyCode == 79){
+        if (keyCode == 79) {
 
             new GlobalData().setMediaPlaybackService(mediaPlaybackService);
             int resId;

@@ -1,4 +1,4 @@
-package com.freemusicdownloader.mp3downloader;
+package com.freemusicdownloader.mp3downloader.Fragment;
 
 import android.Manifest;
 import android.app.Activity;
@@ -6,13 +6,10 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,15 +19,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.freemusicdownloader.mp3downloader.Adapter.FavMusicsAdapter;
+import com.freemusicdownloader.mp3downloader.DownloadAsync.DownloadAsyncTask;
+import com.freemusicdownloader.mp3downloader.Model.FavMusic;
+import com.freemusicdownloader.mp3downloader.Model.GlobalClass;
+import com.freemusicdownloader.mp3downloader.Constans.GlobalData;
+import com.freemusicdownloader.mp3downloader.R;
+import com.freemusicdownloader.mp3downloader.Activity.StreamingMp3Player;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.michaelbel.bottomsheet.BottomSheet;
 
 import java.util.ArrayList;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class FavFragment extends Fragment implements View.OnClickListener {
+public class FavFragment extends Fragment {
 
     private ListView lvSong;
     private ArrayList<FavMusic> songList;
@@ -62,10 +65,8 @@ public class FavFragment extends Fragment implements View.OnClickListener {
         View rootView = inflater.inflate(R.layout.fragment_page4, container, false);
 
         songList = globalClass.getSavedFavSongs(activity);
-        lvSong = (ListView) rootView.findViewById(R.id.listView);
+        lvSong = rootView.findViewById(R.id.listView);
         tv_empty_fav = rootView.findViewById(R.id.tv_fav_empty);
-
-
 
 
         if (songList != null) {
@@ -76,8 +77,6 @@ public class FavFragment extends Fragment implements View.OnClickListener {
 
                 public void onItemClick(AdapterView<?> parent, View arg1,
                                         final int position, long arg3) {
-                    // Toast.makeText(getActivity(),"playing : " + songList.get(position).getMusicName(),0).show();
-
 
                     BottomSheet.Builder builder = new BottomSheet.Builder(getActivity());
                     builder.setTitle(songList.get(position).getMusicName().toString() + "\n- " + songList.get(position).getMusicAuthor().toString())
@@ -94,7 +93,7 @@ public class FavFragment extends Fragment implements View.OnClickListener {
                                     switch (i) {
 
                                         case 0:
-                                            Toast.makeText(getActivity(), "playing : " + songList.get(position).getMusicName(), 0).show();
+                                            Toast.makeText(getActivity(), "playing : " + songList.get(position).getMusicName(), Toast.LENGTH_SHORT).show();
                                             play_selected_song(position);
                                             break;
                                         case 1:
@@ -133,12 +132,9 @@ public class FavFragment extends Fragment implements View.OnClickListener {
                 }
             });
 
-        }else{
-                tv_empty_fav.setVisibility(View.VISIBLE);
+        } else {
+            tv_empty_fav.setVisibility(View.VISIBLE);
         }
-
-
-
 
         return rootView;
     }
@@ -146,106 +142,32 @@ public class FavFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         activity = getActivity();
         globalClass = new GlobalClass();
     }
 
-    @Override
-    public void onClick(View view) {
-
-    }
-
     public void play_selected_song(int position) {
 
-        // Toast.makeText(getActivity(), "Play", Toast.LENGTH_SHORT).show();
-
         try {
-            PlayMusicAction playMusicAction = new PlayMusicAction();
-            playMusicAction.doInBackground(Uri.parse(songList.get(position).getMusicURL().toString()));
 
-        } catch (Exception e) {
-//            new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
-//                    .setTitleText("MP3 Downloader")
-//                    .setContentText("Please install the 'Google Play Music' for quick play.\nDo you want to install it now?")
-//                    .setConfirmButton("YES", new SweetAlertDialog.OnSweetClickListener() {
-//                        @Override
-//                        public void onClick(SweetAlertDialog sweetAlertDialog) {
-//
-//                            final String appPackageName = getActivity().getPackageName(); // getPackageName() from Context or Activity object
-//                            try {
-//                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + "com.google.android.music")));
-//                            } catch (android.content.ActivityNotFoundException anfe) {
-//                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + "com.google.android.music")));
-//                            }
-//
-//                        }
-//                    })
-//                    .setCancelButton("NO", new SweetAlertDialog.OnSweetClickListener() {
-//                        @Override
-//                        public void onClick(SweetAlertDialog sweetAlertDialog) {
-//
-//                            sweetAlertDialog.cancel();
-//                        }
-//                    })
-//
-//                    .show();
-        }
+            new GlobalData().setMusicName(songList.get(position).getMusicName().toString().trim());
+            new GlobalData().setMusicSecondName(songList.get(position).getMusicAuthor().toString().trim());
+            new GlobalData().setTextSongURL(songList.get(position).getMusicURL().toString().trim());
+            new GlobalData().setStreamMusicTime(songList.get(position).getMusicDuration().toString().trim());
 
-
-    }
-
-    class PlayMusicAction extends AsyncTask<Uri, Uri, Uri> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-//            LoadingMethod();
-        }
-
-        @Override
-        protected Uri doInBackground(Uri... uris) {
-
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_VIEW);
-            intent.setDataAndType(uris[0], "audio/mp3");
+            Intent intent = new Intent(getActivity(), StreamingMp3Player.class);
             startActivity(intent);
 
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Uri uri) {
-            super.onPostExecute(uri);
-
-            LoadingMethodDismiss();
-
+        } catch (Exception e) {
 
         }
-    }
 
-    public void LoadingMethodDismiss() {
-
-
-    }
-
-    private boolean isPackageInstalled(String packageName, PackageManager packageManager) {
-
-        boolean found = true;
-
-        try {
-
-            packageManager.getPackageInfo(packageName, 0);
-        } catch (PackageManager.NameNotFoundException e) {
-
-            found = false;
-        }
-
-        return found;
     }
 
     public void download_selected_song(int songPos) {
 
-       // Toast.makeText(getActivity(), "Download", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getActivity(), "Download", Toast.LENGTH_SHORT).show();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.System.canWrite(getContext())) {
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,

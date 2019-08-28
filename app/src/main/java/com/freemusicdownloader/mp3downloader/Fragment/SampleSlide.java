@@ -1,4 +1,4 @@
-package com.freemusicdownloader.mp3downloader;
+package com.freemusicdownloader.mp3downloader.Fragment;
 
 /**
  * Created by yesilbag on 14.01.2018.

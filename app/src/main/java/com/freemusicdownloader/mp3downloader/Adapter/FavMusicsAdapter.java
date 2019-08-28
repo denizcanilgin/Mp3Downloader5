@@ -1,13 +1,15 @@
-package com.freemusicdownloader.mp3downloader;
+package com.freemusicdownloader.mp3downloader.Adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.freemusicdownloader.mp3downloader.Model.FavMusic;
+import com.freemusicdownloader.mp3downloader.R;
 
 import java.util.List;
 
@@ -22,7 +24,7 @@ public class FavMusicsAdapter extends ArrayAdapter<FavMusic> {
     private LayoutInflater layoutInflater;
 
     public FavMusicsAdapter(Context mContext, List<FavMusic> mSongList){
-        super(mContext,R.layout.list_item_row,mSongList);
+        super(mContext, R.layout.list_item_row,mSongList);
         this.mContext = mContext;
         this.mSongList = mSongList;
         this.layoutInflater = LayoutInflater.from(mContext);
