@@ -45,7 +45,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.google.android.gms:play-services-analytics:16.0.8'
     implementation 'com.google.android.gms:play-services-ads:17.2.0'
-    implementation 'com.facebook.android:facebook-android-sdk:4.42.0'
+    implementation 'com.facebook.android:facebook-android-sdk:5.5.0'
     implementation 'com.facebook.android:audience-network-sdk:5.2.1'
     implementation 'com.google.firebase:firebase-core:16.0.8'
     implementation 'com.github.paolorotolo:appintro:4.0.0'

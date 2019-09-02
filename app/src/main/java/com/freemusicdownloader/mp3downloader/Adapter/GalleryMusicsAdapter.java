@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,10 +18,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.freemusicdownloader.mp3downloader.Activity.StreamingMp3Player;
 import com.freemusicdownloader.mp3downloader.Fragment.GalleryFragment;
 import com.freemusicdownloader.mp3downloader.Constans.GlobalData;
 import com.freemusicdownloader.mp3downloader.Services.MusicPlayer;
 import com.freemusicdownloader.mp3downloader.R;
+import com.kaopiz.kprogresshud.KProgressHUD;
 
 import org.michaelbel.bottomsheet.BottomSheet;
 
@@ -60,6 +63,8 @@ public class GalleryMusicsAdapter extends BaseAdapter {
     private TextView txt_music_time;
     private ImageButton btn_play_stop;
     private LayoutInflater inflater = null;
+    private KProgressHUD kProgressHUD;
+
 
     public GalleryMusicsAdapter(ArrayList<String> listmusicURL, ArrayList<String> listmusicname, ArrayList<String> listmusicauthor, ArrayList<String> listmusictime, Activity activity, Context context, ListView mylist, TextView tv_downloadedempty) {
         this.listmusicURL = listmusicURL;
@@ -78,6 +83,7 @@ public class GalleryMusicsAdapter extends BaseAdapter {
         listMusicName = new ArrayList<String>();
         listMusicTime = new ArrayList<String>();
         listMusicNameCont = new ArrayList<String>();
+        kProgressHUD = new KProgressHUD(activity);
 
     }
 
@@ -181,22 +187,63 @@ public class GalleryMusicsAdapter extends BaseAdapter {
 
     public void delete_item(final int position) {
 
-        try {
-            File file = new File(Uri.parse(listMusicurll.get(position)).getPath());
-            file.exists();
-            file.delete();
-            listMusicName = new ArrayList<String>();
-            listMusicTime = new ArrayList<String>();
-            listMusicNameCont = new ArrayList<String>();
-            getAllMusics(pathControl());
-            GalleryMusicsAdapter adapterListMusics = new GalleryMusicsAdapter(getAllMusics(pathControl()), listMusicNameCont,listMusicName, listMusicTime,activity,activity.getApplication(),mylist,tv_downloadedempty);
-            mylist.setAdapter(adapterListMusics);
+        reloadList reloadList = new reloadList();
+        reloadList.execute(position);
 
-            Toast.makeText(activity, "Song Deleted!", Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            Toast.makeText(activity, "An Error Occurred!", Toast.LENGTH_SHORT).show();
+    }
+
+    public class reloadList extends AsyncTask<Integer, Integer, Integer> {
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            kProgressHUD = KProgressHUD.create(activity)
+                    .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                    .setLabel("Please wait")
+                    .setDetailsLabel("Song removing ...")
+                    .setCancellable(true)
+                    .setAnimationSpeed(2)
+                    .setAutoDismiss(true)
+                    .setDimAmount(0.5f)
+                    .show();
+
         }
 
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+
+            GalleryMusicsAdapter adapterListMusics = new GalleryMusicsAdapter(getAllMusics(pathControl()), listMusicNameCont,listMusicName, listMusicTime,activity,activity.getApplication(),mylist,tv_downloadedempty);
+            mylist.setAdapter(adapterListMusics);
+            kProgressHUD.dismiss();
+        }
+
+        @Override
+        protected Integer doInBackground(Integer... integers) {
+
+            int position = integers[0];
+
+
+
+            try {
+                File file = new File(Uri.parse(listMusicurll.get(position)).getPath());
+                file.exists();
+                file.delete();
+                listMusicName = new ArrayList<String>();
+                listMusicTime = new ArrayList<String>();
+                listMusicNameCont = new ArrayList<String>();
+                getAllMusics(pathControl());
+
+
+             //   Toast.makeText(activity, "Song Deleted!", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+            //    Toast.makeText(activity, "An Error Occurred!", Toast.LENGTH_SHORT).show();
+            }
+
+            return null;
+        }
     }
 
     public ArrayList<String> getAllMusics(String path) {
