@@ -20,7 +20,7 @@
         android:layout_height="@dimen/status_bar_album_art"
         android:background="@drawable/status_bg"
         android:scaleType="center"
-        android:src="@mipmap/ic_launcher"
+        android:src="@mipmap/icon"
         android:visibility="gone" />
 
     <LinearLayout

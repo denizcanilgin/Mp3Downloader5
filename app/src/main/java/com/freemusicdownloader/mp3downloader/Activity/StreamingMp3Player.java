@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.freemusicdownloader.mp3downloader.Ads.AudienceNetworkAds;
 import com.freemusicdownloader.mp3downloader.Constans.GlobalData;
 import com.freemusicdownloader.mp3downloader.R;
 import com.kaopiz.kprogresshud.KProgressHUD;
@@ -27,8 +28,7 @@ public class StreamingMp3Player extends Activity implements OnClickListener, OnT
     private SeekBar seekBarProgress;
     private TextView musicName, musicAuthor, textViewDuration, elapsedTimeTextView;
     private KProgressHUD kProgressHUD;
-    BroadcastReceiver receiverElapsedTime2;
-
+    private View view ;
 
     private MediaPlayer mediaPlayer;
     private int mediaFileLengthInMilliseconds; // this value contains the song duration in milliseconds. Look at getDuration() method in MediaPlayer class
@@ -39,6 +39,10 @@ public class StreamingMp3Player extends Activity implements OnClickListener, OnT
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.streamingmp3player);
+
+        view = getWindow().getDecorView().getRootView();
+        AudienceNetworkAds.facebookLoadBanner(getApplicationContext(), view);
+
 
         initView();
 

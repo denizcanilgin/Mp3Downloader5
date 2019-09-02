@@ -7,8 +7,8 @@ android {
         applicationId "com.freemusicdownloader.mp3downloader"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 15
-        versionName "1.15"
+        versionCode 16
+        versionName "1.16"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
     }
